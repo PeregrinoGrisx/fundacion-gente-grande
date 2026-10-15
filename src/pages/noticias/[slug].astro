@@ -1,0 +1,163 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
+
+export async function getStaticPaths() {
+  const entradas = await getCollection("noticias", ({ data }) => !data.borrador);
+  return entradas.map((entrada) => ({
+    params: { slug: entrada.id },
+    props: { entrada },
+  }));
+}
+
+const { entrada } = Astro.props;
+const { Content } = await render(entrada);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" });
+---
+
+<Base
+  title={entrada.data.titulo}
+  description={entrada.data.resumen}
+  image={entrada.data.imagen}
+>
+  <article class="nota-full">
+    <header class="nota-full__head">
+      <div class="wrap-narrow">
+        <a href="/noticias/" class="volver">
+          <Icon name="arrow-right" size={17} class="volver__icon" />
+          Noticias
+        </a>
+        <span class="nota-full__cat">{entrada.data.categoria}</span>
+        <h1>{entrada.data.titulo}</h1>
+        <time datetime={entrada.data.fecha.toISOString()}>{fmt(entrada.data.fecha)}</time>
+      </div>
+    </header>
+
+    {
+      entrada.data.imagen && (
+        <figure class="nota-full__foto wrap">
+          <img
+            src={entrada.data.imagen}
+            alt={entrada.data.imagenAlt ?? ""}
+            loading="eager"
+          />
+        </figure>
+      )
+    }
+
+    <div class="wrap-narrow prosa">
+      <p class="lead">{entrada.data.resumen}</p>
+      <Content />
+    </div>
+
+    <div class="wrap-narrow nota-full__pie">
+      <a href="/noticias/" class="btn btn--ghost">Ver todas las noticias</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .nota-full__head {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--bg-alt);
+  }
+  .volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .volver__icon {
+    transform: rotate(180deg);
+  }
+  .volver:hover {
+    color: var(--brand);
+  }
+  .nota-full__cat {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: var(--petrol-100);
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--petrol-700);
+  }
+  .nota-full__head h1 {
+    font-size: var(--step-4);
+    margin: 1rem 0 0.9rem;
+  }
+  .nota-full__head time {
+    font-size: 0.9rem;
+    color: var(--ink-400);
+  }
+
+  .nota-full__foto {
+    margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
+  }
+  .nota-full__foto img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .prosa {
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+  .prosa .lead {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-700);
+  }
+  .prosa :global(h2) {
+    font-size: var(--step-2);
+    margin: 2.25rem 0 0.9rem;
+  }
+  .prosa :global(h3) {
+    font-size: var(--step-1);
+    margin: 1.75rem 0 0.7rem;
+  }
+  .prosa :global(p),
+  .prosa :global(li) {
+    color: var(--ink-700);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .prosa :global(p + p) {
+    margin-top: 1.1rem;
+  }
+  .prosa :global(ul),
+  .prosa :global(ol) {
+    margin: 1.1rem 0;
+    padding-left: 1.4rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .prosa :global(blockquote) {
+    margin: 1.75rem 0;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-alt);
+    border-left: 3px solid var(--terra-500);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 1.08rem;
+  }
+  .prosa :global(img) {
+    margin: 1.75rem 0;
+    border-radius: var(--radius);
+  }
+
+  .nota-full__pie {
+    padding-bottom: var(--space-xl);
+  }
+</style>

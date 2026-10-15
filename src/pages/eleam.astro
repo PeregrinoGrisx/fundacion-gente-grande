@@ -1,0 +1,267 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import Pendiente from "../components/Pendiente.astro";
+import { contacto, eleam, servicios } from "../data/site";
+
+const datos = [
+  { icono: "ubicacion" as const, label: "Dirección", valor: contacto.direccionEleam },
+  { icono: "reloj" as const, label: "Atención", valor: contacto.horario },
+  { icono: "escudo" as const, label: "Fiscalización", valor: "SENAMA" },
+  { icono: "comunidad" as const, label: "Destinatarios", valor: "Personas mayores de 60 años" },
+];
+---
+
+<Base
+  title="ELEAM"
+  description="Establecimiento de Larga Estadía para el Adulto Mayor de la Fundación Gente Grande, en Arica, fiscalizado por SENAMA."
+>
+  <PageHero
+    eyebrow="Establecimiento de Larga Estadía"
+    title="Un hogar que acompaña sin infantilizar"
+    lead={eleam.intro}
+  />
+
+  <!-- ===== Datos clave ===== -->
+  <section class="section section--tight">
+    <div class="wrap">
+      <ul class="datos">
+        {
+          datos.map((d, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <span class="datos__icon"><Icon name={d.icono} size={20} /></span>
+              <span class="datos__label">{d.label}</span>
+              <span class="datos__valor">{d.valor}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Servicios ===== -->
+  <section class="section" id="servicios">
+    <div class="wrap">
+      <header class="sechead sechead--split" data-reveal>
+        <div>
+          <span class="eyebrow">Servicios</span>
+          <h2>Qué ofrecemos</h2>
+        </div>
+        <p class="lead">
+          Cuidado de largo plazo con equipo multidisciplinario, programas de
+          envejecimiento activo y puertas abiertas a la comunidad.
+        </p>
+      </header>
+
+      <div class="grid grid--3">
+        {
+          servicios.map((s, i) => (
+            <article class="card card--line" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <div class="card__icon"><Icon name={s.icono as any} size={24} /></div>
+              <h3>{s.titulo}</h3>
+              <p>{s.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Galería ===== -->
+  <section class="section section--alt">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">El lugar</span>
+        <h2>Nuestras instalaciones</h2>
+      </header>
+      <Pendiente que="Fotografías del ELEAM: fachada, habitaciones, comedor, sala de talleres, patio. Idealmente 6 a 8 fotos horizontales." />
+      <div class="galeria">
+        {
+          Array.from({ length: 6 }).map((_, i) => (
+            <figure class="galeria__hueco" data-reveal="scale" style={`--reveal-delay:${i * 60}ms`}>
+              <Icon name="comunidad" size={28} />
+              <figcaption>Foto {i + 1}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Postular ===== -->
+  <section class="section" id="postular">
+    <div class="wrap pasos">
+      <div class="stack" data-reveal="left">
+        <span class="eyebrow">Postulación</span>
+        <h2>Cómo postular a una residencia</h2>
+        <p class="lead">{eleam.destinatarios}</p>
+        <p class="muted">{eleam.visitas}</p>
+        <div class="btn-row">
+          <a
+            href="https://www.senama.gob.cl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn"
+          >
+            Ir a SENAMA
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a href="/contacto/" class="btn btn--ghost">Consultar con nosotros</a>
+        </div>
+      </div>
+
+      <div class="apoyo card" data-reveal="right">
+        <h3>Cómo apoyar al ELEAM</h3>
+        <ul>
+          {
+            eleam.comoApoyar.map((item) => (
+              <li>
+                <Icon name="check-circle" size={18} />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/contacto/#voluntariado" class="link-arrow">
+          Quiero colaborar
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Ubicación ===== -->
+  <section class="section section--tight" id="ubicacion">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Cómo llegar</span>
+        <h2>Dónde estamos</h2>
+      </header>
+      <div class="mapa" data-reveal>
+        <iframe
+          title="Mapa de la ubicación del ELEAM en Arica"
+          src="https://www.google.com/maps?q=Sargento+Carvajal+3944,+Arica,+Chile&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <p class="fineprint" style="margin-top:1rem">
+        {contacto.direccionEleam} · Las visitas se coordinan con anticipación.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .datos li {
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .datos__icon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.9rem;
+    background: var(--petrol-100);
+    color: var(--petrol-700);
+    border-radius: var(--radius);
+  }
+  .datos__label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+  }
+  .datos__valor {
+    display: block;
+    margin-top: 0.35rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 1rem;
+  }
+  .galeria__hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    background:
+      radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.7), transparent 60%),
+      var(--petrol-100);
+    border-radius: var(--radius-lg);
+    color: var(--petrol-600);
+  }
+  .galeria__hueco figcaption {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pasos {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .apoyo ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.75rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .apoyo li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text-muted);
+  }
+  .apoyo svg {
+    color: var(--petrol-500);
+    flex: none;
+  }
+  @media (max-width: 880px) {
+    .pasos {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .mapa {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    aspect-ratio: 16 / 7;
+  }
+  .mapa iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .mapa {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

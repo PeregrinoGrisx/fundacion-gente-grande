@@ -1,0 +1,200 @@
+---
+import { contacto, site } from "../data/site";
+import Icon from "./Icon.astro";
+
+const columnas = [
+  {
+    titulo: "Fundación",
+    links: [
+      { label: "Historia", href: "/nosotros/#historia" },
+      { label: "Directorio", href: "/nosotros/#directorio" },
+      { label: "Socios fundadores", href: "/nosotros/#fundadores" },
+      { label: "Misión y visión", href: "/nosotros/#mision" },
+    ],
+  },
+  {
+    titulo: "ELEAM",
+    links: [
+      { label: "¿Qué es el ELEAM?", href: "/eleam/" },
+      { label: "Servicios", href: "/eleam/#servicios" },
+      { label: "Cómo llegar", href: "/eleam/#ubicacion" },
+      { label: "Postular a residencia", href: "/eleam/#postular" },
+    ],
+  },
+  {
+    titulo: "Transparencia",
+    links: [
+      { label: "Memorias y balances", href: "/recursos/" },
+      { label: "Recursos transferidos", href: "/recursos/#recursos-transferidos" },
+      { label: "Canal de denuncias", href: "/contacto/#denuncias" },
+      { label: "Noticias", href: "/noticias/" },
+    ],
+  },
+  {
+    titulo: "Participa",
+    links: [
+      { label: "Donar", href: "/#donar" },
+      { label: "Ser voluntario", href: "/contacto/#voluntariado" },
+      { label: "Contacto", href: "/contacto/" },
+    ],
+  },
+];
+
+const redes = [
+  { name: "facebook" as const, href: contacto.redes.facebook, label: "Facebook" },
+  { name: "instagram" as const, href: contacto.redes.instagram, label: "Instagram" },
+  { name: "youtube" as const, href: contacto.redes.youtube, label: "YouTube" },
+].filter((r) => r.href);
+---
+
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div class="footer__brand">
+      <span class="eyebrow">{site.shortName}</span>
+      <p class="footer__blurb">{site.description}</p>
+      {
+        redes.length > 0 && (
+          <ul class="social">
+            {redes.map((r) => (
+              <li>
+                <a href={r.href} target="_blank" rel="noopener noreferrer" aria-label={r.label}>
+                  <Icon name={r.name} size={19} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    {
+      columnas.map((col) => (
+        <nav class="footer__col" aria-label={col.titulo}>
+          <h2>{col.titulo}</h2>
+          <ul>
+            {col.links.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+  </div>
+
+  <div class="wrap footer__legal">
+    <p>
+      © {new Date().getFullYear()} {site.name} · RUT {site.rut} · {site.city} · {site.ley}
+    </p>
+    <p class="footer__credit">
+      Diseño y desarrollo <a href="https://puntogris.cl" target="_blank" rel="noopener noreferrer">Puntogris</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--petrol-900);
+    color: var(--petrol-100);
+    padding-top: var(--space-xl);
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 2.5rem;
+    padding-bottom: var(--space-xl);
+  }
+  .footer__brand {
+    grid-column: span 2;
+    min-width: min(100%, 17rem);
+  }
+  .footer__blurb {
+    margin-top: 0.9rem;
+    max-width: 30ch;
+    color: color-mix(in srgb, var(--petrol-100) 80%, transparent);
+    font-size: 0.95rem;
+  }
+  .footer .eyebrow {
+    color: var(--terra-500);
+  }
+
+  .social {
+    display: flex;
+    gap: 0.55rem;
+    list-style: none;
+    padding: 0;
+    margin-top: 1.4rem;
+  }
+  .social a {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--petrol-100);
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: 50%;
+    transition:
+      background-color 0.25s var(--ease-out),
+      color 0.25s var(--ease-out),
+      transform 0.25s var(--ease-out);
+  }
+  .social a:hover {
+    background: var(--terra-600);
+    border-color: var(--terra-600);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .footer__col h2 {
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .footer__col ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .footer__col a {
+    color: color-mix(in srgb, var(--petrol-100) 85%, transparent);
+    text-decoration: none;
+    font-size: 0.93rem;
+    transition:
+      color 0.2s var(--ease-out),
+      padding-left 0.2s var(--ease-out);
+  }
+  .footer__col a:hover {
+    color: #fff;
+    padding-left: 4px;
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.82rem;
+    color: color-mix(in srgb, var(--petrol-100) 70%, transparent);
+  }
+  .footer__credit a {
+    color: var(--terra-500);
+    text-decoration: none;
+  }
+  .footer__credit a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .footer__brand {
+      grid-column: span 1;
+    }
+  }
+</style>

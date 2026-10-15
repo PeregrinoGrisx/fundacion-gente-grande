@@ -1,0 +1,23 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+---
+
+<Base title="Página no encontrada" description="La página que buscas no existe o cambió de dirección.">
+  <section class="section center">
+    <div class="wrap-narrow stack">
+      <span class="eyebrow center" style="display:inline-flex">Error 404</span>
+      <h1 style="font-size:var(--step-4)">No encontramos esta página</h1>
+      <p class="lead">
+        Puede que haya cambiado de dirección o que el enlace esté incompleto.
+      </p>
+      <div class="btn-row" style="justify-content:center">
+        <a href="/" class="btn">
+          Volver al inicio
+          <Icon name="arrow-right" size={18} />
+        </a>
+        <a href="/contacto/" class="btn btn--ghost">Contacto</a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,375 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import Pendiente from "../components/Pendiente.astro";
+import {
+  directorio,
+  historia,
+  misionVision,
+  site,
+  sociosFundadores,
+  sociosFundadoresTotal,
+  vinculacionAcademica,
+} from "../data/site";
+
+/** Iniciales para el retrato provisional mientras no haya fotos. */
+const iniciales = (nombre: string) =>
+  nombre
+    .split(" ")
+    .slice(0, 2)
+    .map((p) => p[0])
+    .join("");
+---
+
+<Base
+  title="Nosotros"
+  description={`Historia, directorio y socios fundadores de la ${site.name}, en Arica desde ${site.foundedYear}.`}
+>
+  <PageHero
+    eyebrow="Quiénes somos"
+    title="Una mirada moderna sobre el envejecimiento"
+    lead={historia.resumen}
+  />
+
+  <!-- ===== Historia ===== -->
+  <section class="section" id="historia">
+    <div class="wrap historia">
+      <div class="historia__texto stack" data-reveal="left">
+        <span class="eyebrow">Historia</span>
+        <h2>Desde 2014, en Arica</h2>
+        {historia.parrafos.map((p) => <p class="historia__p">{p}</p>)}
+      </div>
+
+      <aside class="historia__aside" data-reveal="right">
+        <ul class="objetivos">
+          {
+            historia.objetivos.map((o) => (
+              <li>
+                <span class="objetivos__dot" aria-hidden="true">
+                  <Icon name="check" size={15} />
+                </span>
+                <div>
+                  <h3>{o.titulo}</h3>
+                  <p>{o.texto}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== Misión y visión ===== -->
+  <section class="section section--alt" id="mision">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Nuestra razón de ser</span>
+        <h2>Misión y visión</h2>
+      </header>
+      <div class="grid grid--2">
+        <article class="card card--line" data-reveal="left">
+          <div class="card__icon"><Icon name="mano" size={24} /></div>
+          <h3>Misión</h3>
+          <p>{misionVision.mision}</p>
+        </article>
+        <article class="card card--line" data-reveal="right">
+          <div class="card__icon"><Icon name="actividad" size={24} /></div>
+          <h3>Visión</h3>
+          <p>{misionVision.vision}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Directorio ===== -->
+  <section class="section" id="directorio">
+    <div class="wrap">
+      <header class="sechead sechead--split" data-reveal>
+        <div>
+          <span class="eyebrow">Directorio</span>
+          <h2>Quienes dirigen<br />la Fundación</h2>
+        </div>
+        <p class="lead">
+          Un equipo multidisciplinario de profesionales de Arica: derecho,
+          psiquiatría, contabilidad, terapia ocupacional y psicología.
+        </p>
+      </header>
+
+      <Pendiente que="Fotografías de los 5 integrantes del directorio. Mientras tanto se muestra un retrato con iniciales." />
+
+      <ul class="personas">
+        {
+          directorio.map((d, i) => (
+            <li class="persona" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <div class="persona__retrato">
+                {d.foto ? (
+                  <img src={d.foto} alt={`Retrato de ${d.nombre}`} loading="lazy" />
+                ) : (
+                  <span aria-hidden="true">{iniciales(d.nombre)}</span>
+                )}
+              </div>
+              <h3>{d.nombre}</h3>
+              <p class="persona__cargo">{d.cargo}</p>
+              <p class="persona__profesion">{d.profesion}</p>
+              <p class="persona__bio">{d.bio}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Socios fundadores ===== -->
+  <section class="section section--alt" id="fundadores">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Origen</span>
+        <h2>Socios fundadores</h2>
+        <p class="lead" style="margin-top:1.1rem;max-width:60ch">
+          La Fundación fue constituida en {site.foundedYear} por {sociosFundadoresTotal}
+           profesionales de Arica que decidieron mirar la vejez de otra manera.
+        </p>
+      </header>
+
+      <Pendiente que={`Nombres, profesiones y fotos de los ${sociosFundadoresTotal} socios fundadores. El sitio antiguo tenía texto de relleno ("Lorem ipsum", "John Doe"), así que acá no se publica nada hasta tener los datos reales.`} />
+
+      {
+        sociosFundadores.length > 0 ? (
+          <ul class="personas">
+            {sociosFundadores.map((s, i) => (
+              <li class="persona" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+                <div class="persona__retrato">
+                  {s.foto ? (
+                    <img src={s.foto} alt={`Retrato de ${s.nombre}`} loading="lazy" />
+                  ) : (
+                    <span aria-hidden="true">{iniciales(s.nombre)}</span>
+                  )}
+                </div>
+                <h3>{s.nombre}</h3>
+                {s.profesion && <p class="persona__profesion">{s.profesion}</p>}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="aviso" data-reveal>
+            <Icon name="reloj" size={19} />
+            Estamos recopilando la nómina completa de socios fundadores para
+            publicarla acá.
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ===== Vinculación académica ===== -->
+  <section class="section" id="vinculacion">
+    <div class="wrap">
+      <header class="sechead sechead--split" data-reveal>
+        <div>
+          <span class="eyebrow">Vinculación con el medio</span>
+          <h2>Alianzas académicas</h2>
+        </div>
+        <p class="lead">{vinculacionAcademica.texto}</p>
+      </header>
+
+      <ul class="instituciones">
+        {
+          vinculacionAcademica.instituciones.map((inst, i) => (
+            <li data-reveal="scale" style={`--reveal-delay:${i * 60}ms`}>
+              <Icon name="libro" size={20} />
+              {inst}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .historia {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .historia__p {
+    color: var(--text-muted);
+    font-size: 1.03rem;
+  }
+  .historia__texto h2 {
+    font-size: var(--step-3);
+  }
+
+  .historia__aside {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    position: sticky;
+    top: 7rem;
+  }
+  .objetivos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.6rem;
+  }
+  .objetivos li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.9rem;
+  }
+  .objetivos__dot {
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-top: 0.2rem;
+    background: var(--petrol-700);
+    color: #fff;
+    border-radius: 50%;
+  }
+  .objetivos h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+  .objetivos p {
+    font-size: 0.93rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 900px) {
+    .historia {
+      grid-template-columns: 1fr;
+    }
+    .historia__aside {
+      position: static;
+    }
+  }
+
+  /* ===== Personas ===== */
+  .personas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .persona {
+    padding: 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+  .persona:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .persona__retrato {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 1.1rem;
+    overflow: hidden;
+    background: linear-gradient(140deg, var(--petrol-100), var(--terra-100));
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--petrol-700);
+  }
+  .persona__retrato img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .persona h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .persona__cargo {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--terra-600);
+  }
+  .persona__profesion {
+    font-size: 0.85rem;
+    color: var(--ink-400);
+    margin-top: 0.15rem;
+  }
+  .persona__bio {
+    margin-top: 0.8rem;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  .aviso {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1rem 1.4rem;
+    background: var(--surface);
+    border: 1px dashed var(--sand-300);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .aviso svg {
+    color: var(--petrol-500);
+    flex: none;
+  }
+
+  /* ===== Instituciones ===== */
+  .instituciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .instituciones li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 0.93rem;
+    font-weight: 500;
+    transition:
+      border-color 0.25s var(--ease-out),
+      transform 0.25s var(--ease-out);
+  }
+  .instituciones li:hover {
+    border-color: var(--petrol-300);
+    transform: translateY(-2px);
+  }
+  .instituciones svg {
+    color: var(--petrol-500);
+  }
+
+  .sechead {
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  }
+  .sechead h2 {
+    margin-top: 0.9rem;
+  }
+  .sechead--split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1.5rem 3rem;
+    align-items: end;
+  }
+</style>

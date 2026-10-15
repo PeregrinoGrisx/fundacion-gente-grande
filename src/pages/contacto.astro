@@ -1,0 +1,419 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import Pendiente from "../components/Pendiente.astro";
+import { contacto, denuncias, donacion, eleam } from "../data/site";
+
+/**
+ * Endpoint del formulario. Al ser un sitio estático necesita un servicio que
+ * reciba el POST (Formspree, Web3Forms, Netlify Forms o un pequeño script PHP
+ * en el hosting actual). Mientras no esté definido, el formulario cae a
+ * `mailto:` para no dejar el botón muerto.
+ */
+const FORM_ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT ?? "";
+const accionFormulario = FORM_ENDPOINT || `mailto:${contacto.email}`;
+
+const vias = [
+  {
+    icono: "mail" as const,
+    titulo: "Correo",
+    valor: contacto.email,
+    href: `mailto:${contacto.email}`,
+  },
+  {
+    icono: "ubicacion" as const,
+    titulo: "Dirección postal",
+    valor: contacto.direccionPostal,
+    href: "",
+  },
+  {
+    icono: "comunidad" as const,
+    titulo: "ELEAM",
+    valor: contacto.direccionEleam,
+    href: "/eleam/#ubicacion",
+  },
+  {
+    icono: "reloj" as const,
+    titulo: "Horario",
+    valor: contacto.horario,
+    href: "",
+  },
+];
+---
+
+<Base
+  title="Contacto"
+  description="Escríbenos para donar, ser voluntario, coordinar una visita o realizar una denuncia confidencial."
+>
+  <PageHero
+    eyebrow="Hablemos"
+    title="Contacto"
+    lead="Donaciones, voluntariado, visitas institucionales o denuncias: acá están todas las vías para comunicarte con la Fundación."
+  />
+
+  <!-- ===== Vías de contacto + formulario ===== -->
+  <section class="section">
+    <div class="wrap contacto">
+      <div class="contacto__vias" data-reveal="left">
+        <span class="eyebrow">Datos de contacto</span>
+        <h2>Dónde encontrarnos</h2>
+        <ul>
+          {
+            vias.map((v) => (
+              <li>
+                <span class="via__icon" aria-hidden="true">
+                  <Icon name={v.icono} size={19} />
+                </span>
+                <div>
+                  <h3>{v.titulo}</h3>
+                  {v.href ? <a href={v.href}>{v.valor}</a> : <p>{v.valor}</p>}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        <Pendiente que="Teléfono y WhatsApp de contacto, horario exacto de atención, y confirmar si el correo correcto es @fundaciongentegrande.org o @fundaciongentegrandearica.org." />
+      </div>
+
+      <form
+        class="formulario card"
+        method="POST"
+        action={accionFormulario}
+        data-reveal="right"
+      >
+        <h2>Escríbenos</h2>
+        {
+          !FORM_ENDPOINT && (
+            <Pendiente que="Servicio que reciba el formulario (Formspree / Web3Forms / script en el hosting). Sin PUBLIC_FORM_ENDPOINT el botón abre el cliente de correo." />
+          )
+        }
+
+        <div class="campo">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" required autocomplete="name" />
+        </div>
+        <div class="campo">
+          <label for="email">Correo electrónico</label>
+          <input id="email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="campo">
+          <label for="motivo">Motivo</label>
+          <select id="motivo" name="motivo">
+            <option>Quiero donar</option>
+            <option>Quiero ser voluntario</option>
+            <option>Consulta sobre el ELEAM</option>
+            <option>Visita institucional o alianza</option>
+            <option>Solicitar un documento</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn">
+          Enviar mensaje
+          <Icon name="arrow-right" size={18} />
+        </button>
+        <p class="fineprint">
+          Usamos tus datos solo para responderte. No los compartimos con
+          terceros.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== Donar ===== -->
+  <section class="section section--alt" id="donar">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Donaciones</span>
+        <h2>{donacion.titulo}</h2>
+        <p class="lead">{donacion.texto}</p>
+      </header>
+
+      <div class="grid grid--2">
+        <article class="card" data-reveal="left">
+          <div class="card__icon"><Icon name="corazon" size={24} /></div>
+          <h3>Transferencia bancaria</h3>
+          <Pendiente que="Datos bancarios de la cuenta de la Fundación (banco, tipo de cuenta, número) y definir si se suma una pasarela de pago (Webpay / Mercado Pago)." />
+          <dl class="datos-banco">
+            <div>
+              <dt>Titular</dt>
+              <dd>{donacion.datosTransferencia.titular}</dd>
+            </div>
+            <div>
+              <dt>RUT</dt>
+              <dd>{donacion.datosTransferencia.rut}</dd>
+            </div>
+            <div>
+              <dt>Banco</dt>
+              <dd>{donacion.datosTransferencia.banco || "Por confirmar"}</dd>
+            </div>
+            <div>
+              <dt>Tipo de cuenta</dt>
+              <dd>{donacion.datosTransferencia.tipoCuenta || "Por confirmar"}</dd>
+            </div>
+            <div>
+              <dt>N° de cuenta</dt>
+              <dd>{donacion.datosTransferencia.numeroCuenta || "Por confirmar"}</dd>
+            </div>
+            <div>
+              <dt>Correo</dt>
+              <dd>{donacion.datosTransferencia.email}</dd>
+            </div>
+          </dl>
+          <p class="fineprint">{donacion.fineprint}</p>
+        </article>
+
+        <article class="card" data-reveal="right">
+          <div class="card__icon"><Icon name="mano" size={24} /></div>
+          <h3 id="voluntariado">Otras formas de aportar</h3>
+          <p>
+            El dinero no es la única vía. También necesitamos tiempo, insumos y
+            redes.
+          </p>
+          <ul class="lista-check">
+            {
+              eleam.comoApoyar.map((item) => (
+                <li>
+                  <Icon name="check-circle" size={18} />
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+          <a href="#contenido" class="link-arrow">
+            Escríbenos para coordinar
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Canal de denuncias ===== -->
+  <section class="section" id="denuncias">
+    <div class="wrap">
+      <div class="denuncia" data-reveal>
+        <div class="denuncia__cabeza">
+          <span class="eyebrow">Canal oficial · Confidencial</span>
+          <h2>Canal de denuncias</h2>
+          <p>{denuncias.intro}</p>
+        </div>
+
+        <ul class="garantias">
+          {
+            denuncias.garantias.map((g) => (
+              <li>
+                <Icon name="escudo" size={19} />
+                {g}
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="btn-row">
+          <a href={`mailto:${contacto.email}?subject=Denuncia`} class="btn btn--light">
+            <Icon name="mail" size={18} />
+            Enviar denuncia por correo
+          </a>
+        </div>
+        <Pendiente que="Definir si el canal de denuncias usa un formulario anónimo propio (recomendado) o solo el correo institucional, y quién lo recibe." />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contacto {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .contacto__vias h2 {
+    font-size: var(--step-3);
+    margin: 0.9rem 0 1.75rem;
+  }
+  .contacto__vias ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .contacto__vias li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+  .via__icon {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    background: var(--petrol-100);
+    color: var(--petrol-700);
+    border-radius: var(--radius);
+  }
+  .contacto__vias h3 {
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+    margin-bottom: 0.2rem;
+  }
+  .contacto__vias a,
+  .contacto__vias p {
+    font-size: 1rem;
+    color: var(--ink-700);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .contacto__vias a:hover {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+
+  .formulario h2 {
+    font-size: var(--step-2);
+    margin-bottom: 1.5rem;
+  }
+  .campo {
+    display: grid;
+    gap: 0.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .campo label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--ink-700);
+  }
+  .campo input,
+  .campo select,
+  .campo textarea {
+    padding: 0.75rem 0.95rem;
+    background: var(--bg);
+    border: 1px solid var(--sand-300);
+    border-radius: var(--radius);
+    transition:
+      border-color 0.2s var(--ease-out),
+      box-shadow 0.2s var(--ease-out);
+  }
+  .campo input:focus,
+  .campo select:focus,
+  .campo textarea:focus {
+    outline: none;
+    border-color: var(--petrol-500);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--petrol-300) 40%, transparent);
+  }
+  .campo textarea {
+    resize: vertical;
+  }
+  .formulario .btn {
+    width: 100%;
+    margin-top: 0.4rem;
+  }
+  .formulario .fineprint {
+    margin-top: 0.9rem;
+    text-align: center;
+  }
+
+  @media (max-width: 880px) {
+    .contacto {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .datos-banco {
+    margin: 1.25rem 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .datos-banco div {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 0.75rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .datos-banco dt {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-400);
+  }
+  .datos-banco dd {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 480px) {
+    .datos-banco div {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+
+  .lista-check {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.5rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .lista-check li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text-muted);
+  }
+  .lista-check svg {
+    color: var(--petrol-500);
+    flex: none;
+  }
+
+  .denuncia {
+    padding: clamp(1.75rem, 4vw, 3.25rem);
+    background: linear-gradient(135deg, var(--petrol-800), var(--petrol-600));
+    border-radius: var(--radius-lg);
+    color: var(--sand-100);
+    box-shadow: var(--shadow-md);
+  }
+  .denuncia .eyebrow {
+    color: var(--terra-500);
+  }
+  .denuncia h2 {
+    font-size: var(--step-2);
+    color: #fff;
+    margin: 0.8rem 0 0.9rem;
+  }
+  .denuncia__cabeza p {
+    max-width: 68ch;
+    color: var(--petrol-100);
+  }
+  .garantias {
+    list-style: none;
+    padding: 0;
+    margin: 1.75rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .garantias li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.1rem;
+    background: rgb(255 255 255 / 0.1);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: var(--radius-pill);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .garantias svg {
+    color: var(--terra-500);
+  }
+</style>

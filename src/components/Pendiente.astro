@@ -1,0 +1,51 @@
+---
+/**
+ * Nota de contenido pendiente.
+ *
+ * Solo se muestra en `astro dev`, nunca en el sitio publicado. Sirve para que
+ * al revisar el sitio juntos quede a la vista qué material falta pedirle a la
+ * Fundación (fotos, nombres, datos bancarios) sin dejar texto de relleno.
+ */
+interface Props {
+  que: string;
+}
+const { que } = Astro.props;
+const esDev = import.meta.env.DEV;
+---
+
+{
+  esDev && (
+    <aside class="pendiente" role="note">
+      <strong>Pendiente</strong>
+      <span>{que}</span>
+    </aside>
+  )
+}
+
+<style>
+  .pendiente {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-block: 1.25rem;
+    padding: 0.85rem 1.1rem;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--terra-100),
+      var(--terra-100) 10px,
+      #fff5ee 10px,
+      #fff5ee 20px
+    );
+    border: 1px dashed var(--terra-500);
+    border-radius: var(--radius);
+    font-size: 0.88rem;
+    color: var(--terra-700);
+  }
+  .pendiente strong {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+</style>

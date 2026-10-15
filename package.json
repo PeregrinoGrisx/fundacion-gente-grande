@@ -1,0 +1,17 @@
+{
+  "name": "fundacion-gente-grande",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Sitio web Fundación Gente Grande de Arica",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5.14.1",
+    "@astrojs/sitemap": "^3.6.0"
+  }
+}

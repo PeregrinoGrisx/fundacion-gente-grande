@@ -1,0 +1,574 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Pendiente from "../components/Pendiente.astro";
+import {
+  donacion,
+  historia,
+  misionVision,
+  servicios,
+  site,
+  stats,
+  testimonios,
+} from "../data/site";
+---
+
+<Base title={site.name} description={site.description}>
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__orb hero__orb--a"></span>
+      <span class="hero__orb hero__orb--b"></span>
+    </div>
+
+    <div class="wrap hero__inner">
+      <div class="hero__copy">
+        <span class="eyebrow hero__eyebrow">Envejecimiento digno</span>
+        <h1 class="hero__title">
+          <span>La grandeza</span>
+          <span>tiene muchos</span>
+          <span><em>años.</em></span>
+        </h1>
+        <p class="lead hero__lead">
+          Promovemos el desarrollo pleno de las personas mayores con dignidad,
+          derechos y una visión moderna del envejecimiento. Desde Arica para
+          todo Chile.
+        </p>
+        <div class="btn-row hero__cta">
+          <a href="/eleam/" class="btn">
+            Conocer el ELEAM
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a href="#donar" class="btn btn--ghost">
+            <Icon name="corazon" size={18} />
+            Quiero donar
+          </a>
+        </div>
+      </div>
+
+      <figure class="hero__media" aria-hidden="true">
+        <div class="hero__frame">
+          <!-- Marcador visual mientras no tengamos fotografía definitiva. -->
+          <div class="hero__placeholder">
+            <Icon name="comunidad" size={56} />
+            <p>Fotografía principal</p>
+          </div>
+        </div>
+        <span class="hero__badge">
+          <Icon name="escudo" size={18} />
+          Fiscalizado por SENAMA
+        </span>
+      </figure>
+    </div>
+
+    <a href="#cifras" class="hero__scroll" aria-label="Bajar a las cifras">
+      <Icon name="flecha_abajo" size={18} />
+    </a>
+  </section>
+
+  <Pendiente que="Fotografía principal del hero (y foto de respaldo para redes, /public/img/og-default.jpg)." />
+
+  <!-- ===== Cifras ===== -->
+  <section id="cifras" class="section section--tight cifras">
+    <div class="wrap">
+      <ul class="cifras__grid">
+        {
+          stats.map((s, i) => (
+            <li class="cifra" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+              <span class="cifra__valor">
+                <span data-count={s.value} data-count-format={s.format ?? ""}>0</span
+                >{s.suffix}
+              </span>
+              <span class="cifra__label">{s.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Misión y visión ===== -->
+  <section class="section section--alt" id="mision">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Nuestra razón de ser</span>
+        <h2>Misión y visión</h2>
+      </header>
+
+      <div class="grid grid--2 mv">
+        <article class="card card--line mv__card" data-reveal="left">
+          <div class="card__icon"><Icon name="mano" size={24} /></div>
+          <h3>Misión</h3>
+          <p>{misionVision.mision}</p>
+        </article>
+        <article class="card card--line mv__card" data-reveal="right">
+          <div class="card__icon"><Icon name="actividad" size={24} /></div>
+          <h3>Visión</h3>
+          <p>{misionVision.vision}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Qué hacemos ===== -->
+  <section class="section">
+    <div class="wrap">
+      <header class="sechead sechead--split" data-reveal>
+        <div>
+          <span class="eyebrow">Qué hacemos</span>
+          <h2>Cuidado que respeta<br />la autonomía</h2>
+        </div>
+        <p class="lead">{historia.resumen}</p>
+      </header>
+
+      <div class="grid grid--3">
+        {
+          servicios.map((s, i) => (
+            <article class="card card--line" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <div class="card__icon">
+                <Icon name={s.icono as any} size={24} />
+              </div>
+              <h3>{s.titulo}</h3>
+              <p>{s.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="center" style="margin-top:2.75rem" data-reveal>
+        <a href="/eleam/" class="link-arrow">
+          Ver todo sobre el ELEAM
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Testimonios ===== -->
+  <section class="section section--dark testim">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Voces de nuestra comunidad</span>
+        <h2>Lo que nos cuentan<br />residentes y familias</h2>
+      </header>
+    </div>
+
+    <!-- Carrusel con scroll-snap: funciona sin JS y es navegable con teclado. -->
+    <ul class="testim__track" tabindex="0" aria-label="Testimonios, desliza para ver más">
+      {
+        testimonios.map((t) => (
+          <li class="testim__item">
+            <blockquote>
+              <Icon name="cita" size={28} class="testim__quote" />
+              <p>{t.texto}</p>
+              <footer>{t.autor}</footer>
+            </blockquote>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ===== Donación ===== -->
+  <section class="section donar" id="donar">
+    <div class="wrap-narrow center stack" data-reveal="scale">
+      <span class="eyebrow center">Suma tu aporte</span>
+      <h2>{donacion.titulo}</h2>
+      <p class="lead">{donacion.texto}</p>
+      <div class="btn-row center" style="justify-content:center">
+        <a href="/contacto/#donar" class="btn btn--accent">
+          <Icon name="corazon" size={18} />
+          Donar ahora
+        </a>
+        <a href="/recursos/" class="btn btn--ghost">
+          <Icon name="documento" size={18} />
+          Ver en qué lo usamos
+        </a>
+      </div>
+      <p class="fineprint">{donacion.fineprint}</p>
+    </div>
+    <Pendiente que="Medio de pago para donar: datos de transferencia o pasarela (Webpay / Mercado Pago). Hoy el botón lleva a Contacto." />
+  </section>
+
+  <!-- ===== Canal de denuncias ===== -->
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="denuncia" data-reveal>
+        <div class="denuncia__icon" aria-hidden="true">
+          <Icon name="escudo" size={30} />
+        </div>
+        <div class="denuncia__body">
+          <span class="eyebrow">Canal oficial · Confidencial</span>
+          <h2>Canal de denuncias</h2>
+          <p>
+            Si has sido testigo o víctima de irregularidades, maltrato o
+            vulneración de derechos, tienes el derecho y la responsabilidad de
+            reportarlo. Tu denuncia es confidencial.
+          </p>
+          <a href="/contacto/#denuncias" class="btn btn--light">
+            Realizar denuncia
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(3rem, 7vw, 6rem) clamp(4rem, 9vw, 7rem);
+    background: linear-gradient(180deg, var(--sand-100), var(--sand-50));
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .hero__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+  }
+  .hero__orb--a {
+    width: 32rem;
+    height: 32rem;
+    top: -12rem;
+    right: -8rem;
+    background: var(--petrol-300);
+    animation: orbA 22s ease-in-out infinite alternate;
+  }
+  .hero__orb--b {
+    width: 24rem;
+    height: 24rem;
+    bottom: -10rem;
+    left: -6rem;
+    background: var(--terra-200);
+    animation: orbB 26s ease-in-out infinite alternate;
+  }
+  @keyframes orbA {
+    to {
+      transform: translate(-8%, 10%) scale(1.15);
+    }
+  }
+  @keyframes orbB {
+    to {
+      transform: translate(10%, -8%) scale(1.1);
+    }
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .hero__title {
+    margin-top: 1.1rem;
+    font-size: var(--step-5);
+  }
+  .hero__title span {
+    display: block;
+    opacity: 0;
+    transform: translateY(0.6em);
+    animation: subir 0.9s var(--ease-out) forwards;
+  }
+  .hero__title span:nth-child(1) {
+    animation-delay: 0.15s;
+  }
+  .hero__title span:nth-child(2) {
+    animation-delay: 0.28s;
+  }
+  .hero__title span:nth-child(3) {
+    animation-delay: 0.41s;
+  }
+  .hero__title em {
+    font-style: normal;
+    color: var(--terra-600);
+  }
+  @keyframes subir {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hero__eyebrow,
+  .hero__lead,
+  .hero__cta {
+    opacity: 0;
+    animation: subir 0.8s var(--ease-out) forwards;
+  }
+  .hero__eyebrow {
+    animation-delay: 0.05s;
+  }
+  .hero__lead {
+    animation-delay: 0.55s;
+    margin-top: 1.6rem;
+    max-width: 46ch;
+  }
+  .hero__cta {
+    animation-delay: 0.68s;
+    margin-top: 2.1rem;
+  }
+
+  .hero__media {
+    position: relative;
+    margin: 0;
+    opacity: 0;
+    animation: subir 1s var(--ease-out) 0.35s forwards;
+  }
+  .hero__frame {
+    aspect-ratio: 4 / 5;
+    border-radius: clamp(1.5rem, 4vw, 2.5rem);
+    overflow: hidden;
+    background: var(--petrol-100);
+    box-shadow: var(--shadow-lg);
+  }
+  .hero__placeholder {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.75rem;
+    height: 100%;
+    color: var(--petrol-600);
+    background:
+      radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.6), transparent 55%),
+      var(--petrol-100);
+  }
+  .hero__placeholder p {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .hero__badge {
+    position: absolute;
+    bottom: 1.5rem;
+    left: -1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-md);
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--petrol-800);
+  }
+  .hero__badge svg {
+    color: var(--petrol-500);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    translate: -50% 0;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--petrol-700);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    animation: botar 2.4s ease-in-out infinite;
+  }
+  @keyframes botar {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+  }
+
+  @media (max-width: 880px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+    .hero__media {
+      max-width: 26rem;
+      order: -1;
+    }
+    .hero__frame {
+      aspect-ratio: 3 / 2;
+    }
+    .hero__badge {
+      left: auto;
+      right: 1rem;
+    }
+    .hero__scroll {
+      display: none;
+    }
+  }
+
+  /* ===== Cifras ===== */
+  .cifras__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    padding: 2rem clamp(1.25rem, 3vw, 2.5rem);
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .cifra {
+    text-align: center;
+  }
+  .cifra__valor {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--petrol-700);
+    font-variant-numeric: tabular-nums;
+  }
+  .cifra__label {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.84rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  /* ===== Cabeceras de sección ===== */
+  .sechead {
+    margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  }
+  .sechead h2 {
+    margin-top: 0.9rem;
+  }
+  .sechead--split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1.5rem 3rem;
+    align-items: end;
+  }
+
+  .mv__card p {
+    font-size: 1.02rem;
+  }
+
+  /* ===== Testimonios ===== */
+  .testim__track {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem max(1.25rem, calc((100vw - var(--wrap)) / 2)) 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--petrol-500) transparent;
+  }
+  .testim__item {
+    flex: 0 0 min(88%, 24rem);
+    scroll-snap-align: start;
+  }
+  .testim__item blockquote {
+    height: 100%;
+    margin: 0;
+    padding: 1.9rem;
+    background: color-mix(in srgb, #fff 8%, transparent);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(4px);
+    transition:
+      background-color 0.3s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+  .testim__item blockquote:hover {
+    background: color-mix(in srgb, #fff 13%, transparent);
+    transform: translateY(-3px);
+  }
+  .testim__quote {
+    color: var(--terra-500);
+    margin-bottom: 0.9rem;
+  }
+  .testim__item p {
+    color: var(--sand-100);
+    font-size: 1.02rem;
+  }
+  .testim__item footer {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--petrol-300);
+  }
+
+  /* ===== Donación ===== */
+  .donar .eyebrow {
+    display: inline-flex;
+  }
+
+  /* ===== Denuncias ===== */
+  .denuncia {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: start;
+    padding: clamp(1.75rem, 4vw, 3rem);
+    background: linear-gradient(135deg, var(--petrol-800), var(--petrol-600));
+    border-radius: var(--radius-lg);
+    color: var(--sand-100);
+    box-shadow: var(--shadow-md);
+  }
+  .denuncia__icon {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    background: rgb(255 255 255 / 0.12);
+    border-radius: var(--radius);
+    color: #fff;
+  }
+  .denuncia h2 {
+    font-size: var(--step-2);
+    color: #fff;
+    margin: 0.7rem 0 0.8rem;
+  }
+  .denuncia p {
+    max-width: 62ch;
+    color: var(--petrol-100);
+    margin-bottom: 1.5rem;
+  }
+  .denuncia .eyebrow {
+    color: var(--terra-500);
+  }
+  @media (max-width: 640px) {
+    .denuncia {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__title span,
+    .hero__eyebrow,
+    .hero__lead,
+    .hero__cta,
+    .hero__media {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+    .hero__orb,
+    .hero__scroll {
+      animation: none;
+    }
+  }
+</style>

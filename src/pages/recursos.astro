@@ -1,0 +1,226 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import Pendiente from "../components/Pendiente.astro";
+import { colecciones } from "../data/documentos";
+import {
+  driveConfigurado,
+  listarCarpeta,
+  urlCarpeta,
+  urlDescargaDirecta,
+} from "../lib/drive";
+
+/**
+ * En el build consultamos cada carpeta de Drive y armamos la lista de
+ * descargas. Si no hay API key configurada caemos a los archivos declarados a
+ * mano y, si tampoco hay, mostramos el enlace a la carpeta.
+ */
+const secciones = await Promise.all(
+  colecciones.map(async (col) => {
+    const deDrive = await listarCarpeta(col.carpetaDrive);
+    const archivos =
+      deDrive.length > 0
+        ? deDrive
+        : col.archivosManuales.map((a) => ({
+            id: a.driveId,
+            nombre: a.nombre,
+            peso: a.peso ?? "",
+            fecha: "",
+            urlDescarga: urlDescargaDirecta(a.driveId),
+            urlVista: `https://drive.google.com/file/d/${a.driveId}/view`,
+          }));
+    return { ...col, archivos };
+  }),
+);
+
+const formatearFecha = (iso: string) =>
+  iso
+    ? new Date(iso).toLocaleDateString("es-CL", {
+        year: "numeric",
+        month: "long",
+      })
+    : "";
+---
+
+<Base
+  title="Recursos"
+  description="Memorias, balances y recursos transferidos de la Fundación Gente Grande, disponibles para descarga directa en PDF."
+>
+  <PageHero
+    eyebrow="Documentos oficiales"
+    title="Memorias, balances y transparencia"
+    lead="Publicamos nuestra gestión anual y los recursos recibidos. Cada documento se descarga con un clic, en PDF."
+  />
+
+  {
+    !driveConfigurado && (
+      <div class="wrap">
+        <Pendiente que="Falta la variable PUBLIC_GOOGLE_API_KEY (ver .env.example y docs/documentos-drive.md). Sin ella no se puede listar automáticamente el contenido de las carpetas de Drive y se muestra el enlace a la carpeta como respaldo." />
+      </div>
+    )
+  }
+
+  {
+    secciones.map((sec) => (
+      <section class="section" id={sec.slug}>
+        <div class="wrap">
+          <header class="sechead sechead--split" data-reveal>
+            <div>
+              <span class="eyebrow">{sec.titulo}</span>
+              <h2>{sec.titulo}</h2>
+            </div>
+            <p class="lead">{sec.descripcion}</p>
+          </header>
+
+          {sec.archivos.length > 0 ? (
+            <ul class="docs">
+              {sec.archivos.map((a, i) => (
+                <li class="doc" data-reveal style={`--reveal-delay:${i * 50}ms`}>
+                  <span class="doc__icon" aria-hidden="true">
+                    <Icon name="documento" size={22} />
+                  </span>
+                  <div class="doc__info">
+                    <h3>{a.nombre}</h3>
+                    <p class="doc__meta">
+                      PDF
+                      {a.peso && <> · {a.peso}</>}
+                      {a.fecha && <> · Actualizado {formatearFecha(a.fecha)}</>}
+                    </p>
+                  </div>
+                  <a
+                    class="btn btn--ghost doc__btn"
+                    href={a.urlDescarga}
+                    download
+                    rel="noopener"
+                  >
+                    <Icon name="download" size={18} />
+                    Descargar
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div class="vacio card" data-reveal>
+              <span class="doc__icon" aria-hidden="true">
+                <Icon name="carpeta" size={22} />
+              </span>
+              <div>
+                <h3>Documentos en Google Drive</h3>
+                <p>
+                  Mientras terminamos de conectar la descarga directa, puedes
+                  revisar los documentos en la carpeta compartida.
+                </p>
+              </div>
+              <a
+                class="btn btn--ghost"
+                href={urlCarpeta(sec.carpetaDrive)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abrir carpeta
+                <Icon name="arrow-right" size={18} />
+              </a>
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- ===== Nota de transparencia ===== -->
+  <section class="section section--tight section--alt">
+    <div class="wrap-narrow center stack" data-reveal>
+      <span class="eyebrow center" style="display:inline-flex">Transparencia</span>
+      <h2 style="font-size:var(--step-2)">¿Buscas un documento que no está acá?</h2>
+      <p class="lead">
+        Escríbenos y lo gestionamos. Como fundación sin fines de lucro, nuestra
+        información de gestión es pública.
+      </p>
+      <div class="btn-row" style="justify-content:center">
+        <a href="/contacto/" class="btn">
+          Solicitar un documento
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .docs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+  .doc {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.15rem 1.35rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition:
+      border-color 0.25s var(--ease-out),
+      box-shadow 0.25s var(--ease-out),
+      transform 0.25s var(--ease-out);
+  }
+  .doc:hover {
+    border-color: var(--petrol-300);
+    box-shadow: var(--shadow-sm);
+    transform: translateX(3px);
+  }
+  .doc__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: var(--petrol-100);
+    color: var(--petrol-700);
+    border-radius: var(--radius);
+    flex: none;
+  }
+  .doc__info h3 {
+    font-size: 1.05rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .doc__meta {
+    margin-top: 0.2rem;
+    font-size: 0.82rem;
+    color: var(--ink-400);
+  }
+  .doc__btn {
+    padding: 0.6rem 1.15rem;
+    font-size: 0.9rem;
+  }
+
+  .vacio {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .vacio h3 {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 640px) {
+    .doc,
+    .vacio {
+      grid-template-columns: auto 1fr;
+    }
+    .doc__btn,
+    .vacio .btn {
+      grid-column: 1 / -1;
+      justify-content: center;
+    }
+  }
+</style>
