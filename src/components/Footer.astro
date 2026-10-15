@@ -50,7 +50,12 @@ const redes = [
 <footer class="footer">
   <div class="wrap footer__grid">
     <div class="footer__brand">
-      <span class="eyebrow">{site.shortName}</span>
+      <!-- El isotipo va sobre un disco blanco: su mitad azul se perdería
+           contra el fondo oscuro del pie. Pendiente la versión monocroma
+           del logo para resolverlo sin el disco. -->
+      <span class="footer__marca">
+        <img src="/img/marca/Isotipo.png" alt={site.name} width="266" height="255" />
+      </span>
       <p class="footer__blurb">{site.description}</p>
       {
         redes.length > 0 && (
@@ -95,8 +100,8 @@ const redes = [
 
 <style>
   .footer {
-    background: var(--petrol-900);
-    color: var(--petrol-100);
+    background: var(--azul-900);
+    color: var(--azul-100);
     padding-top: var(--space-xl);
   }
   .footer__grid {
@@ -109,14 +114,26 @@ const redes = [
     grid-column: span 2;
     min-width: min(100%, 17rem);
   }
+  .footer__marca {
+    display: grid;
+    place-items: center;
+    width: 3.4rem;
+    height: 3.4rem;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .footer__marca img {
+    width: 2.3rem;
+    height: auto;
+  }
   .footer__blurb {
     margin-top: 0.9rem;
     max-width: 30ch;
-    color: color-mix(in srgb, var(--petrol-100) 80%, transparent);
+    color: color-mix(in srgb, var(--azul-100) 80%, transparent);
     font-size: 0.95rem;
   }
   .footer .eyebrow {
-    color: var(--terra-500);
+    color: var(--magenta-500);
   }
 
   .social {
@@ -131,7 +148,7 @@ const redes = [
     place-items: center;
     width: 2.4rem;
     height: 2.4rem;
-    color: var(--petrol-100);
+    color: var(--azul-100);
     border: 1px solid rgb(255 255 255 / 0.18);
     border-radius: 50%;
     transition:
@@ -140,8 +157,8 @@ const redes = [
       transform 0.25s var(--ease-out);
   }
   .social a:hover {
-    background: var(--terra-600);
-    border-color: var(--terra-600);
+    background: var(--magenta-600);
+    border-color: var(--magenta-600);
     color: #fff;
     transform: translateY(-2px);
   }
@@ -162,7 +179,7 @@ const redes = [
     gap: 0.6rem;
   }
   .footer__col a {
-    color: color-mix(in srgb, var(--petrol-100) 85%, transparent);
+    color: color-mix(in srgb, var(--azul-100) 85%, transparent);
     text-decoration: none;
     font-size: 0.93rem;
     transition:
@@ -182,10 +199,10 @@ const redes = [
     padding-block: 1.5rem;
     border-top: 1px solid rgb(255 255 255 / 0.12);
     font-size: 0.82rem;
-    color: color-mix(in srgb, var(--petrol-100) 70%, transparent);
+    color: color-mix(in srgb, var(--azul-100) 70%, transparent);
   }
   .footer__credit a {
-    color: var(--terra-500);
+    color: var(--magenta-500);
     text-decoration: none;
   }
   .footer__credit a:hover {

@@ -20,7 +20,8 @@ y recorrer las páginas: cada bloque naranja a rayas es algo por conseguir.
 ## Stack
 
 - **[Astro](https://astro.build)** — genera HTML estático, sin framework de UI.
-- **CSS propio** con custom properties (`src/styles/global.css`). Sin Tailwind
+- **CSS propio** con custom properties (`src/styles/global.css`), con los
+  colores y la tipografía de la marca (ver [docs/marca.md](docs/marca.md)). Sin Tailwind
   ni preprocesadores.
 - **JavaScript mínimo**: menú móvil, revelado al hacer scroll, contadores.
   Todo respeta `prefers-reduced-motion`.

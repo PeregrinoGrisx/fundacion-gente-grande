@@ -4,45 +4,55 @@
    ========================================================================== */
 
 :root {
-  /* Marca */
-  --petrol-900: #07302d;
-  --petrol-800: #0b413c;
-  --petrol-700: #0e4f4a;
-  --petrol-600: #13645c;
-  --petrol-500: #1b7f74;
-  --petrol-300: #7fbdb4;
-  --petrol-100: #dceee9;
+  /* --- Marca -------------------------------------------------------------
+     Los dos colores del logotipo: el azul del corazón y de "Gente Grande",
+     y el magenta de la otra mitad del corazón. El resto de cada escala se
+     derivó de ellos para tener sombras y fondos coherentes.
+     ----------------------------------------------------------------------- */
+  --azul-900: #0a2c45;
+  --azul-800: #0f3e60;
+  --azul-700: #17527e;
+  --azul-600: #2275b7; /* ← azul de marca */
+  --azul-500: #3d8ccb;
+  --azul-300: #8ebfe4;
+  --azul-100: #e3f0fa;
 
-  --terra-700: #a8431f;
-  --terra-600: #c2572f;
-  --terra-500: #d9733f;
-  --terra-200: #f4d6c3;
-  --terra-100: #fbeade;
+  --magenta-800: #951a56;
+  --magenta-700: #b82068;
+  --magenta-600: #e8388d; /* ← magenta de marca */
+  --magenta-500: #f05fa5;
+  --magenta-200: #f9c2dc;
+  --magenta-100: #fdeaf3;
 
-  --sand-50: #fdfbf7;
-  --sand-100: #f8f3ec;
-  --sand-200: #efe7da;
-  --sand-300: #e0d4c1;
+  /* Neutros fríos, para que acompañen al azul sin ensuciarlo. */
+  --neutro-50: #fafbfd;
+  --neutro-100: #f1f5f9;
+  --neutro-200: #e3eaf1;
+  --neutro-300: #cdd8e4;
 
-  --ink-900: #11201e;
-  --ink-700: #2b3b38;
-  --ink-500: #566762;
-  --ink-400: #7d8c88;
+  --ink-900: #0f1c2b;
+  --ink-700: #33465c;
+  --ink-500: #5f7187;
+  --ink-400: #8d9bad;
 
   /* Roles semánticos */
-  --bg: var(--sand-50);
-  --bg-alt: var(--sand-100);
+  --bg: var(--neutro-50);
+  --bg-alt: var(--neutro-100);
   --surface: #ffffff;
   --text: var(--ink-900);
   --text-muted: var(--ink-500);
-  --border: var(--sand-200);
-  --brand: var(--petrol-700);
-  --brand-strong: var(--petrol-900);
-  --accent: var(--terra-600);
+  --border: var(--neutro-200);
+  --brand: var(--azul-600);
+  --brand-strong: var(--azul-900);
+  /* El magenta de marca sobre blanco da 3,9:1 y no alcanza AA para texto, así
+     que para texto y rellenos en claro usamos el tono 700 (6,1:1). El 600 se
+     reserva para fondos oscuros y elementos decorativos. */
+  --accent: var(--magenta-700);
+  --accent-bright: var(--magenta-600);
 
-  /* Tipografía */
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Tipografía: Montserrat, la misma familia del logotipo. */
+  --font-display: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --step--1: clamp(0.82rem, 0.8rem + 0.1vw, 0.9rem);
   --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.07rem);
@@ -124,10 +134,14 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
   text-wrap: balance;
+}
+h3,
+h4 {
+  letter-spacing: -0.015em;
 }
 h1 {
   font-size: var(--step-5);
@@ -146,7 +160,7 @@ p {
 }
 
 :where(a, button, [tabindex]):focus-visible {
-  outline: 2px solid var(--petrol-500);
+  outline: 2px solid var(--azul-500);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -170,8 +184,8 @@ p {
   background: var(--bg-alt);
 }
 .section--dark {
-  background: var(--petrol-900);
-  color: var(--sand-100);
+  background: var(--azul-900);
+  color: var(--neutro-100);
 }
 .section--dark h2,
 .section--dark h3 {
@@ -203,7 +217,7 @@ p {
   left: 50%;
   translate: -50% -150%;
   z-index: 200;
-  background: var(--petrol-900);
+  background: var(--azul-900);
   color: #fff;
   padding: 0.7rem 1.2rem;
   border-radius: 0 0 var(--radius) var(--radius);
@@ -242,7 +256,7 @@ p {
   opacity: 0.6;
 }
 .section--dark .eyebrow {
-  color: var(--terra-500);
+  color: var(--magenta-500);
 }
 .lead {
   font-size: var(--step-1);
@@ -250,7 +264,7 @@ p {
   line-height: 1.55;
 }
 .section--dark .lead {
-  color: var(--petrol-100);
+  color: var(--azul-100);
 }
 .muted {
   color: var(--text-muted);
@@ -262,7 +276,7 @@ p {
 
 /* --- Botones -------------------------------------------------------------- */
 .btn {
-  --btn-bg: var(--petrol-700);
+  --btn-bg: var(--azul-700);
   --btn-fg: #fff;
   display: inline-flex;
   align-items: center;
@@ -292,22 +306,22 @@ p {
   transform: translateY(0);
 }
 .btn--accent {
-  --btn-bg: var(--terra-600);
+  --btn-bg: var(--magenta-700);
 }
 .btn--accent:hover {
-  --btn-bg: var(--terra-700);
+  --btn-bg: var(--magenta-800);
 }
 .btn--ghost {
   --btn-bg: transparent;
   --btn-fg: var(--brand);
-  border-color: var(--sand-300);
+  border-color: var(--neutro-300);
 }
 .btn--ghost:hover {
   --btn-bg: var(--surface);
 }
 .btn--light {
   --btn-bg: #fff;
-  --btn-fg: var(--petrol-900);
+  --btn-fg: var(--azul-900);
 }
 .btn--outline-light {
   --btn-bg: transparent;
@@ -358,7 +372,7 @@ p {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
-  border-color: var(--petrol-300);
+  border-color: var(--azul-300);
 }
 .card__icon {
   display: grid;
@@ -366,8 +380,8 @@ p {
   width: 3rem;
   height: 3rem;
   margin-bottom: 1.1rem;
-  background: var(--petrol-100);
-  color: var(--petrol-700);
+  background: var(--azul-100);
+  color: var(--azul-700);
   border-radius: var(--radius);
 }
 .card h3 {
@@ -385,7 +399,7 @@ p {
   inset: 0 auto auto 0;
   height: 3px;
   width: 100%;
-  background: linear-gradient(90deg, var(--petrol-500), var(--terra-500));
+  background: linear-gradient(90deg, var(--azul-500), var(--magenta-500));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.45s var(--ease-out);
