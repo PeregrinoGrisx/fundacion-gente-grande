@@ -1,3 +1,6 @@
+/* Las @import van primero: fuentes locales, si se configuraron. */
+@import "./fuentes.css";
+
 /* ==========================================================================
    Fundación Gente Grande — sistema de diseño
    Paleta: petróleo (mar de Arica) + terracota (desierto) + arena cálida.
@@ -65,14 +68,14 @@
   --accent-bright: var(--magenta-600);
 
   /* --- Tipografía --------------------------------------------------------
-     Bricolage Grotesque para titulares: una grotesca variable con carácter
-     editorial, algo condensada y con detalles irregulares que le dan
-     personalidad sin perder seriedad. Instrument Sans para el texto, por
-     legibilidad: aperturas amplias y formas claras, que es lo que pide un
-     público mayor.
+     Source Serif 4 para titulares: una serif humanista con autoridad
+     institucional y calidez. La serif es deliberada: en una fundación de
+     personas mayores transmite respeto y permanencia, no tendencia.
+     Public Sans para el texto, diseñada para servicios públicos con la
+     legibilidad como requisito, que es lo que pide un público mayor.
      ----------------------------------------------------------------------- */
-  --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
-  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --step--1: clamp(0.82rem, 0.8rem + 0.1vw, 0.9rem);
   --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.07rem);
@@ -154,11 +157,10 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.035em;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
   text-wrap: balance;
-  font-variation-settings: "wdth" 88;
 }
 h3,
 h4 {

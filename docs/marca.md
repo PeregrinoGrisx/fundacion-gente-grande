@@ -45,16 +45,31 @@ El azul `#2275b7` con blanco da 4,9:1 y se usa tal cual.
 
 ## Tipografía
 
-| Rol       | Familia                  | Por qué                                                                                        |
-| --------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
-| Titulares | **Bricolage Grotesque**  | Grotesca variable con carácter editorial. Se la comprime con `wdth` 80-88 para titulares densos |
-| Texto     | **Instrument Sans**      | Aperturas amplias y formas claras: legibilidad real para un público mayor                       |
+**Provisional.** El cliente va a aportar la tipografía definitiva. Lo que hay
+hoy es un reemplazo decente, no una decisión cerrada.
 
-Las dos son variables y se cargan desde Google Fonts en `src/layouts/Base.astro`.
+| Rol       | Familia            | Por qué                                                          |
+| --------- | ------------------ | ---------------------------------------------------------------- |
+| Titulares | **Source Serif 4** | Serif humanista: transmite respeto y permanencia, no tendencia    |
+| Texto     | **Public Sans**    | Diseñada para servicios públicos, con la legibilidad como requisito |
 
-Bricolage tiene ejes `opsz`, `wdth` y `wght`. El ancho se aprovecha: los
-titulares grandes van comprimidos (`wdth` 80-82) para ganar presencia, y los
-`h3` quedan más anchos para leerse bien en tamaño chico.
+La serif en los titulares es deliberada. En una fundación de personas mayores
+una serif se lee como institucional y digna; una grotesca comprimida, como se
+probó antes, se lee como cartel y no corresponde al tema.
+
+### Cambiar la tipografía
+
+Todo el cambio ocurre en **`src/styles/fuentes.css`**, que tiene los pasos
+escritos al inicio:
+
+1. Copiar los archivos a `public/fonts/` (.woff2 de preferencia).
+2. Descomentar y completar los bloques `@font-face`.
+3. Descomentar el bloque `:root` del final.
+4. Borrar el `<link>` a Google Fonts en `src/layouts/Base.astro`.
+
+Si la fuente nueva es de palo seco, conviene revisar en `global.css` el
+`letter-spacing` de los titulares: una serif y una sans piden tracking
+distinto.
 
 ## Archivos del logo
 

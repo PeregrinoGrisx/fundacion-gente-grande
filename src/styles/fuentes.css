@@ -1,0 +1,94 @@
+/* ==========================================================================
+   Tipografías locales
+   ==========================================================================
+
+   PARA CAMBIAR LA TIPOGRAFÍA, SOLO HAY QUE TOCAR ESTE ARCHIVO.
+
+   Pasos
+   -----
+   1. Copiar los archivos de fuente a `public/fonts/`.
+      Formato preferido: .woff2 (pesa la mitad que .ttf o .otf).
+      Si solo tienes .ttf/.otf, se convierten en https://transfonter.org
+
+   2. Descomentar los bloques @font-face de abajo y ajustar el nombre del
+      archivo y el peso (`font-weight`) de cada uno.
+
+   3. Descomentar el bloque `:root` del final, que es el que hace el cambio
+      efectivo en todo el sitio.
+
+   4. En `src/layouts/Base.astro`, borrar el <link> a Google Fonts
+      (busca "fonts.googleapis.com") para no cargar fuentes de más.
+
+   Mientras esto siga comentado, el sitio usa las fuentes de Google que están
+   puestas hoy: Source Serif 4 para titulares y Public Sans para texto.
+
+   Nota: `font-display: swap` hace que el texto se vea de inmediato con una
+   fuente de sistema y cambie al cargar la definitiva. Para un sitio que se
+   lee, es preferible a dejar la pantalla en blanco.
+   ========================================================================== */
+
+/* --- Titulares ------------------------------------------------------------
+@font-face {
+  font-family: "Titulares";
+  src: url("/fonts/NOMBRE-DEL-ARCHIVO.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Titulares";
+  src: url("/fonts/NOMBRE-DEL-ARCHIVO-BOLD.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+--------------------------------------------------------------------------- */
+
+/* --- Texto ----------------------------------------------------------------
+@font-face {
+  font-family: "Texto";
+  src: url("/fonts/NOMBRE-DEL-ARCHIVO.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Texto";
+  src: url("/fonts/NOMBRE-DEL-ARCHIVO-MEDIUM.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Texto";
+  src: url("/fonts/NOMBRE-DEL-ARCHIVO-BOLD.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+--------------------------------------------------------------------------- */
+
+/* --- Activación -----------------------------------------------------------
+   Descomentar esto y las fuentes nuevas pasan a usarse en todo el sitio.
+   Si la fuente nueva es de palo seco, conviene además revisar en
+   global.css el `letter-spacing` de los titulares: una serif y una sans
+   piden tracking distinto.
+
+:root {
+  --font-display: "Titulares", Georgia, serif;
+  --font-sans: "Texto", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+--------------------------------------------------------------------------- */
+
+/* --- Si la fuente es variable ---------------------------------------------
+   Un solo archivo cubre todos los pesos. En ese caso, en vez de los bloques
+   de arriba, va uno así:
+
+@font-face {
+  font-family: "Titulares";
+  src: url("/fonts/ARCHIVO-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+--------------------------------------------------------------------------- */

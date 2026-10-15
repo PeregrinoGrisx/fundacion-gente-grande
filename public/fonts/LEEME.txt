@@ -1,0 +1,4 @@
+Acá van los archivos de fuente (.woff2 de preferencia).
+
+Después de copiarlos, abrir src/styles/fuentes.css y seguir los 4 pasos
+que están explicados al inicio de ese archivo.
