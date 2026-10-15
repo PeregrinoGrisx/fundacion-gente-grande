@@ -24,6 +24,20 @@
   --magenta-200: #f9c2dc;
   --magenta-100: #fdeaf3;
 
+  /* --- Pasteles ----------------------------------------------------------
+     Muestreados del sitio anterior, donde se usaban como fondo de sección.
+     Son los que le dan aire y variedad a la página: conviven con el azul y
+     el magenta sin competirles, porque ninguno satura.
+     ----------------------------------------------------------------------- */
+  --lavanda: #ece5fa;
+  --lavanda-fuerte: #d9ccf5;
+  --cielo: #eef6ff;
+  --cielo-fuerte: #d7e9fb;
+  --menta: #dff3e8;
+  --menta-fuerte: #c3e6d3;
+  --rosa: #fdeaf3;
+  --rosa-fuerte: #f9cfe3;
+
   /* Neutros fríos, para que acompañen al azul sin ensuciarlo. */
   --neutro-50: #fafbfd;
   --neutro-100: #f1f5f9;
@@ -50,9 +64,15 @@
   --accent: var(--magenta-700);
   --accent-bright: var(--magenta-600);
 
-  /* Tipografía: Montserrat, la misma familia del logotipo. */
-  --font-display: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* --- Tipografía --------------------------------------------------------
+     Bricolage Grotesque para titulares: una grotesca variable con carácter
+     editorial, algo condensada y con detalles irregulares que le dan
+     personalidad sin perder seriedad. Instrument Sans para el texto, por
+     legibilidad: aperturas amplias y formas claras, que es lo que pide un
+     público mayor.
+     ----------------------------------------------------------------------- */
+  --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --step--1: clamp(0.82rem, 0.8rem + 0.1vw, 0.9rem);
   --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.07rem);
@@ -135,9 +155,10 @@ h3,
 h4 {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   text-wrap: balance;
+  font-variation-settings: "wdth" 88;
 }
 h3,
 h4 {

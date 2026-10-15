@@ -1,20 +1,34 @@
 # Marca
 
-Los colores y la tipografía salen del logotipo y del sitio anterior, no de una
-propuesta nueva.
+Los colores y el logo salen del material existente. La tipografía y el lenguaje
+visual sí son propuesta nueva, porque el encargo es rediseñar, no maquillar.
 
 ## Colores
+
+### Los dos principales
 
 | Token           | Valor     | Origen y uso                                              |
 | --------------- | --------- | --------------------------------------------------------- |
 | `--azul-600`    | `#2275b7` | Azul del logotipo. Color principal: botones, enlaces, foco |
-| `--magenta-600` | `#e8388d` | Magenta del logotipo. Acento sobre fondo oscuro, titulares |
+| `--magenta-600` | `#e8388d` | Magenta del logotipo. Acento y titulares destacados        |
 | `--magenta-700` | `#b82068` | Acento para texto y rellenos sobre fondo claro (ver abajo) |
 | `--azul-900`    | `#0a2c45` | Fondo de las secciones oscuras y del pie                   |
 
-El resto de cada escala (`100` a `800`) se derivó de esos dos colores para
-tener fondos, bordes y estados de hover coherentes. Están todos en
-`src/styles/global.css`.
+### Los pasteles
+
+Muestreados del sitio anterior, donde ya se usaban como fondo de sección. No
+son decoración: son los que dan aire y ritmo a la página. Al ir rotando entre
+secciones y entre filas de una misma lista, evitan que todo se lea igual sin
+tener que meter más tinta.
+
+| Token       | Valor     | Dónde se usa                                   |
+| ----------- | --------- | ---------------------------------------------- |
+| `--lavanda` | `#ece5fa` | Fondo del hero, mitad "Misión", fichas          |
+| `--cielo`   | `#eef6ff` | Sección de testimonios, hueco de la foto        |
+| `--menta`   | `#dff3e8` | Mitad "Visión", fichas                          |
+| `--rosa`    | `#fdeaf3` | Franja de denuncias, fichas                     |
+
+Cada uno tiene su versión `-fuerte` para bordes y estados.
 
 ### Por qué hay dos magentas
 
@@ -31,9 +45,16 @@ El azul `#2275b7` con blanco da 4,9:1 y se usa tal cual.
 
 ## Tipografía
 
-**Montserrat**, la misma familia del logotipo. Se carga desde Google Fonts en
-`src/layouts/Base.astro`. Titulares en 700 con tracking negativo; texto en 400
-y 500.
+| Rol       | Familia                  | Por qué                                                                                        |
+| --------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
+| Titulares | **Bricolage Grotesque**  | Grotesca variable con carácter editorial. Se la comprime con `wdth` 80-88 para titulares densos |
+| Texto     | **Instrument Sans**      | Aperturas amplias y formas claras: legibilidad real para un público mayor                       |
+
+Las dos son variables y se cargan desde Google Fonts en `src/layouts/Base.astro`.
+
+Bricolage tiene ejes `opsz`, `wdth` y `wght`. El ancho se aprovecha: los
+titulares grandes van comprimidos (`wdth` 80-82) para ganar presencia, y los
+`h3` quedan más anchos para leerse bien en tamaño chico.
 
 ## Archivos del logo
 
@@ -44,15 +65,15 @@ En `public/img/marca/`:
 | `cropped-Logotipo.png` | Logotipo horizontal completo (904 × 255)  |
 | `Isotipo.png`          | Solo el corazón (266 × 255)               |
 
-Ambos se bajaron del sitio anterior y son PNG sobre transparente.
+Ambos se bajaron del sitio anterior y son PNG sobre transparente. El isotipo
+también se usa en gran tamaño y baja opacidad como filigrana del hero.
 
 ### Pendiente
 
 - **Versiones vectoriales (SVG)** del logotipo y el isotipo. Los PNG se ven
-  bien hoy, pero pierden nitidez en pantallas de alta densidad y pesan de más.
-- **Versión monocroma blanca**, para el pie de página y cualquier fondo
-  oscuro. Hoy el isotipo va sobre un disco blanco porque su mitad azul se
-  perdería contra el azul oscuro del pie; con una versión blanca el disco
-  sobra.
-- **Favicon dedicado**. Ahora se usa el isotipo en PNG, que a 16 px se ve
-  apretado. Conviene una versión simplificada.
+  bien hoy, pero pierden nitidez en alta densidad y, en la filigrana del hero
+  —que se escala a 40rem— se nota.
+- **Versión monocroma blanca**, para el pie de página. Hoy el isotipo va sobre
+  un disco blanco porque su mitad azul se perdería contra el azul oscuro; con
+  una versión blanca el disco sobra.
+- **Favicon dedicado**: el isotipo a 16 px queda apretado.

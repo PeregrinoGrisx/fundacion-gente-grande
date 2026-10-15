@@ -15,7 +15,9 @@ desarrollo** y nunca en el sitio publicado. Para revisar la lista completa:
 npm run dev
 ```
 
-y recorrer las páginas: cada bloque naranja a rayas es algo por conseguir.
+y recorrer las páginas: cada bloque a rayas es algo por conseguir.
+
+Para retomar el trabajo, ver [docs/proximos-pasos.md](docs/proximos-pasos.md).
 
 ## Stack
 

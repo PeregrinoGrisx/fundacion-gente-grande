@@ -8,78 +8,124 @@ import {
   misionVision,
   servicios,
   site,
-  stats,
   testimonios,
 } from "../data/site";
+
+/** Valores que recorren la cinta bajo el hero. */
+const valores = [
+  "Dignidad",
+  "Derechos",
+  "Autonomía",
+  "Comunidad",
+  "Envejecimiento activo",
+  "Sin infantilizar",
+];
+
+/** Las cifras, como piezas editoriales y no como tarjetas. */
+const cifras = [
+  { n: "2014", pie: "Operando en Arica desde", tinte: "lavanda" },
+  { n: "11", pie: "Socios fundadores", tinte: "menta" },
+  { n: "01", pie: "ELEAM fiscalizado por SENAMA", tinte: "cielo" },
+  { n: "0", pie: "Pesos de lucro. Somos fundación", tinte: "rosa" },
+];
+
+const tintes = ["lavanda", "menta", "cielo", "rosa", "lavanda", "menta"];
 ---
 
 <Base title={site.name} description={site.description}>
-  <!-- ===== Hero ===== -->
+  <!-- ======================================================================
+       HERO — composición asimétrica: el titular manda y ocupa el ancho,
+       la imagen se sale del margen derecho y el isotipo queda de filigrana.
+       ====================================================================== -->
   <section class="hero">
-    <div class="hero__bg" aria-hidden="true">
-      <span class="hero__orb hero__orb--a"></span>
-      <span class="hero__orb hero__orb--b"></span>
-    </div>
+    <img
+      class="hero__filigrana"
+      src="/img/marca/Isotipo.png"
+      alt=""
+      aria-hidden="true"
+      width="266"
+      height="255"
+    />
 
     <div class="wrap hero__inner">
-      <div class="hero__copy">
-        <span class="eyebrow hero__eyebrow">Envejecimiento digno</span>
-        <h1 class="hero__title">
-          <span>La grandeza</span>
-          <span>tiene muchos</span>
-          <span><em>años.</em></span>
-        </h1>
-        <p class="lead hero__lead">
-          Promovemos el desarrollo pleno de las personas mayores con dignidad,
-          derechos y una visión moderna del envejecimiento. Desde Arica para
-          todo Chile.
+      <div class="hero__texto">
+        <p class="hero__kicker">
+          <span class="punto" aria-hidden="true"></span>
+          Fundación Gente Grande · Arica, Chile
         </p>
-        <div class="btn-row hero__cta">
-          <a href="/eleam/" class="btn">
-            Conocer el ELEAM
-            <Icon name="arrow-right" size={18} />
-          </a>
-          <a href="#donar" class="btn btn--ghost">
-            <Icon name="corazon" size={18} />
-            Quiero donar
-          </a>
+
+        <h1 class="hero__titular">
+          <span class="l l1">La grandeza</span>
+          <span class="l l2">tiene</span>
+          <span class="l l3"><em>muchos años</em></span>
+        </h1>
+
+        <div class="hero__pie">
+          <p class="hero__bajada">
+            Promovemos el desarrollo pleno de las personas mayores con
+            dignidad, derechos y una visión moderna del envejecimiento.
+          </p>
+          <div class="btn-row">
+            <a href="/eleam/" class="btn">
+              Conocer el ELEAM
+              <Icon name="arrow-right" size={18} />
+            </a>
+            <a href="#donar" class="btn btn--ghost">Quiero aportar</a>
+          </div>
         </div>
       </div>
 
-      <figure class="hero__media" aria-hidden="true">
-        <div class="hero__frame">
-          <!-- Marcador visual mientras no tengamos fotografía definitiva. -->
+      <figure class="hero__figura">
+        <div class="hero__foto">
           <div class="hero__placeholder">
-            <Icon name="comunidad" size={56} />
+            <Icon name="comunidad" size={48} />
             <p>Fotografía principal</p>
           </div>
         </div>
-        <span class="hero__badge">
-          <Icon name="escudo" size={18} />
+        <figcaption class="hero__sello">
+          <Icon name="escudo" size={17} />
           Fiscalizado por SENAMA
-        </span>
+        </figcaption>
       </figure>
     </div>
-
-    <a href="#cifras" class="hero__scroll" aria-label="Bajar a las cifras">
-      <Icon name="flecha_abajo" size={18} />
-    </a>
   </section>
 
-  <Pendiente que="Fotografía principal del hero (y foto de respaldo para redes, /public/img/og-default.jpg)." />
+  <Pendiente que="Fotografía principal del hero (retrato de persona mayor, vertical) e imagen para compartir en redes (/public/img/og-default.jpg)." />
 
-  <!-- ===== Cifras ===== -->
-  <section id="cifras" class="section section--tight cifras">
-    <div class="wrap">
-      <ul class="cifras__grid">
-        {
-          stats.map((s, i) => (
-            <li class="cifra" data-reveal style={`--reveal-delay:${i * 90}ms`}>
-              <span class="cifra__valor">
-                <span data-count={s.value} data-count-format={s.format ?? ""}>0</span
-                >{s.suffix}
+  <!-- ======================================================================
+       CINTA — banda en movimiento continuo con los valores de la Fundación.
+       ====================================================================== -->
+  <div class="cinta" aria-hidden="true">
+    <div class="cinta__pista">
+      {
+        [0, 1].map(() => (
+          <span class="cinta__grupo">
+            {valores.map((v) => (
+              <span class="cinta__item">
+                {v}
+                <span class="cinta__sep">◆</span>
               </span>
-              <span class="cifra__label">{s.label}</span>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+  <p class="visually-hidden">
+    Valores de la Fundación: {valores.join(", ")}.
+  </p>
+
+  <!-- ======================================================================
+       CIFRAS — banda editorial. Números enormes, reglas finas, sin tarjetas.
+       ====================================================================== -->
+  <section class="section section--tight cifras" aria-label="La Fundación en cifras">
+    <div class="wrap">
+      <ul class="cifras__lista">
+        {
+          cifras.map((c, i) => (
+            <li class={`cifra cifra--${c.tinte}`} data-reveal style={`--reveal-delay:${i * 90}ms`}>
+              <span class="cifra__n">{c.n}</span>
+              <span class="cifra__pie">{c.pie}</span>
             </li>
           ))
         }
@@ -87,79 +133,78 @@ import {
     </div>
   </section>
 
-  <!-- ===== Misión y visión ===== -->
-  <section class="section section--alt" id="mision">
-    <div class="wrap">
-      <header class="sechead" data-reveal>
-        <span class="eyebrow">Nuestra razón de ser</span>
-        <h2>Misión y visión</h2>
-      </header>
-
-      <div class="grid grid--2 mv">
-        <article class="card card--line mv__card" data-reveal="left">
-          <div class="card__icon"><Icon name="mano" size={24} /></div>
-          <h3>Misión</h3>
-          <p>{misionVision.mision}</p>
-        </article>
-        <article class="card card--line mv__card" data-reveal="right">
-          <div class="card__icon"><Icon name="actividad" size={24} /></div>
-          <h3>Visión</h3>
-          <p>{misionVision.vision}</p>
-        </article>
-      </div>
-    </div>
+  <!-- ======================================================================
+       MISIÓN Y VISIÓN — partición a dos tonos a sangre completa.
+       ====================================================================== -->
+  <section class="particion" id="mision">
+    <article class="particion__mitad particion__mitad--lavanda" data-reveal="left">
+      <span class="particion__num" aria-hidden="true">01</span>
+      <h2>Misión</h2>
+      <p>{misionVision.mision}</p>
+    </article>
+    <article class="particion__mitad particion__mitad--menta" data-reveal="right">
+      <span class="particion__num" aria-hidden="true">02</span>
+      <h2>Visión</h2>
+      <p>{misionVision.vision}</p>
+    </article>
   </section>
 
-  <!-- ===== Qué hacemos ===== -->
-  <section class="section">
-    <div class="wrap">
-      <header class="sechead sechead--split" data-reveal>
-        <div>
-          <span class="eyebrow">Qué hacemos</span>
-          <h2>Cuidado que respeta<br />la autonomía</h2>
-        </div>
-        <p class="lead">{historia.resumen}</p>
-      </header>
-
-      <div class="grid grid--3">
-        {
-          servicios.map((s, i) => (
-            <article class="card card--line" data-reveal style={`--reveal-delay:${i * 70}ms`}>
-              <div class="card__icon">
-                <Icon name={s.icono as any} size={24} />
-              </div>
-              <h3>{s.titulo}</h3>
-              <p>{s.texto}</p>
-            </article>
-          ))
-        }
-      </div>
-
-      <div class="center" style="margin-top:2.75rem" data-reveal>
+  <!-- ======================================================================
+       QUÉ HACEMOS — índice editorial: el título queda fijo mientras la lista
+       numerada corre al lado. Reemplaza la grilla de tarjetas.
+       ====================================================================== -->
+  <section class="section indice">
+    <div class="wrap indice__inner">
+      <div class="indice__fijo">
+        <span class="eyebrow">Qué hacemos</span>
+        <h2>Cuidado que<br />respeta la<br /><em>autonomía</em></h2>
+        <p class="indice__nota">{historia.resumen}</p>
         <a href="/eleam/" class="link-arrow">
           Ver todo sobre el ELEAM
           <Icon name="arrow-right" size={18} />
         </a>
       </div>
+
+      <ol class="indice__lista">
+        {
+          servicios.map((s, i) => (
+            <li
+              class={`fila fila--${tintes[i % tintes.length]}`}
+              data-reveal
+              style={`--reveal-delay:${i * 60}ms`}
+            >
+              <span class="fila__n">{String(i + 1).padStart(2, "0")}</span>
+              <div class="fila__cuerpo">
+                <h3>{s.titulo}</h3>
+                <p>{s.texto}</p>
+              </div>
+              <span class="fila__icono" aria-hidden="true">
+                <Icon name={s.icono as any} size={22} />
+              </span>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 
-  <!-- ===== Testimonios ===== -->
-  <section class="section section--dark testim">
+  <!-- ======================================================================
+       TESTIMONIOS — carrusel sobre pastel, cada ficha con su propio tinte.
+       ====================================================================== -->
+  <section class="section testim">
     <div class="wrap">
-      <header class="sechead" data-reveal>
+      <header class="testim__head" data-reveal>
         <span class="eyebrow">Voces de nuestra comunidad</span>
-        <h2>Lo que nos cuentan<br />residentes y familias</h2>
+        <h2>Lo que nos cuentan residentes y familias</h2>
       </header>
     </div>
 
-    <!-- Carrusel con scroll-snap: funciona sin JS y es navegable con teclado. -->
-    <ul class="testim__track" tabindex="0" aria-label="Testimonios, desliza para ver más">
+    <ul class="testim__pista" tabindex="0" aria-label="Testimonios, desliza para ver más">
       {
-        testimonios.map((t) => (
-          <li class="testim__item">
+        testimonios.map((t, i) => (
+          <li class={`ficha ficha--${tintes[i % tintes.length]}`}>
+            <span class="ficha__comilla" aria-hidden="true">“</span>
             <blockquote>
-              <Icon name="cita" size={28} class="testim__quote" />
               <p>{t.texto}</p>
               <footer>{t.autor}</footer>
             </blockquote>
@@ -169,405 +214,623 @@ import {
     </ul>
   </section>
 
-  <!-- ===== Donación ===== -->
-  <section class="section donar" id="donar">
-    <div class="wrap-narrow center stack" data-reveal="scale">
-      <span class="eyebrow center">Suma tu aporte</span>
-      <h2>{donacion.titulo}</h2>
-      <p class="lead">{donacion.texto}</p>
-      <div class="btn-row center" style="justify-content:center">
-        <a href="/contacto/#donar" class="btn btn--accent">
-          <Icon name="corazon" size={18} />
-          Donar ahora
-        </a>
-        <a href="/recursos/" class="btn btn--ghost">
-          <Icon name="documento" size={18} />
-          Ver en qué lo usamos
-        </a>
+  <!-- ======================================================================
+       DONAR — bloque a sangre, tipografía grande, sin caja.
+       ====================================================================== -->
+  <section class="donar" id="donar">
+    <div class="wrap donar__inner">
+      <div data-reveal="left">
+        <span class="eyebrow">Suma tu aporte</span>
+        <h2 class="donar__titular">
+          Cada peso<br />se convierte en<br /><em>compañía</em>
+        </h2>
       </div>
-      <p class="fineprint">{donacion.fineprint}</p>
+      <div class="donar__col" data-reveal="right">
+        <p class="lead">{donacion.texto}</p>
+        <div class="btn-row">
+          <a href="/contacto/#donar" class="btn btn--accent">
+            <Icon name="corazon" size={18} />
+            Donar ahora
+          </a>
+          <a href="/recursos/" class="btn btn--outline-light">
+            Ver en qué lo usamos
+          </a>
+        </div>
+        <p class="donar__fino">{donacion.fineprint}</p>
+      </div>
     </div>
     <Pendiente que="Medio de pago para donar: datos de transferencia o pasarela (Webpay / Mercado Pago). Hoy el botón lleva a Contacto." />
   </section>
 
-  <!-- ===== Canal de denuncias ===== -->
+  <!-- ======================================================================
+       DENUNCIAS — franja sobria, sin adornos.
+       ====================================================================== -->
   <section class="section section--tight">
-    <div class="wrap">
-      <div class="denuncia" data-reveal>
-        <div class="denuncia__icon" aria-hidden="true">
-          <Icon name="escudo" size={30} />
-        </div>
-        <div class="denuncia__body">
-          <span class="eyebrow">Canal oficial · Confidencial</span>
-          <h2>Canal de denuncias</h2>
-          <p>
-            Si has sido testigo o víctima de irregularidades, maltrato o
-            vulneración de derechos, tienes el derecho y la responsabilidad de
-            reportarlo. Tu denuncia es confidencial.
-          </p>
-          <a href="/contacto/#denuncias" class="btn btn--light">
-            Realizar denuncia
-            <Icon name="arrow-right" size={18} />
-          </a>
-        </div>
+    <div class="wrap denuncia" data-reveal>
+      <div class="denuncia__texto">
+        <span class="eyebrow">Canal oficial · Confidencial</span>
+        <h2>Canal de denuncias</h2>
+        <p>
+          Si has sido testigo o víctima de irregularidades, maltrato o
+          vulneración de derechos, tienes el derecho y la responsabilidad de
+          reportarlo. Tu denuncia es confidencial.
+        </p>
       </div>
+      <a href="/contacto/#denuncias" class="btn">
+        Realizar denuncia
+        <Icon name="arrow-right" size={18} />
+      </a>
     </div>
   </section>
 </Base>
 
 <style>
-  /* ===== Hero ===== */
+  /* ===================== HERO ===================== */
   .hero {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding-block: clamp(3rem, 7vw, 6rem) clamp(4rem, 9vw, 7rem);
-    background: linear-gradient(180deg, var(--neutro-100), var(--neutro-50));
+    background: var(--lavanda);
+    padding-block: clamp(2.5rem, 6vw, 5rem) clamp(3rem, 7vw, 5.5rem);
   }
-  .hero__bg {
+  .hero__filigrana {
     position: absolute;
-    inset: 0;
     z-index: -1;
+    top: -8%;
+    left: -7%;
+    width: clamp(22rem, 42vw, 40rem);
+    height: auto;
+    opacity: 0.14;
+    rotate: -12deg;
+    animation: respirar 20s ease-in-out infinite alternate;
   }
-  .hero__orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.5;
-  }
-  .hero__orb--a {
-    width: 32rem;
-    height: 32rem;
-    top: -12rem;
-    right: -8rem;
-    background: var(--azul-300);
-    animation: orbA 22s ease-in-out infinite alternate;
-  }
-  .hero__orb--b {
-    width: 24rem;
-    height: 24rem;
-    bottom: -10rem;
-    left: -6rem;
-    background: var(--magenta-200);
-    animation: orbB 26s ease-in-out infinite alternate;
-  }
-  @keyframes orbA {
+  @keyframes respirar {
     to {
-      transform: translate(-8%, 10%) scale(1.15);
-    }
-  }
-  @keyframes orbB {
-    to {
-      transform: translate(10%, -8%) scale(1.1);
+      rotate: -6deg;
+      scale: 1.08;
     }
   }
 
   .hero__inner {
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
     align-items: center;
-    gap: clamp(2rem, 5vw, 4.5rem);
   }
 
-  .hero__title {
-    margin-top: 1.1rem;
-    font-size: var(--step-5);
+  .hero__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--azul-800);
   }
-  .hero__title span {
+  .punto {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--magenta-600);
+    animation: latir 2.6s ease-in-out infinite;
+  }
+  @keyframes latir {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0.55;
+    }
+  }
+
+  /* El titular es la pieza de diseño: enorme, apretado, desbordando. */
+  .hero__titular {
+    margin-top: 1.1rem;
+    font-size: clamp(3rem, 11.5vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    font-variation-settings: "wdth" 82;
+    color: var(--azul-900);
+  }
+  .hero__titular .l {
     display: block;
     opacity: 0;
-    transform: translateY(0.6em);
-    animation: subir 0.9s var(--ease-out) forwards;
+    transform: translateY(0.5em);
+    animation: entrar 1s var(--ease-out) forwards;
   }
-  .hero__title span:nth-child(1) {
-    animation-delay: 0.15s;
+  .l1 {
+    animation-delay: 0.1s;
   }
-  .hero__title span:nth-child(2) {
-    animation-delay: 0.28s;
+  .l2 {
+    animation-delay: 0.22s;
+    padding-left: 0.14em;
   }
-  .hero__title span:nth-child(3) {
-    animation-delay: 0.41s;
+  .l3 {
+    animation-delay: 0.34s;
+    padding-left: 0.05em;
   }
-  .hero__title em {
+  .hero__titular em {
     font-style: normal;
     color: var(--magenta-600);
   }
-  @keyframes subir {
+  @keyframes entrar {
     to {
       opacity: 1;
       transform: none;
     }
   }
 
-  .hero__eyebrow,
-  .hero__lead,
-  .hero__cta {
+  .hero__pie {
+    display: grid;
+    grid-template-columns: minmax(0, 24rem) auto;
+    gap: 1.5rem 2.5rem;
+    align-items: start;
+    margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
+    padding-top: 1.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--azul-900) 18%, transparent);
     opacity: 0;
-    animation: subir 0.8s var(--ease-out) forwards;
+    animation: entrar 0.9s var(--ease-out) 0.6s forwards;
   }
-  .hero__eyebrow {
-    animation-delay: 0.05s;
-  }
-  .hero__lead {
-    animation-delay: 0.55s;
-    margin-top: 1.6rem;
-    max-width: 46ch;
-  }
-  .hero__cta {
-    animation-delay: 0.68s;
-    margin-top: 2.1rem;
+  .hero__bajada {
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--azul-800);
   }
 
-  .hero__media {
+  .hero__figura {
     position: relative;
     margin: 0;
     opacity: 0;
-    animation: subir 1s var(--ease-out) 0.35s forwards;
+    animation: entrar 1.1s var(--ease-out) 0.3s forwards;
   }
-  .hero__frame {
-    aspect-ratio: 4 / 5;
-    border-radius: clamp(1.5rem, 4vw, 2.5rem);
+  /* La foto se sale del margen derecho: rompe la caja y da profundidad. */
+  .hero__foto {
+    aspect-ratio: 3 / 4;
+    margin-right: calc(-1 * clamp(1rem, 5vw, 5rem));
+    border-radius: 999px 999px 2rem 2rem;
     overflow: hidden;
-    background: var(--azul-100);
+    background: var(--cielo);
     box-shadow: var(--shadow-lg);
   }
   .hero__placeholder {
     display: grid;
     place-content: center;
     justify-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     height: 100%;
     color: var(--azul-600);
-    background:
-      radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.6), transparent 55%),
-      var(--azul-100);
   }
   .hero__placeholder p {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
-  .hero__badge {
+  .hero__sello {
     position: absolute;
-    bottom: 1.5rem;
-    left: -1rem;
+    bottom: 1.25rem;
+    left: -1.25rem;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.7rem 1.1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    padding: 0.65rem 1.05rem;
+    background: #fff;
     border-radius: var(--radius-pill);
     box-shadow: var(--shadow-md);
-    font-size: 0.86rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--azul-800);
   }
-  .hero__badge svg {
-    color: var(--azul-500);
+  .hero__sello svg {
+    color: var(--magenta-600);
   }
 
-  .hero__scroll {
-    position: absolute;
-    left: 50%;
-    bottom: 1.5rem;
-    translate: -50% 0;
-    display: grid;
-    place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    color: var(--azul-700);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    animation: botar 2.4s ease-in-out infinite;
-  }
-  @keyframes botar {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(5px);
-    }
-  }
-
-  @media (max-width: 880px) {
+  @media (max-width: 900px) {
     .hero__inner {
       grid-template-columns: 1fr;
     }
-    .hero__media {
-      max-width: 26rem;
+    .hero__figura {
       order: -1;
+      max-width: 20rem;
     }
-    .hero__frame {
-      aspect-ratio: 3 / 2;
+    .hero__foto {
+      aspect-ratio: 4 / 3;
+      margin-right: 0;
+      border-radius: 2rem;
     }
-    .hero__badge {
+    .hero__sello {
       left: auto;
-      right: 1rem;
+      right: 0.75rem;
     }
-    .hero__scroll {
-      display: none;
+    .hero__pie {
+      grid-template-columns: 1fr;
     }
   }
 
-  /* ===== Cifras ===== */
-  .cifras__grid {
+  /* ===================== CINTA ===================== */
+  .cinta {
+    overflow: hidden;
+    padding-block: 0.9rem;
+    background: var(--azul-900);
+    color: #fff;
+  }
+  .cinta__pista {
+    display: flex;
+    width: max-content;
+    animation: correr 38s linear infinite;
+  }
+  .cinta:hover .cinta__pista {
+    animation-play-state: paused;
+  }
+  .cinta__grupo {
+    display: flex;
+    flex: none;
+  }
+  .cinta__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5rem;
+    padding-right: 2.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .cinta__sep {
+    font-size: 0.5em;
+    color: var(--magenta-500);
+  }
+  @keyframes correr {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* ===================== CIFRAS ===================== */
+  .cifras__lista {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0;
     list-style: none;
-    padding: 2rem clamp(1.25rem, 3vw, 2.5rem);
+    padding: 0;
     margin: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border-top: 1px solid var(--neutro-200);
   }
   .cifra {
-    text-align: center;
+    position: relative;
+    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
+    border-bottom: 1px solid var(--neutro-200);
+    border-right: 1px solid var(--neutro-200);
+    transition: background-color 0.4s var(--ease-out);
   }
-  .cifra__valor {
+  .cifra:last-child {
+    border-right: 0;
+  }
+  .cifra--lavanda:hover {
+    background: var(--lavanda);
+  }
+  .cifra--menta:hover {
+    background: var(--menta);
+  }
+  .cifra--cielo:hover {
+    background: var(--cielo);
+  }
+  .cifra--rosa:hover {
+    background: var(--rosa);
+  }
+  .cifra__n {
     display: block;
     font-family: var(--font-display);
-    font-size: var(--step-3);
-    font-weight: 600;
-    line-height: 1;
-    color: var(--azul-700);
-    font-variant-numeric: tabular-nums;
+    font-size: clamp(2.75rem, 6.5vw, 5rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    font-variation-settings: "wdth" 80;
+    color: var(--azul-600);
   }
-  .cifra__label {
+  .cifra__pie {
     display: block;
-    margin-top: 0.5rem;
-    font-size: 0.84rem;
+    margin-top: 0.85rem;
+    max-width: 16ch;
+    font-size: 0.86rem;
     line-height: 1.4;
-    color: var(--text-muted);
+    color: var(--ink-500);
   }
 
-  /* ===== Cabeceras de sección ===== */
-  .sechead {
-    margin-bottom: clamp(2rem, 4vw, 3.25rem);
-  }
-  .sechead h2 {
-    margin-top: 0.9rem;
-  }
-  .sechead--split {
+  /* ===================== PARTICIÓN ===================== */
+  .particion {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-    gap: 1.5rem 3rem;
-    align-items: end;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+  .particion__mitad {
+    padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4.5rem);
+  }
+  .particion__mitad--lavanda {
+    background: var(--lavanda);
+  }
+  .particion__mitad--menta {
+    background: var(--menta);
+  }
+  .particion__num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: color-mix(in srgb, var(--azul-900) 22%, transparent);
+  }
+  .particion__mitad h2 {
+    margin: 0.5rem 0 1.25rem;
+    font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+    color: var(--azul-900);
+  }
+  .particion__mitad p {
+    max-width: 44ch;
+    font-size: 1.04rem;
+    line-height: 1.65;
+    color: var(--azul-800);
   }
 
-  .mv__card p {
-    font-size: 1.02rem;
+  /* ===================== ÍNDICE ===================== */
+  .indice__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .indice__fijo {
+    position: sticky;
+    top: 7.5rem;
+  }
+  .indice__fijo h2 {
+    margin: 1rem 0 1.4rem;
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+  }
+  .indice__fijo em {
+    font-style: normal;
+    color: var(--magenta-700);
+  }
+  .indice__nota {
+    max-width: 34ch;
+    margin-bottom: 1.5rem;
+    color: var(--ink-500);
   }
 
-  /* ===== Testimonios ===== */
-  .testim__track {
-    display: flex;
+  .indice__lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: fila;
+    border-top: 1px solid var(--neutro-200);
+  }
+  .fila {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     gap: 1.25rem;
+    align-items: start;
+    padding: clamp(1.4rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.5rem);
+    border-bottom: 1px solid var(--neutro-200);
+    border-radius: var(--radius);
+    transition:
+      background-color 0.4s var(--ease-out),
+      transform 0.4s var(--ease-out);
+  }
+  .fila--lavanda:hover {
+    background: var(--lavanda);
+  }
+  .fila--menta:hover {
+    background: var(--menta);
+  }
+  .fila--cielo:hover {
+    background: var(--cielo);
+  }
+  .fila--rosa:hover {
+    background: var(--rosa);
+  }
+  .fila:hover {
+    transform: translateX(6px);
+  }
+  .fila__n {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--magenta-600);
+    padding-top: 0.3rem;
+  }
+  .fila__cuerpo h3 {
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    margin-bottom: 0.4rem;
+    color: var(--azul-900);
+  }
+  .fila__cuerpo p {
+    color: var(--ink-500);
+    font-size: 0.97rem;
+    max-width: 48ch;
+  }
+  .fila__icono {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid var(--neutro-300);
+    border-radius: 50%;
+    color: var(--azul-600);
+    transition:
+      border-color 0.3s var(--ease-out),
+      background-color 0.3s var(--ease-out);
+  }
+  .fila:hover .fila__icono {
+    background: #fff;
+    border-color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .indice__inner {
+      grid-template-columns: 1fr;
+    }
+    .indice__fijo {
+      position: static;
+    }
+    .fila__icono {
+      display: none;
+    }
+    .fila {
+      grid-template-columns: auto 1fr;
+    }
+  }
+
+  /* ===================== TESTIMONIOS ===================== */
+  .testim {
+    background: var(--cielo);
+  }
+  .testim__head {
+    max-width: 30ch;
+    margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+  .testim__head h2 {
+    margin-top: 0.9rem;
+    font-size: clamp(1.9rem, 4vw, 3.1rem);
+    color: var(--azul-900);
+  }
+
+  .testim__pista {
+    display: flex;
+    gap: 1.1rem;
     list-style: none;
     margin: 0;
-    padding: 0.5rem max(1.25rem, calc((100vw - var(--wrap)) / 2)) 1.5rem;
+    padding: 0.4rem max(1.25rem, calc((100vw - var(--wrap)) / 2)) 1.25rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
-    scrollbar-color: var(--azul-500) transparent;
+    scrollbar-color: var(--azul-300) transparent;
   }
-  .testim__item {
-    flex: 0 0 min(88%, 24rem);
+  .ficha {
+    position: relative;
+    flex: 0 0 min(86%, 23rem);
     scroll-snap-align: start;
+    padding: 2.5rem 1.8rem 1.8rem;
+    border-radius: 1.75rem 1.75rem 1.75rem 0.4rem;
+    transition: transform 0.35s var(--ease-out);
   }
-  .testim__item blockquote {
-    height: 100%;
+  .ficha:hover {
+    transform: translateY(-5px);
+  }
+  .ficha--lavanda {
+    background: var(--lavanda);
+  }
+  .ficha--menta {
+    background: var(--menta);
+  }
+  .ficha--cielo {
+    background: #fff;
+  }
+  .ficha--rosa {
+    background: var(--rosa);
+  }
+  .ficha__comilla {
+    position: absolute;
+    top: 0.35rem;
+    left: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: color-mix(in srgb, var(--azul-900) 24%, transparent);
+  }
+  .ficha blockquote {
     margin: 0;
-    padding: 1.9rem;
-    background: color-mix(in srgb, #fff 8%, transparent);
-    border: 1px solid rgb(255 255 255 / 0.14);
-    border-radius: var(--radius-lg);
-    backdrop-filter: blur(4px);
-    transition:
-      background-color 0.3s var(--ease-out),
-      transform 0.3s var(--ease-out);
   }
-  .testim__item blockquote:hover {
-    background: color-mix(in srgb, #fff 13%, transparent);
-    transform: translateY(-3px);
+  .ficha p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--azul-900);
   }
-  .testim__quote {
-    color: var(--magenta-500);
-    margin-bottom: 0.9rem;
-  }
-  .testim__item p {
-    color: var(--neutro-100);
-    font-size: 1.02rem;
-  }
-  .testim__item footer {
-    margin-top: 1.25rem;
-    font-size: 0.82rem;
+  .ficha footer {
+    margin-top: 1.1rem;
+    font-size: 0.76rem;
+    font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--azul-300);
+    color: var(--ink-500);
   }
 
-  /* ===== Donación ===== */
+  /* ===================== DONAR ===================== */
+  .donar {
+    padding-block: clamp(3.5rem, 8vw, 6.5rem);
+    background: var(--azul-900);
+    color: #fff;
+  }
+  .donar__inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
   .donar .eyebrow {
-    display: inline-flex;
-  }
-
-  /* ===== Denuncias ===== */
-  .denuncia {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: clamp(1.25rem, 3vw, 2.5rem);
-    align-items: start;
-    padding: clamp(1.75rem, 4vw, 3rem);
-    background: linear-gradient(135deg, var(--azul-800), var(--azul-600));
-    border-radius: var(--radius-lg);
-    color: var(--neutro-100);
-    box-shadow: var(--shadow-md);
-  }
-  .denuncia__icon {
-    display: grid;
-    place-items: center;
-    width: 4rem;
-    height: 4rem;
-    background: rgb(255 255 255 / 0.12);
-    border-radius: var(--radius);
-    color: #fff;
-  }
-  .denuncia h2 {
-    font-size: var(--step-2);
-    color: #fff;
-    margin: 0.7rem 0 0.8rem;
-  }
-  .denuncia p {
-    max-width: 62ch;
-    color: var(--azul-100);
-    margin-bottom: 1.5rem;
-  }
-  .denuncia .eyebrow {
     color: var(--magenta-500);
   }
-  @media (max-width: 640px) {
+  .donar__titular {
+    margin-top: 1rem;
+    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+    line-height: 0.95;
+    color: #fff;
+  }
+  .donar__titular em {
+    font-style: normal;
+    color: var(--magenta-500);
+  }
+  .donar__col .lead {
+    color: var(--cielo);
+    margin-bottom: 1.75rem;
+  }
+  .donar__fino {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: color-mix(in srgb, var(--cielo) 65%, transparent);
+  }
+
+  /* ===================== DENUNCIAS ===================== */
+  .denuncia {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: center;
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    background: var(--rosa);
+    border-radius: var(--radius-lg);
+  }
+  .denuncia h2 {
+    margin: 0.7rem 0 0.7rem;
+    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+    color: var(--azul-900);
+  }
+  .denuncia p {
+    max-width: 60ch;
+    color: var(--ink-700);
+  }
+  @media (max-width: 760px) {
     .denuncia {
       grid-template-columns: 1fr;
     }
   }
 
+  /* ===================== MOVIMIENTO REDUCIDO ===================== */
   @media (prefers-reduced-motion: reduce) {
-    .hero__title span,
-    .hero__eyebrow,
-    .hero__lead,
-    .hero__cta,
-    .hero__media {
+    .hero__titular .l,
+    .hero__pie,
+    .hero__figura {
       opacity: 1;
       transform: none;
       animation: none;
     }
-    .hero__orb,
-    .hero__scroll {
+    .hero__filigrana,
+    .punto,
+    .cinta__pista {
       animation: none;
     }
   }
