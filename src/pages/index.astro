@@ -49,6 +49,11 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 <Base title={site.name} description={site.description}>
   <!-- ===================== HERO (lavanda) ===================== -->
   <section class="hero">
+    <div class="hero__fondo" aria-hidden="true">
+      <span class="hero__elipse hero__elipse--a"></span>
+      <span class="hero__elipse hero__elipse--b"></span>
+    </div>
+
     <div class="wrap hero__inner">
       <div class="hero__texto">
         <span class="eyebrow">Envejecimiento digno · Arica, Chile</span>
@@ -76,7 +81,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
         <div class="hero__foto">
           <Image
             src={heroRetrato}
-            alt="Mujer mayor sonriendo al aire libre"
+            alt="Mujer mayor sonriendo junto a su cuidadora en un espacio hogareño"
             widths={[480, 720, 960, 1200]}
             sizes="(max-width: 900px) 92vw, 44vw"
             loading="eager"
@@ -427,12 +432,37 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
   /* ===================== HERO ===================== */
   .hero {
     position: relative;
+    isolation: isolate;
+    overflow: hidden;
     padding-top: clamp(2.5rem, 5vw, 4.5rem);
-    background: linear-gradient(180deg, var(--lavanda) 0%, var(--lavanda) 62%, #fff 62%);
+    background: #fff;
+  }
+  .hero__fondo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .hero__elipse {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .hero__elipse--a {
+    top: -48%;
+    left: -22%;
+    width: 59%;
+    aspect-ratio: 1133 / 1889;
+    background: var(--lavanda);
+  }
+  .hero__elipse--b {
+    top: 20%;
+    left: 81%;
+    width: 46%;
+    aspect-ratio: 886 / 1477;
+    background: var(--cielo);
   }
   .hero__inner {
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1fr 1fr;
     gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
@@ -457,8 +487,11 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     position: relative;
     margin: 0;
   }
+  /* El template encuadra el hero en vertical: 526 x 727 px. */
   .hero__foto {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 526 / 727;
+    max-width: 33rem;
+    margin-inline: auto;
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: #fff;
@@ -521,8 +554,9 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
   }
 
   @media (max-width: 900px) {
-    .hero {
-      background: linear-gradient(180deg, var(--lavanda) 0%, var(--lavanda) 78%, #fff 78%);
+    .hero__foto {
+      aspect-ratio: 4 / 3;
+      max-width: 26rem;
     }
     .hero__inner {
       grid-template-columns: 1fr;
