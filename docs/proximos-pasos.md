@@ -72,3 +72,33 @@ migrar. Hay que rescatar las entradas reales y pasarlas a Markdown en
 - Los teléfonos y correos de los directores que aparecen en el sitio viejo son
   placeholders de plantilla (`+1 859 254-6589`, `info@example.com`). No
   publicarlos.
+
+## Fotografías (17 de octubre de 2026)
+
+El sitio ya no tiene huecos grises: se bajaron 8 fotos de **Envato Elements**
+(stock, licencia comercial de por vida, licenciadas automáticamente con la
+suscripción). No se gastaron créditos de IA: quedan los 2 que había.
+
+Viven en `src/assets/fotos/` y se sirven con el componente `<Image>` de Astro,
+que genera webp en varios tamaños durante el build. Pesan 70 MB en origen y
+7,3 MB servidas en total, y cada página carga solo las variantes que necesita.
+
+| Archivo                     | Dónde se usa                         |
+| --------------------------- | ------------------------------------ |
+| `hero-retrato.jpg`          | Hero de la portada                   |
+| `taller-manualidades.jpg`   | "Qué nos diferencia" + galería       |
+| `comunidad-conversacion.jpg`| "Sobre nosotros"                     |
+| `actividades-cartas.jpg`    | Galería ELEAM                        |
+| `ejercicios.jpg`            | Galería ELEAM                        |
+| `equipo-sala-comun.jpg`     | Galería ELEAM                        |
+| `lectura.jpg`               | Galería ELEAM                        |
+| `juego-argollas.jpg`        | Galería ELEAM                        |
+
+**Son provisionales.** Las personas que aparecen no son residentes de la
+Fundación. Sirven para que el sitio funcione y se pueda mostrar, pero hay que
+reemplazarlas por fotografías reales del ELEAM antes de publicar: en un sitio
+institucional, mostrar modelos de stock como si fueran residentes induce a
+error. Está marcado con `<Pendiente>` en las dos páginas.
+
+Reemplazarlas es sustituir el archivo en `src/assets/fotos/` conservando el
+nombre. No hay que tocar el código.

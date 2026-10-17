@@ -9,6 +9,10 @@
  * tiene que significar algo.
  */
 import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import heroRetrato from "../assets/fotos/hero-retrato.jpg";
+import fotoActividades from "../assets/fotos/taller-manualidades.jpg";
+import fotoComunidad from "../assets/fotos/comunidad-conversacion.jpg";
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Pendiente from "../components/Pendiente.astro";
@@ -70,10 +74,14 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 
       <figure class="hero__figura">
         <div class="hero__foto">
-          <div class="hero__hueco">
-            <Icon name="comunidad" size={52} />
-            <p>Fotografía principal</p>
-          </div>
+          <Image
+            src={heroRetrato}
+            alt="Mujer mayor sonriendo al aire libre"
+            widths={[480, 720, 960, 1200]}
+            sizes="(max-width: 900px) 92vw, 44vw"
+            loading="eager"
+            fetchpriority="high"
+          />
         </div>
         <span class="hero__sello">
           <Icon name="escudo" size={18} />
@@ -96,7 +104,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     </div>
   </section>
 
-  <Pendiente que="Fotografía principal del hero e imagen para compartir en redes (/public/img/og-default.jpg)." />
+  <Pendiente que="Las fotos son de stock (Envato Elements, licencia comercial) y son PROVISIONALES: hay que reemplazarlas por fotografías reales del ELEAM y sus residentes. Falta además la imagen para compartir en redes (/public/img/og-default.jpg)." />
 
   <!-- ===================== INSTITUCIONES (blanco) ===================== -->
   <section class="section section--tight instituciones">
@@ -174,10 +182,14 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
       </div>
 
       <div class="pareja__figura" data-reveal="right">
-        <div class="hueco hueco--alto">
-          <Icon name="actividad" size={44} />
-          <p>Fotografía de actividades</p>
-        </div>
+        <Image
+          class="foto foto--alta"
+          src={fotoActividades}
+          alt="Personas mayores en un taller de manualidades"
+          widths={[400, 600, 800]}
+          sizes="(max-width: 900px) 92vw, 40vw"
+          loading="lazy"
+        />
       </div>
     </div>
   </section>
@@ -235,10 +247,14 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     <div class="wrap">
       <div class="bloque bloque--lavanda pareja pareja--invertida">
         <div class="pareja__figura" data-reveal="left">
-          <div class="hueco">
-            <Icon name="comunidad" size={44} />
-            <p>Equipo y residentes</p>
-          </div>
+          <Image
+            class="foto"
+            src={fotoComunidad}
+            alt="Personas mayores conversando y compartiendo"
+            widths={[400, 600, 800]}
+            sizes="(max-width: 900px) 88vw, 40vw"
+            loading="lazy"
+          />
         </div>
         <div data-reveal="right">
           <span class="eyebrow">Sobre nosotros</span>
@@ -448,18 +464,10 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     background: #fff;
     box-shadow: var(--shadow-md);
   }
-  .hero__hueco {
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    gap: 0.6rem;
+  .hero__foto :global(img) {
+    width: 100%;
     height: 100%;
-    color: var(--ink-400);
-  }
-  .hero__hueco p {
-    font-size: var(--fs-xs);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    object-fit: cover;
   }
   .hero__sello {
     position: absolute;
@@ -622,24 +630,15 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     color: var(--ink-700);
   }
 
-  .hueco {
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    gap: 0.6rem;
+  .foto {
+    width: 100%;
     aspect-ratio: 4 / 3;
-    background: #fff;
+    object-fit: cover;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sm);
-    color: var(--ink-400);
   }
-  .hueco--alto {
+  .foto--alta {
     aspect-ratio: 4 / 5;
-  }
-  .hueco p {
-    font-size: var(--fs-xs);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
   }
 
   .puntos {
@@ -680,7 +679,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     .pareja--invertida .pareja__figura {
       order: 0;
     }
-    .hueco--alto {
+    .foto--alta {
       aspect-ratio: 3 / 2;
     }
   }

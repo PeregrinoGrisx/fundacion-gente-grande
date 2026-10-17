@@ -4,6 +4,22 @@ import PageHero from "../components/PageHero.astro";
 import Icon from "../components/Icon.astro";
 import Pendiente from "../components/Pendiente.astro";
 import { contacto, eleam, servicios } from "../data/site";
+import { Image } from "astro:assets";
+import cartas from "../assets/fotos/actividades-cartas.jpg";
+import ejercicios from "../assets/fotos/ejercicios.jpg";
+import salaComun from "../assets/fotos/equipo-sala-comun.jpg";
+import lectura from "../assets/fotos/lectura.jpg";
+import argollas from "../assets/fotos/juego-argollas.jpg";
+import taller from "../assets/fotos/taller-manualidades.jpg";
+
+const galeria = [
+  { src: cartas, alt: "Residentes jugando cartas acompañados por una cuidadora" },
+  { src: ejercicios, alt: "Residentes haciendo ejercicios junto al equipo" },
+  { src: salaComun, alt: "Residentes y personal en la sala común" },
+  { src: taller, alt: "Taller de manualidades con residentes" },
+  { src: lectura, alt: "Lectura compartida con residentes" },
+  { src: argollas, alt: "Residentes jugando a las argollas" },
+];
 
 const datos = [
   { icono: "ubicacion" as const, label: "Dirección", valor: contacto.direccionEleam },
@@ -76,13 +92,18 @@ const datos = [
         <span class="eyebrow">El lugar</span>
         <h2>Nuestras instalaciones</h2>
       </header>
-      <Pendiente que="Fotografías del ELEAM: fachada, habitaciones, comedor, sala de talleres, patio. Idealmente 6 a 8 fotos horizontales." />
+      <Pendiente que="Galería con fotos de stock PROVISIONALES. Reemplazar por fotografías reales del ELEAM: fachada, habitaciones, comedor, sala de talleres y patio. Idealmente 6 a 8 horizontales." />
       <div class="galeria">
         {
-          Array.from({ length: 6 }).map((_, i) => (
-            <figure class="galeria__hueco" data-reveal="scale" style={`--reveal-delay:${i * 60}ms`}>
-              <Icon name="comunidad" size={28} />
-              <figcaption>Foto {i + 1}</figcaption>
+          galeria.map((g, i) => (
+            <figure data-reveal="scale" style={`--reveal-delay:${i * 60}ms`}>
+              <Image
+                src={g.src}
+                alt={g.alt}
+                widths={[320, 480, 640]}
+                sizes="(max-width: 700px) 92vw, 30vw"
+                loading="lazy"
+              />
             </figure>
           ))
         }
@@ -199,23 +220,19 @@ const datos = [
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
     gap: 1rem;
   }
-  .galeria__hueco {
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    gap: 0.5rem;
+  .galeria figure {
     margin: 0;
-    aspect-ratio: 4 / 3;
-    background:
-      radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.7), transparent 60%),
-      var(--azul-100);
+    overflow: hidden;
     border-radius: var(--radius-lg);
-    color: var(--azul-600);
   }
-  .galeria__hueco figcaption {
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .galeria :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .galeria figure:hover :global(img) {
+    transform: scale(1.04);
   }
 
   .pasos {
