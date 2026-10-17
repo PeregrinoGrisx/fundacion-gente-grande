@@ -16,6 +16,7 @@ import fotoComunidad from "../assets/fotos/comunidad-conversacion.jpg";
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Pendiente from "../components/Pendiente.astro";
+import Lineas from "../components/Lineas.astro";
 import {
   contacto,
   denuncias,
@@ -49,10 +50,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 <Base title={site.name} description={site.description}>
   <!-- ===================== HERO (lavanda) ===================== -->
   <section class="hero">
-    <div class="hero__fondo" aria-hidden="true">
-      <span class="hero__elipse hero__elipse--a"></span>
-      <span class="hero__elipse hero__elipse--b"></span>
-    </div>
+    <Lineas desfase={-6} />
 
     <div class="wrap hero__inner">
       <div class="hero__texto">
@@ -126,6 +124,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 
   <!-- ===================== SERVICIOS (dos bloques pastel) ===================== -->
   <section class="section section--tight">
+    <Lineas lado="derecha" desfase={8} />
     <div class="wrap">
       <div class="duo">
         <article class="duo__card duo__card--lavanda" data-reveal="left">
@@ -201,6 +200,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 
   <!-- ===================== NOTICIAS (lavanda) ===================== -->
   <section class="section section--lavanda">
+    <Lineas lado="izquierda" desfase={4} />
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">Noticias</span>
@@ -276,6 +276,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 
   <!-- ===================== OBJETIVOS (menta) ===================== -->
   <section class="section section--menta">
+    <Lineas lado="derecha" desfase={-4} />
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">Nuestros objetivos</span>
@@ -343,6 +344,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 
   <!-- ===================== TESTIMONIOS (blanco, fichas pastel) ===================== -->
   <section class="section">
+    <Lineas desfase={6} />
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">Voces de nuestra comunidad</span>
@@ -437,29 +439,6 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     padding-top: clamp(2.5rem, 5vw, 4.5rem);
     background: #fff;
   }
-  .hero__fondo {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-  }
-  .hero__elipse {
-    position: absolute;
-    border-radius: 50%;
-  }
-  .hero__elipse--a {
-    top: -48%;
-    left: -22%;
-    width: 59%;
-    aspect-ratio: 1133 / 1889;
-    background: var(--lavanda);
-  }
-  .hero__elipse--b {
-    top: 20%;
-    left: 81%;
-    width: 46%;
-    aspect-ratio: 886 / 1477;
-    background: var(--cielo);
-  }
   .hero__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -506,12 +485,12 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     position: absolute;
     bottom: -1rem;
     left: -1rem;
+    border-radius: var(--radius-pill);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.7rem 1.1rem;
     background: #fff;
-    border-radius: var(--radius);
     box-shadow: var(--shadow-md);
     font-size: var(--fs-sm);
     font-weight: 600;
@@ -528,7 +507,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     padding: clamp(1.5rem, 3vw, 2.25rem);
     margin: 0;
     background: #fff;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow-md);
   }
   .cifras li {
@@ -631,7 +610,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     height: 4.5rem;
     margin-bottom: 1.5rem;
     background: #fff;
-    border-radius: var(--radius-lg);
+    border-radius: 50%;
     color: var(--ink-700);
   }
   .duo__card h2 {
@@ -693,7 +672,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     width: 2.75rem;
     height: 2.75rem;
     background: #fff;
-    border-radius: var(--radius);
+    border-radius: 50%;
     color: var(--ink-700);
     box-shadow: var(--shadow-sm);
   }
@@ -721,7 +700,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
   /* ===================== NOTICIAS ===================== */
   .nota {
     background: #fff;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     overflow: hidden;
     transition:
       transform 0.25s var(--ease-out),
@@ -877,7 +856,7 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     flex: 0 0 min(85%, 22rem);
     scroll-snap-align: start;
     padding: 1.75rem;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     transition: transform 0.25s var(--ease-out);
   }
   .testim__item:hover {

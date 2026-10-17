@@ -1,0 +1,52 @@
+---
+/**
+ * Arcos decorativos de fondo.
+ *
+ * El template los resuelve con elipses enormes sin relleno y un borde muy
+ * grueso (100 px) en un lavanda casi blanco. Como la mayor parte de cada
+ * elipse queda fuera del lienzo, lo que se ve es un arco amplio cruzando la
+ * sección. Están en casi todas las secciones y son lo que le da continuidad
+ * visual a la página.
+ *
+ * Las medidas son las del archivo de diseño, pasadas a porcentaje sobre su
+ * lienzo de 1920 px: elipse de 660 × 1100 (34,4% de ancho), la izquierda en
+ * x = -193 (-10%) y la derecha en x = 1388 (72,3%).
+ */
+interface Props {
+  /** Qué arcos mostrar. Por defecto los dos. */
+  lado?: "izquierda" | "derecha" | "ambos";
+  /** Desplazamiento vertical en porcentaje, para variar entre secciones. */
+  desfase?: number;
+}
+const { lado = "ambos", desfase = 0 } = Astro.props;
+---
+
+<div class="lineas" aria-hidden="true" style={`--desfase:${desfase}%`}>
+  {(lado === "ambos" || lado === "izquierda") && <span class="arco arco--izq" />}
+  {(lado === "ambos" || lado === "derecha") && <span class="arco arco--der" />}
+</div>
+
+<style>
+  .lineas {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .arco {
+    position: absolute;
+    width: 34.4%;
+    aspect-ratio: 660 / 1100;
+    border: clamp(2.5rem, 5.2vw, 6.25rem) solid var(--linea);
+    border-radius: 50%;
+  }
+  .arco--izq {
+    left: -10%;
+    top: calc(-41% + var(--desfase));
+  }
+  .arco--der {
+    left: 72.3%;
+    top: calc(-41% + var(--desfase));
+  }
+</style>
