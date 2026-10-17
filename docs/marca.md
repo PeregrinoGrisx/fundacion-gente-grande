@@ -45,31 +45,26 @@ El azul `#2275b7` con blanco da 4,9:1 y se usa tal cual.
 
 ## Tipografía
 
-**Provisional.** El cliente va a aportar la tipografía definitiva. Lo que hay
-hoy es un reemplazo decente, no una decisión cerrada.
+**Public Sans**, en todo el sitio. Es la del template Nosic Sketch, y coincide
+con la que ya se usaba para texto. Está diseñada para servicios públicos, con
+la legibilidad como requisito: justo lo que pide un público mayor.
 
-| Rol       | Familia            | Por qué                                                          |
-| --------- | ------------------ | ---------------------------------------------------------------- |
-| Titulares | **Source Serif 4** | Serif humanista: transmite respeto y permanencia, no tendencia    |
-| Texto     | **Public Sans**    | Diseñada para servicios públicos, con la legibilidad como requisito |
+Escala tomada del archivo de diseño —48 / 40 / 32 / 28 / 24 / 20 / 17 / 16 /
+13 / 12— expresada en `clamp()` para que se adapte sin perder las
+proporciones. Los tokens son `--fs-display`, `--fs-h1`, `--fs-h2`,
+`--fs-h3`, `--fs-lg`, `--fs-md`, `--fs-base`, `--fs-sm` y `--fs-xs`.
 
-La serif en los titulares es deliberada. En una fundación de personas mayores
-una serif se lee como institucional y digna; una grotesca comprimida, como se
-probó antes, se lee como cartel y no corresponde al tema.
+Ver [template.md](template.md) para el detalle de qué se extrajo del archivo.
 
 ### Cambiar la tipografía
 
-Todo el cambio ocurre en **`src/styles/fuentes.css`**, que tiene los pasos
-escritos al inicio:
+El cliente puede aportar otra. Todo el cambio ocurre en
+**`src/styles/fuentes.css`**, que tiene los pasos escritos al inicio:
 
 1. Copiar los archivos a `public/fonts/` (.woff2 de preferencia).
 2. Descomentar y completar los bloques `@font-face`.
 3. Descomentar el bloque `:root` del final.
 4. Borrar el `<link>` a Google Fonts en `src/layouts/Base.astro`.
-
-Si la fuente nueva es de palo seco, conviene revisar en `global.css` el
-`letter-spacing` de los titulares: una serif y una sans piden tracking
-distinto.
 
 ## Archivos del logo
 

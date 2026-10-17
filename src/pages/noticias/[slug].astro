@@ -25,7 +25,7 @@ const fmt = (d: Date) =>
 >
   <article class="nota-full">
     <header class="nota-full__head">
-      <div class="wrap-narrow">
+      <div class="wrap-angosto">
         <a href="/noticias/" class="volver">
           <Icon name="arrow-right" size={17} class="volver__icon" />
           Noticias
@@ -48,12 +48,12 @@ const fmt = (d: Date) =>
       )
     }
 
-    <div class="wrap-narrow prosa">
+    <div class="wrap-angosto prosa">
       <p class="lead">{entrada.data.resumen}</p>
       <Content />
     </div>
 
-    <div class="wrap-narrow nota-full__pie">
+    <div class="wrap-angosto nota-full__pie">
       <a href="/noticias/" class="btn btn--ghost">Ver todas las noticias</a>
     </div>
   </article>
@@ -92,7 +92,7 @@ const fmt = (d: Date) =>
     color: var(--azul-700);
   }
   .nota-full__head h1 {
-    font-size: var(--step-4);
+    font-size: var(--fs-h1);
     margin: 1rem 0 0.9rem;
   }
   .nota-full__head time {
@@ -121,11 +121,11 @@ const fmt = (d: Date) =>
     color: var(--ink-700);
   }
   .prosa :global(h2) {
-    font-size: var(--step-2);
+    font-size: var(--fs-h2);
     margin: 2.25rem 0 0.9rem;
   }
   .prosa :global(h3) {
-    font-size: var(--step-1);
+    font-size: var(--fs-lg);
     margin: 1.75rem 0 0.7rem;
   }
   .prosa :global(p),

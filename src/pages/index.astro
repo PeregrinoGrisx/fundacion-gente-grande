@@ -1,131 +1,95 @@
 ---
+/**
+ * Portada.
+ *
+ * Sigue el orden de secciones del template Nosic Sketch, adaptado a lo que
+ * la Fundación tiene que comunicar:
+ *
+ *   hero + cifras → instituciones → servicios → qué nos diferencia →
+ *   noticias → nosotros → objetivos → vinculación → formas de aportar →
+ *   testimonios → CTA → contacto/denuncias
+ */
+import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Pendiente from "../components/Pendiente.astro";
 import {
+  contacto,
+  denuncias,
+  diferencias,
   donacion,
+  formasDeAportar,
   historia,
   misionVision,
   servicios,
   site,
   testimonios,
+  vinculacionAcademica,
 } from "../data/site";
 
-/** Valores que recorren la cinta bajo el hero. */
-const valores = [
-  "Dignidad",
-  "Derechos",
-  "Autonomía",
-  "Comunidad",
-  "Envejecimiento activo",
-  "Sin infantilizar",
-];
-
-/** Las cifras, como piezas editoriales y no como tarjetas. */
 const cifras = [
-  { n: "2014", pie: "Operando en Arica desde", tinte: "lavanda" },
-  { n: "11", pie: "Socios fundadores", tinte: "menta" },
-  { n: "01", pie: "ELEAM fiscalizado por SENAMA", tinte: "cielo" },
-  { n: "0", pie: "Pesos de lucro. Somos fundación", tinte: "rosa" },
+  { n: "2014", pie: "Operando en Arica desde" },
+  { n: "11", pie: "Socios fundadores" },
+  { n: "60+", pie: "Años, desde donde acompañamos" },
+  { n: "100%", pie: "Sin fines de lucro" },
 ];
 
-const tintes = ["lavanda", "menta", "cielo", "rosa", "lavanda", "menta"];
+const noticias = (await getCollection("noticias", ({ data }) => !data.borrador))
+  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf())
+  .slice(0, 3);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" });
 ---
 
 <Base title={site.name} description={site.description}>
-  <!-- ======================================================================
-       HERO — composición asimétrica: el titular manda y ocupa el ancho,
-       la imagen se sale del margen derecho y el isotipo queda de filigrana.
-       ====================================================================== -->
+  <!-- ===================== HERO ===================== -->
   <section class="hero">
-    <img
-      class="hero__filigrana"
-      src="/img/marca/Isotipo.png"
-      alt=""
-      aria-hidden="true"
-      width="266"
-      height="255"
-    />
-
     <div class="wrap hero__inner">
       <div class="hero__texto">
-        <p class="hero__kicker">
-          <span class="punto" aria-hidden="true"></span>
-          Fundación Gente Grande · Arica, Chile
-        </p>
-
-        <h1 class="hero__titular">
-          <span class="l l1">La grandeza</span>
-          <span class="l l2">tiene</span>
-          <span class="l l3"><em>muchos años</em></span>
+        <span class="eyebrow">Envejecimiento digno · Arica, Chile</span>
+        <h1 class="hero__titulo">
+          La grandeza tiene <span>muchos años</span>
         </h1>
-
-        <div class="hero__pie">
-          <p class="hero__bajada">
-            Promovemos el desarrollo pleno de las personas mayores con
-            dignidad, derechos y una visión moderna del envejecimiento.
-          </p>
-          <div class="btn-row">
-            <a href="/eleam/" class="btn">
-              Conocer el ELEAM
-              <Icon name="arrow-right" size={18} />
-            </a>
-            <a href="#donar" class="btn btn--ghost">Quiero aportar</a>
-          </div>
+        <p class="hero__bajada">
+          Promovemos el desarrollo pleno de las personas mayores con dignidad,
+          derechos y una visión moderna del envejecimiento. Desde Arica para
+          todo Chile.
+        </p>
+        <div class="btn-row">
+          <a href="/eleam/" class="btn btn--lg">
+            Conocer el ELEAM
+            <Icon name="arrow-right" size={18} />
+          </a>
+          <a href="/contacto/#donar" class="btn btn--ghost btn--lg">
+            <Icon name="corazon" size={18} />
+            Quiero aportar
+          </a>
         </div>
       </div>
 
       <figure class="hero__figura">
         <div class="hero__foto">
-          <div class="hero__placeholder">
-            <Icon name="comunidad" size={48} />
+          <div class="hero__hueco">
+            <Icon name="comunidad" size={52} />
             <p>Fotografía principal</p>
           </div>
         </div>
-        <figcaption class="hero__sello">
-          <Icon name="escudo" size={17} />
+        <span class="hero__sello">
+          <Icon name="escudo" size={18} />
           Fiscalizado por SENAMA
-        </figcaption>
+        </span>
       </figure>
     </div>
-  </section>
 
-  <Pendiente que="Fotografía principal del hero (retrato de persona mayor, vertical) e imagen para compartir en redes (/public/img/og-default.jpg)." />
-
-  <!-- ======================================================================
-       CINTA — banda en movimiento continuo con los valores de la Fundación.
-       ====================================================================== -->
-  <div class="cinta" aria-hidden="true">
-    <div class="cinta__pista">
-      {
-        [0, 1].map(() => (
-          <span class="cinta__grupo">
-            {valores.map((v) => (
-              <span class="cinta__item">
-                {v}
-                <span class="cinta__sep">◆</span>
-              </span>
-            ))}
-          </span>
-        ))
-      }
-    </div>
-  </div>
-  <p class="visually-hidden">
-    Valores de la Fundación: {valores.join(", ")}.
-  </p>
-
-  <!-- ======================================================================
-       CIFRAS — banda editorial. Números enormes, reglas finas, sin tarjetas.
-       ====================================================================== -->
-  <section class="section section--tight cifras" aria-label="La Fundación en cifras">
+    <!-- Barra de cifras montada sobre el borde, como en el template. -->
     <div class="wrap">
-      <ul class="cifras__lista">
+      <ul class="cifras">
         {
           cifras.map((c, i) => (
-            <li class={`cifra cifra--${c.tinte}`} data-reveal style={`--reveal-delay:${i * 90}ms`}>
-              <span class="cifra__n">{c.n}</span>
-              <span class="cifra__pie">{c.pie}</span>
+            <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
+              <span class="cifras__n">{c.n}</span>
+              <span class="cifras__pie">{c.pie}</span>
             </li>
           ))
         }
@@ -133,77 +97,240 @@ const tintes = ["lavanda", "menta", "cielo", "rosa", "lavanda", "menta"];
     </div>
   </section>
 
-  <!-- ======================================================================
-       MISIÓN Y VISIÓN — partición a dos tonos a sangre completa.
-       ====================================================================== -->
-  <section class="particion" id="mision">
-    <article class="particion__mitad particion__mitad--lavanda" data-reveal="left">
-      <span class="particion__num" aria-hidden="true">01</span>
-      <h2>Misión</h2>
-      <p>{misionVision.mision}</p>
-    </article>
-    <article class="particion__mitad particion__mitad--menta" data-reveal="right">
-      <span class="particion__num" aria-hidden="true">02</span>
-      <h2>Visión</h2>
-      <p>{misionVision.vision}</p>
-    </article>
-  </section>
+  <Pendiente que="Fotografía principal del hero e imagen para compartir en redes (/public/img/og-default.jpg)." />
 
-  <!-- ======================================================================
-       QUÉ HACEMOS — índice editorial: el título queda fijo mientras la lista
-       numerada corre al lado. Reemplaza la grilla de tarjetas.
-       ====================================================================== -->
-  <section class="section indice">
-    <div class="wrap indice__inner">
-      <div class="indice__fijo">
-        <span class="eyebrow">Qué hacemos</span>
-        <h2>Cuidado que<br />respeta la<br /><em>autonomía</em></h2>
-        <p class="indice__nota">{historia.resumen}</p>
-        <a href="/eleam/" class="link-arrow">
-          Ver todo sobre el ELEAM
-          <Icon name="arrow-right" size={18} />
-        </a>
-      </div>
-
-      <ol class="indice__lista">
+  <!-- ===================== INSTITUCIONES ===================== -->
+  <section class="section section--tight instituciones">
+    <div class="wrap">
+      <p class="instituciones__titulo">
+        Trabajamos en red con instituciones de la región
+      </p>
+      <ul class="instituciones__lista">
         {
-          servicios.map((s, i) => (
-            <li
-              class={`fila fila--${tintes[i % tintes.length]}`}
-              data-reveal
-              style={`--reveal-delay:${i * 60}ms`}
-            >
-              <span class="fila__n">{String(i + 1).padStart(2, "0")}</span>
-              <div class="fila__cuerpo">
-                <h3>{s.titulo}</h3>
-                <p>{s.texto}</p>
-              </div>
-              <span class="fila__icono" aria-hidden="true">
-                <Icon name={s.icono as any} size={22} />
-              </span>
-            </li>
+          vinculacionAcademica.instituciones.map((i) => (
+            <li>{i}</li>
           ))
         }
-      </ol>
+        <li>SENAMA</li>
+      </ul>
     </div>
   </section>
 
-  <!-- ======================================================================
-       TESTIMONIOS — carrusel sobre pastel, cada ficha con su propio tinte.
-       ====================================================================== -->
-  <section class="section testim">
+  <!-- ===================== SERVICIOS (2 bloques grandes) ===================== -->
+  <section class="section">
     <div class="wrap">
-      <header class="testim__head" data-reveal>
+      <div class="grid grid--2 duo">
+        <article class="duo__card duo__card--lavanda" data-reveal="left">
+          <div class="duo__media" aria-hidden="true">
+            <Icon name="comunidad" size={38} />
+          </div>
+          <h2>Residencia de larga estadía</h2>
+          <p>
+            Un ELEAM en Arica fiscalizado por SENAMA desde 2014, con equipo
+            multidisciplinario y programas de envejecimiento activo.
+          </p>
+          <a href="/eleam/" class="link-arrow">
+            Conocer el ELEAM
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </article>
+
+        <article class="duo__card duo__card--menta" data-reveal="right">
+          <div class="duo__media" aria-hidden="true">
+            <Icon name="megafono" size={38} />
+          </div>
+          <h2>Conciencia y formación</h2>
+          <p>
+            Charlas, talleres y capacitaciones para cuidadores, familias y
+            estudiantes, con enfoque de derechos y envejecimiento activo.
+          </p>
+          <a href="/nosotros/" class="link-arrow">
+            Conocer la Fundación
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== QUÉ NOS DIFERENCIA ===================== -->
+  <section class="section section--alt">
+    <div class="wrap dif">
+      <div class="dif__texto" data-reveal="left">
+        <span class="eyebrow">Qué nos diferencia</span>
+        <h2>Una mirada distinta sobre la vejez</h2>
+        <p class="lead">{historia.resumen}</p>
+
+        <ul class="dif__lista">
+          {
+            diferencias.map((d) => (
+              <li>
+                <span class="dif__icono" aria-hidden="true">
+                  <Icon name={d.icono as any} size={20} />
+                </span>
+                <div>
+                  <h3>{d.titulo}</h3>
+                  <p>{d.texto}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="dif__figura" data-reveal="right">
+        <div class="dif__hueco">
+          <Icon name="actividad" size={44} />
+          <p>Fotografía de actividades</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NOTICIAS ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Noticias</span>
+        <h2>Lo que pasa en la Fundación</h2>
+        <p class="lead">
+          Comunicados, novedades y actividades junto a residentes, familias,
+          equipo y comunidad.
+        </p>
+      </header>
+
+      {
+        noticias.length > 0 ? (
+          <div class="grid grid--3">
+            {noticias.map((n, i) => (
+              <article class="card nota" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+                <a href={`/noticias/${n.id}/`}>
+                  <div class="nota__media">
+                    {n.data.imagen ? (
+                      <img src={n.data.imagen} alt={n.data.imagenAlt ?? ""} loading="lazy" />
+                    ) : (
+                      <span class="nota__hueco" aria-hidden="true">
+                        <Icon name="comunidad" size={26} />
+                      </span>
+                    )}
+                  </div>
+                  <time datetime={n.data.fecha.toISOString()}>{fmt(n.data.fecha)}</time>
+                  <h3>{n.data.titulo}</h3>
+                  <p>{n.data.resumen}</p>
+                  <span class="link-arrow">
+                    Leer más
+                    <Icon name="arrow-right" size={17} />
+                  </span>
+                </a>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="center muted">Pronto publicaremos novedades acá.</p>
+        )
+      }
+      <Pendiente que="Noticias reales del sitio anterior: el listado cargaba de forma dinámica y no se alcanzó a migrar." />
+    </div>
+  </section>
+
+  <!-- ===================== NOSOTROS ===================== -->
+  <section class="section section--lavanda">
+    <div class="wrap dos-col">
+      <div data-reveal="left">
+        <span class="eyebrow">Sobre nosotros</span>
+        <h2>Nuestra visión es una sociedad que no infantilice la vejez</h2>
+      </div>
+      <div class="dos-col__texto" data-reveal="right">
+        <p class="lead">{misionVision.vision}</p>
+        <a href="/nosotros/" class="btn">
+          Leer nuestra historia
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== OBJETIVOS ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Nuestros objetivos</span>
+        <h2>En qué trabajamos todos los días</h2>
+      </header>
+      <div class="grid grid--3">
+        {
+          historia.objetivos.map((o, i) => (
+            <article class="card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <div class="card__icon card__icon--lavanda">
+                <span class="num">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <h3>{o.titulo}</h3>
+              <p>{o.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FORMAS DE APORTAR ===================== -->
+  <section class="section section--alt" id="aportar">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">Cómo ayudar</span>
+        <h2>Tres formas de aportar</h2>
+        <p class="lead">
+          No todo se resuelve con dinero. El tiempo y las redes pesan igual.
+        </p>
+      </header>
+
+      <div class="grid grid--3 planes">
+        {
+          formasDeAportar.map((f, i) => (
+            <article
+              class:list={["plan", { "plan--destacado": f.destacado }]}
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+            >
+              {f.destacado && <span class="plan__cinta">Más necesario</span>}
+              <h3>{f.titulo}</h3>
+              <p class="plan__resumen">{f.resumen}</p>
+              <ul class="plan__lista">
+                {f.incluye.map((item) => (
+                  <li>
+                    <Icon name="check-circle" size={17} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={f.href}
+                class:list={["btn", f.destacado ? "btn--light" : "btn--ghost"]}
+              >
+                {f.cta}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <p class="center fineprint" style="margin-top:1.5rem">{donacion.fineprint}</p>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIOS ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
         <span class="eyebrow">Voces de nuestra comunidad</span>
         <h2>Lo que nos cuentan residentes y familias</h2>
       </header>
     </div>
 
-    <ul class="testim__pista" tabindex="0" aria-label="Testimonios, desliza para ver más">
+    <ul class="testim" tabindex="0" aria-label="Testimonios, desliza para ver más">
       {
-        testimonios.map((t, i) => (
-          <li class={`ficha ficha--${tintes[i % tintes.length]}`}>
-            <span class="ficha__comilla" aria-hidden="true">“</span>
+        testimonios.map((t) => (
+          <li class="testim__item">
+            <Icon name="cita" size={26} class="testim__icono" />
             <blockquote>
               <p>{t.texto}</p>
               <footer>{t.autor}</footer>
@@ -214,52 +341,65 @@ const tintes = ["lavanda", "menta", "cielo", "rosa", "lavanda", "menta"];
     </ul>
   </section>
 
-  <!-- ======================================================================
-       DONAR — bloque a sangre, tipografía grande, sin caja.
-       ====================================================================== -->
-  <section class="donar" id="donar">
-    <div class="wrap donar__inner">
-      <div data-reveal="left">
-        <span class="eyebrow">Suma tu aporte</span>
-        <h2 class="donar__titular">
-          Cada peso<br />se convierte en<br /><em>compañía</em>
-        </h2>
-      </div>
-      <div class="donar__col" data-reveal="right">
-        <p class="lead">{donacion.texto}</p>
-        <div class="btn-row">
-          <a href="/contacto/#donar" class="btn btn--accent">
-            <Icon name="corazon" size={18} />
-            Donar ahora
-          </a>
-          <a href="/recursos/" class="btn btn--outline-light">
-            Ver en qué lo usamos
-          </a>
-        </div>
-        <p class="donar__fino">{donacion.fineprint}</p>
+  <!-- ===================== CTA ===================== -->
+  <section class="cta">
+    <div class="wrap-medio center" data-reveal="scale">
+      <h2>Empieza a aportar hoy a la vejez digna en Arica</h2>
+      <p class="lead">{donacion.texto}</p>
+      <div class="btn-row" style="justify-content:center">
+        <a href="/contacto/#donar" class="btn btn--accent btn--lg">
+          <Icon name="corazon" size={18} />
+          Donar ahora
+        </a>
+        <a href="/recursos/" class="btn btn--outline-light btn--lg">
+          Ver en qué lo usamos
+        </a>
       </div>
     </div>
-    <Pendiente que="Medio de pago para donar: datos de transferencia o pasarela (Webpay / Mercado Pago). Hoy el botón lleva a Contacto." />
   </section>
 
-  <!-- ======================================================================
-       DENUNCIAS — franja sobria, sin adornos.
-       ====================================================================== -->
-  <section class="section section--tight">
-    <div class="wrap denuncia" data-reveal>
-      <div class="denuncia__texto">
-        <span class="eyebrow">Canal oficial · Confidencial</span>
-        <h2>Canal de denuncias</h2>
-        <p>
-          Si has sido testigo o víctima de irregularidades, maltrato o
-          vulneración de derechos, tienes el derecho y la responsabilidad de
-          reportarlo. Tu denuncia es confidencial.
-        </p>
+  <!-- ===================== CONTACTO Y DENUNCIAS ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <header class="sechead" data-reveal>
+        <span class="eyebrow">¿Cómo podemos ayudarte?</span>
+        <h2>Escríbenos</h2>
+      </header>
+
+      <div class="grid grid--3">
+        <article class="card" data-reveal>
+          <div class="card__icon card__icon--lavanda"><Icon name="mano" size={22} /></div>
+          <h3>Quiero colaborar</h3>
+          <p>Voluntariado, donaciones de insumos, charlas o alianzas.</p>
+          <a href="/contacto/#voluntariado" class="link-arrow">
+            Escribir
+            <Icon name="arrow-right" size={17} />
+          </a>
+        </article>
+
+        <article class="card" data-reveal style="--reveal-delay:80ms">
+          <div class="card__icon"><Icon name="comunidad" size={22} /></div>
+          <h3>Consultas sobre el ELEAM</h3>
+          <p>Postulaciones, visitas y coordinación con familias.</p>
+          <a href="/eleam/#postular" class="link-arrow">
+            Ver información
+            <Icon name="arrow-right" size={17} />
+          </a>
+        </article>
+
+        <article class="card card--denuncia" data-reveal style="--reveal-delay:160ms">
+          <div class="card__icon card__icon--rosa"><Icon name="escudo" size={22} /></div>
+          <h3>Canal de denuncias</h3>
+          <p>{denuncias.intro.slice(0, 150)}…</p>
+          <ul class="garantias">
+            {denuncias.garantias.map((g) => <li>{g}</li>)}
+          </ul>
+          <a href={`mailto:${contacto.email}?subject=Denuncia`} class="link-arrow">
+            Realizar denuncia
+            <Icon name="arrow-right" size={17} />
+          </a>
+        </article>
       </div>
-      <a href="/contacto/#denuncias" class="btn">
-        Realizar denuncia
-        <Icon name="arrow-right" size={18} />
-      </a>
     </div>
   </section>
 </Base>
@@ -268,567 +408,476 @@ const tintes = ["lavanda", "menta", "cielo", "rosa", "lavanda", "menta"];
   /* ===================== HERO ===================== */
   .hero {
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: var(--lavanda);
-    padding-block: clamp(2.5rem, 6vw, 5rem) clamp(3rem, 7vw, 5.5rem);
+    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+    background: linear-gradient(180deg, var(--lavanda) 0%, var(--lavanda) 62%, #fff 62%);
   }
-  .hero__filigrana {
-    position: absolute;
-    z-index: -1;
-    top: -8%;
-    left: -7%;
-    width: clamp(22rem, 42vw, 40rem);
-    height: auto;
-    opacity: 0.14;
-    rotate: -12deg;
-    animation: respirar 20s ease-in-out infinite alternate;
-  }
-  @keyframes respirar {
-    to {
-      rotate: -6deg;
-      scale: 1.08;
-    }
-  }
-
   .hero__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
-    gap: clamp(1.5rem, 4vw, 3.5rem);
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
   }
-
-  .hero__kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--azul-800);
+  .hero__titulo {
+    font-size: var(--fs-display);
+    line-height: 1.18;
+    max-width: 14ch;
   }
-  .punto {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--magenta-600);
-    animation: latir 2.6s ease-in-out infinite;
-  }
-  @keyframes latir {
-    0%,
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    50% {
-      transform: scale(1.5);
-      opacity: 0.55;
-    }
-  }
-
-  /* El titular es la pieza de diseño: enorme, apretado, desbordando. */
-  .hero__titular {
-    margin-top: 1.1rem;
-    font-size: clamp(2.5rem, 7.5vw, 6rem);
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    color: var(--azul-900);
-  }
-  .hero__titular .l {
-    display: block;
-    opacity: 0;
-    transform: translateY(0.5em);
-    animation: entrar 1s var(--ease-out) forwards;
-  }
-  .l1 {
-    animation-delay: 0.1s;
-  }
-  .l2 {
-    animation-delay: 0.22s;
-    padding-left: 0.14em;
-  }
-  .l3 {
-    animation-delay: 0.34s;
-    padding-left: 0.05em;
-  }
-  .hero__titular em {
-    font-style: normal;
-    color: var(--magenta-600);
-  }
-  @keyframes entrar {
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  .hero__pie {
-    display: grid;
-    grid-template-columns: minmax(0, 24rem) auto;
-    gap: 1.5rem 2.5rem;
-    align-items: start;
-    margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
-    padding-top: 1.75rem;
-    border-top: 1px solid color-mix(in srgb, var(--azul-900) 18%, transparent);
-    opacity: 0;
-    animation: entrar 0.9s var(--ease-out) 0.6s forwards;
+  .hero__titulo span {
+    color: var(--magenta-700);
   }
   .hero__bajada {
-    font-size: 1.02rem;
-    line-height: 1.6;
-    color: var(--azul-800);
+    margin: 1.25rem 0 2rem;
+    max-width: 46ch;
+    font-size: var(--fs-md);
+    color: var(--ink-700);
+    line-height: 1.7;
   }
 
   .hero__figura {
     position: relative;
     margin: 0;
-    opacity: 0;
-    animation: entrar 1.1s var(--ease-out) 0.3s forwards;
   }
-  /* La foto se sale del margen derecho: rompe la caja y da profundidad. */
   .hero__foto {
-    aspect-ratio: 3 / 4;
-    margin-right: calc(-1 * clamp(1rem, 5vw, 5rem));
-    border-radius: 999px 999px 2rem 2rem;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-xl);
     overflow: hidden;
-    background: var(--cielo);
-    box-shadow: var(--shadow-lg);
+    background: #fff;
+    box-shadow: var(--shadow-md);
   }
-  .hero__placeholder {
+  .hero__hueco {
     display: grid;
     place-content: center;
     justify-items: center;
     gap: 0.6rem;
     height: 100%;
-    color: var(--azul-600);
+    color: var(--azul-500);
   }
-  .hero__placeholder p {
-    font-size: 0.78rem;
+  .hero__hueco p {
+    font-size: var(--fs-xs);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
   .hero__sello {
     position: absolute;
-    bottom: 1.25rem;
-    left: -1.25rem;
+    bottom: -1rem;
+    left: -1rem;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.65rem 1.05rem;
+    padding: 0.7rem 1.1rem;
     background: #fff;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius);
     box-shadow: var(--shadow-md);
-    font-size: 0.82rem;
+    font-size: var(--fs-sm);
     font-weight: 600;
-    color: var(--azul-800);
+    color: var(--azul-900);
   }
   .hero__sello svg {
     color: var(--magenta-600);
   }
 
+  /* Barra de cifras: tarjeta blanca montada sobre el cambio de fondo. */
+  .cifras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    list-style: none;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    margin: 0;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+  .cifras li {
+    padding-inline: 1rem;
+    border-right: 1px solid var(--border);
+  }
+  .cifras li:last-child {
+    border-right: 0;
+  }
+  .cifras__n {
+    display: block;
+    font-size: var(--fs-h1);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--azul-600);
+  }
+  .cifras__pie {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+
   @media (max-width: 900px) {
+    .hero {
+      background: linear-gradient(180deg, var(--lavanda) 0%, var(--lavanda) 78%, #fff 78%);
+    }
     .hero__inner {
       grid-template-columns: 1fr;
     }
     .hero__figura {
       order: -1;
-      max-width: 20rem;
-    }
-    .hero__foto {
-      aspect-ratio: 4 / 3;
-      margin-right: 0;
-      border-radius: 2rem;
     }
     .hero__sello {
       left: auto;
       right: 0.75rem;
+      bottom: -0.75rem;
     }
-    .hero__pie {
-      grid-template-columns: 1fr;
+    .cifras li {
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+      padding-block: 0.9rem;
     }
-  }
-
-  /* ===================== CINTA ===================== */
-  .cinta {
-    overflow: hidden;
-    padding-block: 0.9rem;
-    background: var(--azul-900);
-    color: #fff;
-  }
-  .cinta__pista {
-    display: flex;
-    width: max-content;
-    animation: correr 38s linear infinite;
-  }
-  .cinta:hover .cinta__pista {
-    animation-play-state: paused;
-  }
-  .cinta__grupo {
-    display: flex;
-    flex: none;
-  }
-  .cinta__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 2.5rem;
-    padding-right: 2.5rem;
-    font-size: clamp(0.95rem, 1.7vw, 1.25rem);
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-  }
-  .cinta__sep {
-    font-size: 0.5em;
-    color: var(--magenta-500);
-  }
-  @keyframes correr {
-    to {
-      transform: translateX(-50%);
+    .cifras li:last-child {
+      border-bottom: 0;
     }
   }
 
-  /* ===================== CIFRAS ===================== */
-  .cifras__lista {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-    gap: 0;
+  /* ===================== INSTITUCIONES ===================== */
+  .instituciones__titulo {
+    text-align: center;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+    margin-bottom: 1.5rem;
+  }
+  .instituciones__lista {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 2.5rem;
     list-style: none;
     padding: 0;
     margin: 0;
-    border-top: 1px solid var(--neutro-200);
   }
-  .cifra {
-    position: relative;
-    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
-    border-bottom: 1px solid var(--neutro-200);
-    border-right: 1px solid var(--neutro-200);
-    transition: background-color 0.4s var(--ease-out);
-  }
-  .cifra:last-child {
-    border-right: 0;
-  }
-  .cifra--lavanda:hover {
-    background: var(--lavanda);
-  }
-  .cifra--menta:hover {
-    background: var(--menta);
-  }
-  .cifra--cielo:hover {
-    background: var(--cielo);
-  }
-  .cifra--rosa:hover {
-    background: var(--rosa);
-  }
-  .cifra__n {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  .instituciones__lista li {
+    font-size: var(--fs-md);
     font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.02em;
+    color: var(--ink-400);
+    transition: color 0.2s var(--ease-out);
+  }
+  .instituciones__lista li:hover {
     color: var(--azul-600);
   }
-  .cifra__pie {
-    display: block;
-    margin-top: 0.85rem;
-    max-width: 16ch;
-    font-size: 0.86rem;
-    line-height: 1.4;
-    color: var(--ink-500);
-  }
 
-  /* ===================== PARTICIÓN ===================== */
-  .particion {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  /* ===================== DUO ===================== */
+  .duo__card {
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    border-radius: var(--radius-xl);
   }
-  .particion__mitad {
-    padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4.5rem);
-  }
-  .particion__mitad--lavanda {
+  .duo__card--lavanda {
     background: var(--lavanda);
   }
-  .particion__mitad--menta {
+  .duo__card--menta {
     background: var(--menta);
   }
-  .particion__num {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: color-mix(in srgb, var(--azul-900) 24%, transparent);
-  }
-  .particion__mitad h2 {
-    margin: 0.5rem 0 1.25rem;
-    font-size: clamp(1.9rem, 3.5vw, 2.9rem);
-    color: var(--azul-900);
-  }
-  .particion__mitad p {
-    max-width: 44ch;
-    font-size: 1.04rem;
-    line-height: 1.65;
-    color: var(--azul-800);
-  }
-
-  /* ===================== ÍNDICE ===================== */
-  .indice__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: clamp(2rem, 5vw, 4.5rem);
-    align-items: start;
-  }
-  .indice__fijo {
-    position: sticky;
-    top: 7.5rem;
-  }
-  .indice__fijo h2 {
-    margin: 1rem 0 1.4rem;
-    font-size: clamp(2rem, 4.5vw, 3.4rem);
-  }
-  .indice__fijo em {
-    font-style: normal;
-    color: var(--magenta-700);
-  }
-  .indice__nota {
-    max-width: 34ch;
-    margin-bottom: 1.5rem;
-    color: var(--ink-500);
-  }
-
-  .indice__lista {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    counter-reset: fila;
-    border-top: 1px solid var(--neutro-200);
-  }
-  .fila {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1.25rem;
-    align-items: start;
-    padding: clamp(1.4rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.5rem);
-    border-bottom: 1px solid var(--neutro-200);
-    border-radius: var(--radius);
-    transition:
-      background-color 0.4s var(--ease-out),
-      transform 0.4s var(--ease-out);
-  }
-  .fila--lavanda:hover {
-    background: var(--lavanda);
-  }
-  .fila--menta:hover {
-    background: var(--menta);
-  }
-  .fila--cielo:hover {
-    background: var(--cielo);
-  }
-  .fila--rosa:hover {
-    background: var(--rosa);
-  }
-  .fila:hover {
-    transform: translateX(6px);
-  }
-  .fila__n {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--magenta-600);
-    padding-top: 0.3rem;
-  }
-  .fila__cuerpo h3 {
-    font-size: clamp(1.15rem, 2vw, 1.5rem);
-    margin-bottom: 0.4rem;
-    color: var(--azul-900);
-  }
-  .fila__cuerpo p {
-    color: var(--ink-500);
-    font-size: 0.97rem;
-    max-width: 48ch;
-  }
-  .fila__icono {
+  .duo__media {
     display: grid;
     place-items: center;
-    width: 2.6rem;
-    height: 2.6rem;
-    border: 1px solid var(--neutro-300);
-    border-radius: 50%;
-    color: var(--azul-600);
-    transition:
-      border-color 0.3s var(--ease-out),
-      background-color 0.3s var(--ease-out);
-  }
-  .fila:hover .fila__icono {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 1.5rem;
     background: #fff;
-    border-color: #fff;
+    border-radius: var(--radius-lg);
+    color: var(--azul-600);
+  }
+  .duo__card h2 {
+    font-size: var(--fs-h2);
+    margin-bottom: 0.75rem;
+  }
+  .duo__card p {
+    margin-bottom: 1.25rem;
+    color: var(--ink-700);
+    max-width: 44ch;
   }
 
+  /* ===================== DIFERENCIAS ===================== */
+  .dif {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .dif__lista {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .dif__lista li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+  .dif__icono {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: #fff;
+    border-radius: var(--radius);
+    color: var(--azul-600);
+    box-shadow: var(--shadow-sm);
+  }
+  .dif__lista h3 {
+    font-size: var(--fs-lg);
+    margin-bottom: 0.2rem;
+  }
+  .dif__lista p {
+    font-size: var(--fs-base);
+    color: var(--text-muted);
+  }
+  .dif__hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.6rem;
+    aspect-ratio: 4 / 5;
+    background: #fff;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    color: var(--azul-500);
+  }
+  .dif__hueco p {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
   @media (max-width: 900px) {
-    .indice__inner {
+    .dif {
       grid-template-columns: 1fr;
     }
-    .indice__fijo {
-      position: static;
+    .dif__hueco {
+      aspect-ratio: 3 / 2;
     }
-    .fila__icono {
-      display: none;
+  }
+
+  /* ===================== NOTICIAS ===================== */
+  .nota {
+    padding: 0;
+    overflow: hidden;
+  }
+  .nota a {
+    display: block;
+    padding: 0 1.5rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .nota__media {
+    aspect-ratio: 16 / 9;
+    margin: 0 -1.5rem 1.25rem;
+    background: var(--lavanda);
+    overflow: hidden;
+  }
+  .nota__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .nota__hueco {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    color: var(--azul-500);
+  }
+  .nota time {
+    font-size: var(--fs-sm);
+    color: var(--ink-400);
+  }
+  .nota h3 {
+    font-size: var(--fs-lg);
+    margin: 0.35rem 0 0.5rem;
+  }
+  .nota p {
+    margin-bottom: 1rem;
+    font-size: var(--fs-base);
+  }
+
+  /* ===================== DOS COLUMNAS ===================== */
+  .dos-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .dos-col h2 {
+    font-size: var(--fs-h1);
+    max-width: 18ch;
+  }
+  .dos-col__texto .lead {
+    margin-bottom: 1.75rem;
+    color: var(--ink-700);
+  }
+  @media (max-width: 860px) {
+    .dos-col {
+      grid-template-columns: 1fr;
     }
-    .fila {
-      grid-template-columns: auto 1fr;
-    }
+  }
+
+  /* ===================== OBJETIVOS ===================== */
+  .num {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+  }
+
+  /* ===================== PLANES ===================== */
+  .plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.75rem, 3vw, 2.25rem);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    transition:
+      transform 0.25s var(--ease-out),
+      box-shadow 0.25s var(--ease-out);
+  }
+  .plan:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .plan--destacado {
+    background: var(--azul-900);
+    border-color: var(--azul-900);
+    color: #fff;
+  }
+  .plan--destacado h3 {
+    color: #fff;
+  }
+  .plan__cinta {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    padding: 0.25rem 0.7rem;
+    background: var(--magenta-600);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .plan h3 {
+    font-size: var(--fs-h3);
+  }
+  .plan__resumen {
+    margin: 0.4rem 0 1.4rem;
+    font-size: var(--fs-base);
+    color: var(--text-muted);
+  }
+  .plan--destacado .plan__resumen {
+    color: var(--cielo);
+  }
+  .plan__lista {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    display: grid;
+    gap: 0.7rem;
+    flex: 1;
+  }
+  .plan__lista li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: var(--fs-base);
+    color: var(--ink-700);
+  }
+  .plan--destacado .plan__lista li {
+    color: var(--cielo);
+  }
+  .plan__lista svg {
+    flex: none;
+    margin-top: 0.3rem;
+    color: var(--azul-600);
+  }
+  .plan--destacado .plan__lista svg {
+    color: var(--magenta-500);
   }
 
   /* ===================== TESTIMONIOS ===================== */
   .testim {
-    background: var(--cielo);
-  }
-  .testim__head {
-    max-width: 30ch;
-    margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
-  }
-  .testim__head h2 {
-    margin-top: 0.9rem;
-    font-size: clamp(1.9rem, 4vw, 3.1rem);
-    color: var(--azul-900);
-  }
-
-  .testim__pista {
     display: flex;
-    gap: 1.1rem;
+    gap: 1.25rem;
     list-style: none;
     margin: 0;
-    padding: 0.4rem max(1.25rem, calc((100vw - var(--wrap)) / 2)) 1.25rem;
+    padding: 0.5rem max(var(--gutter), calc((100vw - var(--wrap)) / 2)) 1.5rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     scrollbar-color: var(--azul-300) transparent;
   }
-  .ficha {
-    position: relative;
-    flex: 0 0 min(86%, 23rem);
+  .testim__item {
+    flex: 0 0 min(85%, 22rem);
     scroll-snap-align: start;
-    padding: 2.5rem 1.8rem 1.8rem;
-    border-radius: 1.75rem 1.75rem 1.75rem 0.4rem;
-    transition: transform 0.35s var(--ease-out);
+    padding: 1.75rem;
+    background: var(--cielo);
+    border-radius: var(--radius-lg);
+    transition: transform 0.25s var(--ease-out);
   }
-  .ficha:hover {
-    transform: translateY(-5px);
+  .testim__item:hover {
+    transform: translateY(-4px);
   }
-  .ficha--lavanda {
-    background: var(--lavanda);
+  .testim__icono {
+    color: var(--magenta-600);
+    margin-bottom: 0.9rem;
   }
-  .ficha--menta {
-    background: var(--menta);
-  }
-  .ficha--cielo {
-    background: #fff;
-  }
-  .ficha--rosa {
-    background: var(--rosa);
-  }
-  .ficha__comilla {
-    position: absolute;
-    top: 0.35rem;
-    left: 1.5rem;
-    font-family: var(--font-display);
-    font-size: 4.5rem;
-    font-weight: 700;
-    line-height: 1;
-    color: color-mix(in srgb, var(--azul-900) 24%, transparent);
-  }
-  .ficha blockquote {
+  .testim__item blockquote {
     margin: 0;
   }
-  .ficha p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--azul-900);
+  .testim__item p {
+    color: var(--ink-700);
   }
-  .ficha footer {
+  .testim__item footer {
     margin-top: 1.1rem;
-    font-size: 0.76rem;
-    font-weight: 600;
+    font-size: var(--fs-xs);
+    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-500);
+    color: var(--ink-400);
   }
 
-  /* ===================== DONAR ===================== */
-  .donar {
-    padding-block: clamp(3.5rem, 8vw, 6.5rem);
+  /* ===================== CTA ===================== */
+  .cta {
+    padding-block: var(--space-2xl);
     background: var(--azul-900);
     color: #fff;
   }
-  .donar__inner {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: center;
-  }
-  .donar .eyebrow {
-    color: var(--magenta-500);
-  }
-  .donar__titular {
-    margin-top: 1rem;
-    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
-    line-height: 1.08;
+  .cta h2 {
+    font-size: var(--fs-h1);
     color: #fff;
+    max-width: 22ch;
+    margin-inline: auto;
   }
-  .donar__titular em {
-    font-style: normal;
-    color: var(--magenta-500);
-  }
-  .donar__col .lead {
+  .cta .lead {
+    margin: 1.1rem auto 2rem;
+    max-width: 54ch;
     color: var(--cielo);
-    margin-bottom: 1.75rem;
-  }
-  .donar__fino {
-    margin-top: 1.25rem;
-    font-size: 0.82rem;
-    color: color-mix(in srgb, var(--cielo) 65%, transparent);
   }
 
   /* ===================== DENUNCIAS ===================== */
-  .denuncia {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: clamp(1.5rem, 3vw, 3rem);
-    align-items: center;
-    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  .card--denuncia {
     background: var(--rosa);
-    border-radius: var(--radius-lg);
+    border-color: transparent;
   }
-  .denuncia h2 {
-    margin: 0.7rem 0 0.7rem;
-    font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-    color: var(--azul-900);
+  .garantias {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    display: grid;
+    gap: 0.4rem;
   }
-  .denuncia p {
-    max-width: 60ch;
-    color: var(--ink-700);
+  .garantias li {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--magenta-700);
   }
-  @media (max-width: 760px) {
-    .denuncia {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ===================== MOVIMIENTO REDUCIDO ===================== */
-  @media (prefers-reduced-motion: reduce) {
-    .hero__titular .l,
-    .hero__pie,
-    .hero__figura {
-      opacity: 1;
-      transform: none;
-      animation: none;
-    }
-    .hero__filigrana,
-    .punto,
-    .cinta__pista {
-      animation: none;
-    }
+  .garantias li::before {
+    content: "✓ ";
   }
 </style>

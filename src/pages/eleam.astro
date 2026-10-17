@@ -18,7 +18,8 @@ const datos = [
   description="Establecimiento de Larga Estadía para el Adulto Mayor de la Fundación Gente Grande, en Arica, fiscalizado por SENAMA."
 >
   <PageHero
-    eyebrow="Establecimiento de Larga Estadía"
+    tono="cielo"
+        eyebrow="Establecimiento de Larga Estadía"
     title="Un hogar que acompaña sin infantilizar"
     lead={eleam.intro}
   />
@@ -57,7 +58,7 @@ const datos = [
       <div class="grid grid--3">
         {
           servicios.map((s, i) => (
-            <article class="card card--line" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+            <article class="card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
               <div class="card__icon"><Icon name={s.icono as any} size={24} /></div>
               <h3>{s.titulo}</h3>
               <p>{s.texto}</p>

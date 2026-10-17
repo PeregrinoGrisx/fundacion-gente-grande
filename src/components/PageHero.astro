@@ -1,71 +1,99 @@
 ---
+/**
+ * Cabecera de página interna.
+ *
+ * El template solo trae portada, login y registro, así que esta pieza se
+ * diseñó con su mismo lenguaje: banda pastel, etiqueta en versales, titular
+ * y bajada, con la miga de pan arriba.
+ */
+import Icon from "./Icon.astro";
+
 interface Props {
   eyebrow: string;
   title: string;
   lead?: string;
+  /** Tinte de fondo. Rota entre páginas para que no se vean todas iguales. */
+  tono?: "lavanda" | "cielo" | "menta" | "rosa";
 }
-const { eyebrow, title, lead } = Astro.props;
+const { eyebrow, title, lead, tono = "lavanda" } = Astro.props;
 ---
 
-<section class="pagehero">
-  <div class="pagehero__glow" aria-hidden="true"></div>
+<section class:list={["pagehero", `pagehero--${tono}`]}>
   <div class="wrap">
-    <span class="eyebrow" data-reveal="fade">{eyebrow}</span>
-    <h1 data-reveal style="--reveal-delay:80ms">{title}</h1>
-    {
-      lead && (
-        <p class="lead pagehero__lead" data-reveal style="--reveal-delay:180ms">
-          {lead}
-        </p>
-      )
-    }
+    <nav class="miga" aria-label="Miga de pan">
+      <a href="/">Inicio</a>
+      <Icon name="arrow-right" size={14} />
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <div class="pagehero__texto">
+      <span class="eyebrow" data-reveal="fade">{eyebrow}</span>
+      <h1 data-reveal style="--reveal-delay:60ms">{title}</h1>
+      {
+        lead && (
+          <p class="lead pagehero__lead" data-reveal style="--reveal-delay:140ms">
+            {lead}
+          </p>
+        )
+      }
+    </div>
   </div>
 </section>
 
 <style>
   .pagehero {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: var(--azul-900);
-    color: var(--neutro-100);
-    padding-block: clamp(4rem, 11vw, 7.5rem) clamp(3rem, 7vw, 5rem);
+    padding-block: clamp(1.5rem, 3vw, 2.25rem) clamp(2.5rem, 5vw, 4rem);
   }
-  .pagehero h1 {
-    color: #fff;
-    font-size: var(--step-4);
-    max-width: 22ch;
-    margin-top: 1rem;
+  .pagehero--lavanda {
+    background: var(--lavanda);
   }
-  .pagehero__lead {
-    margin-top: 1.4rem;
-    max-width: 58ch;
-    color: color-mix(in srgb, var(--azul-100) 88%, transparent);
+  .pagehero--cielo {
+    background: var(--cielo);
   }
-  .pagehero .eyebrow {
-    color: var(--magenta-500);
+  .pagehero--menta {
+    background: var(--menta);
+  }
+  .pagehero--rosa {
+    background: var(--rosa);
   }
 
-  /* Resplandor difuso que da profundidad sin cargar la pantalla. */
-  .pagehero__glow {
-    position: absolute;
-    inset: auto -10% -60% 45%;
-    z-index: -1;
-    aspect-ratio: 1;
-    background: radial-gradient(
-      circle at center,
-      color-mix(in srgb, var(--azul-500) 55%, transparent),
-      transparent 68%
-    );
-    filter: blur(10px);
-    animation: flotar 18s ease-in-out infinite alternate;
+  .miga {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    font-size: var(--fs-sm);
+    color: var(--ink-500);
   }
-  @keyframes flotar {
-    from {
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-    to {
-      transform: translate3d(-6%, -8%, 0) scale(1.12);
-    }
+  .miga a {
+    color: var(--azul-700);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .miga a:hover {
+    text-decoration: underline;
+  }
+  .miga svg {
+    color: var(--ink-400);
+  }
+  .miga span {
+    font-weight: 600;
+    color: var(--azul-900);
+  }
+
+  .pagehero__texto {
+    max-width: 46rem;
+  }
+  .pagehero h1 {
+    font-size: var(--fs-display);
+    line-height: 1.18;
+  }
+  .pagehero .eyebrow {
+    color: var(--azul-700);
+  }
+  .pagehero__lead {
+    margin-top: 1.1rem;
+    max-width: 58ch;
+    color: var(--ink-700);
   }
 </style>

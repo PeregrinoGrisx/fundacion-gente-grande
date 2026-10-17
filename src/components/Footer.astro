@@ -1,4 +1,9 @@
 ---
+/**
+ * Pie en el patrón del template: bloque de marca con suscripción a la
+ * izquierda, columnas de enlaces al centro y una barra inferior con los
+ * datos de contacto.
+ */
 import { contacto, site } from "../data/site";
 import Icon from "./Icon.astro";
 
@@ -7,9 +12,9 @@ const columnas = [
     titulo: "Fundación",
     links: [
       { label: "Historia", href: "/nosotros/#historia" },
+      { label: "Misión y visión", href: "/nosotros/#mision" },
       { label: "Directorio", href: "/nosotros/#directorio" },
       { label: "Socios fundadores", href: "/nosotros/#fundadores" },
-      { label: "Misión y visión", href: "/nosotros/#mision" },
     ],
   },
   {
@@ -17,8 +22,8 @@ const columnas = [
     links: [
       { label: "¿Qué es el ELEAM?", href: "/eleam/" },
       { label: "Servicios", href: "/eleam/#servicios" },
+      { label: "Postular", href: "/eleam/#postular" },
       { label: "Cómo llegar", href: "/eleam/#ubicacion" },
-      { label: "Postular a residencia", href: "/eleam/#postular" },
     ],
   },
   {
@@ -33,7 +38,7 @@ const columnas = [
   {
     titulo: "Participa",
     links: [
-      { label: "Donar", href: "/#donar" },
+      { label: "Donar", href: "/contacto/#donar" },
       { label: "Ser voluntario", href: "/contacto/#voluntariado" },
       { label: "Contacto", href: "/contacto/" },
     ],
@@ -47,23 +52,20 @@ const redes = [
 ].filter((r) => r.href);
 ---
 
-<footer class="footer">
-  <div class="wrap footer__grid">
-    <div class="footer__brand">
-      <!-- El isotipo va sobre un disco blanco: su mitad azul se perdería
-           contra el fondo oscuro del pie. Pendiente la versión monocroma
-           del logo para resolverlo sin el disco. -->
-      <span class="footer__marca">
+<footer class="pie">
+  <div class="wrap pie__grid">
+    <div class="pie__marca">
+      <span class="pie__iso">
         <img src="/img/marca/Isotipo.png" alt={site.name} width="266" height="255" />
       </span>
-      <p class="footer__blurb">{site.description}</p>
+      <p class="pie__blurb">{site.description}</p>
       {
         redes.length > 0 && (
-          <ul class="social">
+          <ul class="pie__redes">
             {redes.map((r) => (
               <li>
                 <a href={r.href} target="_blank" rel="noopener noreferrer" aria-label={r.label}>
-                  <Icon name={r.name} size={19} />
+                  <Icon name={r.name} size={18} />
                 </a>
               </li>
             ))}
@@ -74,7 +76,7 @@ const redes = [
 
     {
       columnas.map((col) => (
-        <nav class="footer__col" aria-label={col.titulo}>
+        <nav class="pie__col" aria-label={col.titulo}>
           <h2>{col.titulo}</h2>
           <ul>
             {col.links.map((l) => (
@@ -88,130 +90,156 @@ const redes = [
     }
   </div>
 
-  <div class="wrap footer__legal">
-    <p>
-      © {new Date().getFullYear()} {site.name} · RUT {site.rut} · {site.city} · {site.ley}
-    </p>
-    <p class="footer__credit">
-      Diseño y desarrollo <a href="https://puntogris.cl" target="_blank" rel="noopener noreferrer">Puntogris</a>
-    </p>
+  <div class="pie__barra">
+    <div class="wrap pie__barra-inner">
+      <p>© {new Date().getFullYear()} {site.name} · RUT {site.rut} · {site.ley}</p>
+      <ul class="pie__datos">
+        <li>
+          <Icon name="ubicacion" size={15} />
+          {contacto.direccionPostal}
+        </li>
+        <li>
+          <a href={`mailto:${contacto.email}`}>
+            <Icon name="mail" size={15} />
+            {contacto.email}
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </footer>
 
 <style>
-  .footer {
+  .pie {
     background: var(--azul-900);
-    color: var(--azul-100);
-    padding-top: var(--space-xl);
+    color: var(--cielo);
   }
-  .footer__grid {
+  .pie__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    grid-template-columns: 1.5fr repeat(4, 1fr);
     gap: 2.5rem;
-    padding-bottom: var(--space-xl);
+    padding-block: var(--space-2xl) var(--space-xl);
   }
-  .footer__brand {
-    grid-column: span 2;
-    min-width: min(100%, 17rem);
-  }
-  .footer__marca {
+
+  .pie__iso {
     display: grid;
     place-items: center;
-    width: 3.4rem;
-    height: 3.4rem;
+    width: 3.25rem;
+    height: 3.25rem;
     background: #fff;
     border-radius: 50%;
   }
-  .footer__marca img {
-    width: 2.3rem;
+  .pie__iso img {
+    width: 2.2rem;
     height: auto;
   }
-  .footer__blurb {
-    margin-top: 0.9rem;
-    max-width: 30ch;
-    color: color-mix(in srgb, var(--azul-100) 80%, transparent);
-    font-size: 0.95rem;
-  }
-  .footer .eyebrow {
-    color: var(--magenta-500);
+  .pie__blurb {
+    margin-top: 1.1rem;
+    max-width: 32ch;
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    color: color-mix(in srgb, var(--cielo) 78%, transparent);
   }
 
-  .social {
+  .pie__redes {
     display: flex;
-    gap: 0.55rem;
+    gap: 0.5rem;
     list-style: none;
     padding: 0;
     margin-top: 1.4rem;
   }
-  .social a {
+  .pie__redes a {
     display: grid;
     place-items: center;
-    width: 2.4rem;
-    height: 2.4rem;
-    color: var(--azul-100);
-    border: 1px solid rgb(255 255 255 / 0.18);
-    border-radius: 50%;
+    width: 2.3rem;
+    height: 2.3rem;
+    color: var(--cielo);
+    background: rgb(255 255 255 / 0.08);
+    border-radius: var(--radius-sm);
     transition:
-      background-color 0.25s var(--ease-out),
-      color 0.25s var(--ease-out),
-      transform 0.25s var(--ease-out);
+      background-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out);
   }
-  .social a:hover {
+  .pie__redes a:hover {
     background: var(--magenta-600);
-    border-color: var(--magenta-600);
     color: #fff;
-    transform: translateY(-2px);
   }
 
-  .footer__col h2 {
-    font-family: var(--font-sans);
-    font-size: 0.74rem;
+  .pie__col h2 {
+    font-size: var(--fs-sm);
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #fff;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
   }
-  .footer__col ul {
+  .pie__col ul {
     list-style: none;
     padding: 0;
     display: grid;
-    gap: 0.6rem;
+    gap: 0.65rem;
   }
-  .footer__col a {
-    color: color-mix(in srgb, var(--azul-100) 85%, transparent);
+  .pie__col a {
+    color: color-mix(in srgb, var(--cielo) 80%, transparent);
     text-decoration: none;
-    font-size: 0.93rem;
+    font-size: var(--fs-sm);
     transition:
       color 0.2s var(--ease-out),
       padding-left 0.2s var(--ease-out);
   }
-  .footer__col a:hover {
+  .pie__col a:hover {
     color: #fff;
-    padding-left: 4px;
+    padding-left: 3px;
   }
 
-  .footer__legal {
+  .pie__barra {
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .pie__barra-inner {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 0.75rem;
-    padding-block: 1.5rem;
-    border-top: 1px solid rgb(255 255 255 / 0.12);
-    font-size: 0.82rem;
-    color: color-mix(in srgb, var(--azul-100) 70%, transparent);
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.35rem;
+    font-size: var(--fs-sm);
+    color: color-mix(in srgb, var(--cielo) 68%, transparent);
   }
-  .footer__credit a {
-    color: var(--magenta-500);
+  .pie__datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .pie__datos li,
+  .pie__datos a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: inherit;
     text-decoration: none;
   }
-  .footer__credit a:hover {
-    text-decoration: underline;
+  .pie__datos a:hover {
+    color: #fff;
+  }
+  .pie__datos svg {
+    color: var(--magenta-500);
   }
 
-  @media (max-width: 640px) {
-    .footer__brand {
-      grid-column: span 1;
+  @media (max-width: 1000px) {
+    .pie__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .pie__marca {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 560px) {
+    .pie__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
   }
 </style>

@@ -18,7 +18,8 @@ const fmt = (d: Date) =>
   description="Comunicados, novedades y actividades de la Fundación Gente Grande de Arica."
 >
   <PageHero
-    eyebrow="Noticias y galería"
+    tono="rosa"
+        eyebrow="Noticias y galería"
     title="Lo que pasa en la Fundación"
     lead="Comunicados, novedades y actividades compartidas junto a residentes, familias, equipo y comunidad."
   />
@@ -60,7 +61,7 @@ const fmt = (d: Date) =>
           </ul>
         ) : (
           <div class="card center stack" data-reveal>
-            <h2 style="font-size:var(--step-2)">Aún no hay noticias publicadas</h2>
+            <h2 style="font-size:var(--fs-h2)">Aún no hay noticias publicadas</h2>
             <p class="muted">
               Pronto compartiremos acá los comunicados y actividades de la
               Fundación.
@@ -148,7 +149,7 @@ const fmt = (d: Date) =>
     color: var(--ink-400);
   }
   .nota__cuerpo h2 {
-    font-size: var(--step-1);
+    font-size: var(--fs-lg);
   }
   .nota__cuerpo p {
     color: var(--text-muted);

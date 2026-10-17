@@ -27,7 +27,8 @@ const iniciales = (nombre: string) =>
   description={`Historia, directorio y socios fundadores de la ${site.name}, en Arica desde ${site.foundedYear}.`}
 >
   <PageHero
-    eyebrow="Quiénes somos"
+    tono="lavanda"
+        eyebrow="Quiénes somos"
     title="Una mirada moderna sobre el envejecimiento"
     lead={historia.resumen}
   />
@@ -69,12 +70,12 @@ const iniciales = (nombre: string) =>
         <h2>Misión y visión</h2>
       </header>
       <div class="grid grid--2">
-        <article class="card card--line" data-reveal="left">
+        <article class="card" data-reveal="left">
           <div class="card__icon"><Icon name="mano" size={24} /></div>
           <h3>Misión</h3>
           <p>{misionVision.mision}</p>
         </article>
-        <article class="card card--line" data-reveal="right">
+        <article class="card" data-reveal="right">
           <div class="card__icon"><Icon name="actividad" size={24} /></div>
           <h3>Visión</h3>
           <p>{misionVision.vision}</p>
@@ -200,7 +201,7 @@ const iniciales = (nombre: string) =>
     font-size: 1.03rem;
   }
   .historia__texto h2 {
-    font-size: var(--step-3);
+    font-size: var(--fs-h2);
   }
 
   .historia__aside {

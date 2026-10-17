@@ -272,3 +272,74 @@ export const donacion = {
     email: contacto.email,
   },
 };
+
+/**
+ * Qué nos diferencia. Ocupa el lugar de la sección "Features" del template.
+ */
+export const diferencias = [
+  {
+    titulo: "Sin infantilizar",
+    texto:
+      "Tratamos a cada residente como el adulto que es. Nada de diminutivos ni de decidir por ellos lo que pueden decidir solos.",
+    icono: "comunidad",
+  },
+  {
+    titulo: "Equipo multidisciplinario",
+    texto:
+      "Medicina, psiquiatría, psicología, terapia ocupacional y trabajo social, coordinados en un mismo plan de cuidado.",
+    icono: "corazon",
+  },
+  {
+    titulo: "Cuentas a la vista",
+    texto:
+      "Memorias, balances y recursos recibidos publicados para descarga. Fiscalizados por SENAMA desde 2014.",
+    icono: "escudo",
+  },
+];
+
+/**
+ * Formas de aportar. Ocupa el lugar de la grilla de planes del template:
+ * misma estructura de tres columnas con una destacada, pero sin precios,
+ * porque acá no se vende nada.
+ */
+export const formasDeAportar = [
+  {
+    titulo: "Voluntariado",
+    resumen: "Tu tiempo, que es lo que más se nota.",
+    destacado: false,
+    incluye: [
+      "Acompañamiento a residentes",
+      "Apoyo en talleres y actividades",
+      "Salidas y celebraciones",
+      "Coordinación según tu disponibilidad",
+    ],
+    cta: "Quiero ser voluntario",
+    href: "/contacto/#voluntariado",
+  },
+  {
+    titulo: "Donación",
+    resumen: "Sostiene la atención diaria del ELEAM.",
+    destacado: true,
+    incluye: [
+      "Aporte único o mensual",
+      "Certificado de donación",
+      "Rendición pública en memorias y balances",
+      "Destino informado a quien aporta",
+    ],
+    cta: "Donar ahora",
+    href: "/contacto/#donar",
+  },
+  {
+    titulo: "Insumos y alianzas",
+    resumen: "Materiales, servicios o convenios institucionales.",
+    destacado: false,
+    incluye: [
+      "Donación de insumos y materiales",
+      "Charlas y visitas institucionales",
+      "Prácticas profesionales",
+      "Convenios con organizaciones",
+    ],
+    cta: "Conversemos",
+    href: "/contacto/",
+  },
+];
