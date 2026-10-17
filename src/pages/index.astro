@@ -3,11 +3,10 @@
  * Portada.
  *
  * Sigue el orden de secciones del template Nosic Sketch, adaptado a lo que
- * la Fundación tiene que comunicar:
- *
- *   hero + cifras → instituciones → servicios → qué nos diferencia →
- *   noticias → nosotros → objetivos → vinculación → formas de aportar →
- *   testimonios → CTA → contacto/denuncias
+ * la Fundación tiene que comunicar. Los pasteles llevan el peso visual y
+ * van rotando sección a sección; el azul y el magenta de marca quedan
+ * reservados para botones, enlaces y las cifras, que es donde el color
+ * tiene que significar algo.
  */
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
@@ -21,7 +20,6 @@ import {
   formasDeAportar,
   historia,
   misionVision,
-  servicios,
   site,
   testimonios,
   vinculacionAcademica,
@@ -40,10 +38,12 @@ const noticias = (await getCollection("noticias", ({ data }) => !data.borrador))
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" });
+
+const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
 ---
 
 <Base title={site.name} description={site.description}>
-  <!-- ===================== HERO ===================== -->
+  <!-- ===================== HERO (lavanda) ===================== -->
   <section class="hero">
     <div class="wrap hero__inner">
       <div class="hero__texto">
@@ -61,7 +61,7 @@ const fmt = (d: Date) =>
             Conocer el ELEAM
             <Icon name="arrow-right" size={18} />
           </a>
-          <a href="/contacto/#donar" class="btn btn--ghost btn--lg">
+          <a href="/contacto/#donar" class="btn btn--accent btn--lg">
             <Icon name="corazon" size={18} />
             Quiero aportar
           </a>
@@ -82,7 +82,6 @@ const fmt = (d: Date) =>
       </figure>
     </div>
 
-    <!-- Barra de cifras montada sobre el borde, como en el template. -->
     <div class="wrap">
       <ul class="cifras">
         {
@@ -99,27 +98,23 @@ const fmt = (d: Date) =>
 
   <Pendiente que="Fotografía principal del hero e imagen para compartir en redes (/public/img/og-default.jpg)." />
 
-  <!-- ===================== INSTITUCIONES ===================== -->
+  <!-- ===================== INSTITUCIONES (blanco) ===================== -->
   <section class="section section--tight instituciones">
     <div class="wrap">
       <p class="instituciones__titulo">
         Trabajamos en red con instituciones de la región
       </p>
       <ul class="instituciones__lista">
-        {
-          vinculacionAcademica.instituciones.map((i) => (
-            <li>{i}</li>
-          ))
-        }
+        {vinculacionAcademica.instituciones.map((i) => <li>{i}</li>)}
         <li>SENAMA</li>
       </ul>
     </div>
   </section>
 
-  <!-- ===================== SERVICIOS (2 bloques grandes) ===================== -->
-  <section class="section">
+  <!-- ===================== SERVICIOS (dos bloques pastel) ===================== -->
+  <section class="section section--tight">
     <div class="wrap">
-      <div class="grid grid--2 duo">
+      <div class="duo">
         <article class="duo__card duo__card--lavanda" data-reveal="left">
           <div class="duo__media" aria-hidden="true">
             <Icon name="comunidad" size={38} />
@@ -153,19 +148,19 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ===================== QUÉ NOS DIFERENCIA ===================== -->
-  <section class="section section--alt">
-    <div class="wrap dif">
-      <div class="dif__texto" data-reveal="left">
+  <!-- ===================== QUÉ NOS DIFERENCIA (cielo, imagen derecha) ===================== -->
+  <section class="section section--cielo">
+    <div class="wrap pareja">
+      <div data-reveal="left">
         <span class="eyebrow">Qué nos diferencia</span>
         <h2>Una mirada distinta sobre la vejez</h2>
         <p class="lead">{historia.resumen}</p>
 
-        <ul class="dif__lista">
+        <ul class="puntos">
           {
             diferencias.map((d) => (
               <li>
-                <span class="dif__icono" aria-hidden="true">
+                <span class="puntos__icono" aria-hidden="true">
                   <Icon name={d.icono as any} size={20} />
                 </span>
                 <div>
@@ -178,8 +173,8 @@ const fmt = (d: Date) =>
         </ul>
       </div>
 
-      <div class="dif__figura" data-reveal="right">
-        <div class="dif__hueco">
+      <div class="pareja__figura" data-reveal="right">
+        <div class="hueco hueco--alto">
           <Icon name="actividad" size={44} />
           <p>Fotografía de actividades</p>
         </div>
@@ -187,8 +182,8 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ===================== NOTICIAS ===================== -->
-  <section class="section">
+  <!-- ===================== NOTICIAS (lavanda) ===================== -->
+  <section class="section section--lavanda">
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">Noticias</span>
@@ -203,9 +198,9 @@ const fmt = (d: Date) =>
         noticias.length > 0 ? (
           <div class="grid grid--3">
             {noticias.map((n, i) => (
-              <article class="card nota" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <article class="nota" data-reveal style={`--reveal-delay:${i * 70}ms`}>
                 <a href={`/noticias/${n.id}/`}>
-                  <div class="nota__media">
+                  <div class={`nota__media nota__media${tintesIcono[(i + 1) % 4]}`}>
                     {n.data.imagen ? (
                       <img src={n.data.imagen} alt={n.data.imagenAlt ?? ""} loading="lazy" />
                     ) : (
@@ -214,13 +209,15 @@ const fmt = (d: Date) =>
                       </span>
                     )}
                   </div>
-                  <time datetime={n.data.fecha.toISOString()}>{fmt(n.data.fecha)}</time>
-                  <h3>{n.data.titulo}</h3>
-                  <p>{n.data.resumen}</p>
-                  <span class="link-arrow">
-                    Leer más
-                    <Icon name="arrow-right" size={17} />
-                  </span>
+                  <div class="nota__cuerpo">
+                    <time datetime={n.data.fecha.toISOString()}>{fmt(n.data.fecha)}</time>
+                    <h3>{n.data.titulo}</h3>
+                    <p>{n.data.resumen}</p>
+                    <span class="link-arrow">
+                      Leer más
+                      <Icon name="arrow-right" size={17} />
+                    </span>
+                  </div>
                 </a>
               </article>
             ))}
@@ -233,25 +230,31 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ===================== NOSOTROS ===================== -->
-  <section class="section section--lavanda">
-    <div class="wrap dos-col">
-      <div data-reveal="left">
-        <span class="eyebrow">Sobre nosotros</span>
-        <h2>Nuestra visión es una sociedad que no infantilice la vejez</h2>
-      </div>
-      <div class="dos-col__texto" data-reveal="right">
-        <p class="lead">{misionVision.vision}</p>
-        <a href="/nosotros/" class="btn">
-          Leer nuestra historia
-          <Icon name="arrow-right" size={18} />
-        </a>
+  <!-- ===================== NOSOTROS (bloque lavanda, imagen izquierda) ===================== -->
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="bloque bloque--lavanda pareja pareja--invertida">
+        <div class="pareja__figura" data-reveal="left">
+          <div class="hueco">
+            <Icon name="comunidad" size={44} />
+            <p>Equipo y residentes</p>
+          </div>
+        </div>
+        <div data-reveal="right">
+          <span class="eyebrow">Sobre nosotros</span>
+          <h2>Una sociedad que no infantilice la vejez</h2>
+          <p class="lead">{misionVision.vision}</p>
+          <a href="/nosotros/" class="btn">
+            Leer nuestra historia
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== OBJETIVOS ===================== -->
-  <section class="section">
+  <!-- ===================== OBJETIVOS (menta) ===================== -->
+  <section class="section section--menta">
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">Nuestros objetivos</span>
@@ -261,7 +264,7 @@ const fmt = (d: Date) =>
         {
           historia.objetivos.map((o, i) => (
             <article class="card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
-              <div class="card__icon card__icon--lavanda">
+              <div class={`card__icon card__icon${tintesIcono[i % 4]}`}>
                 <span class="num">{String(i + 1).padStart(2, "0")}</span>
               </div>
               <h3>{o.titulo}</h3>
@@ -273,8 +276,8 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ===================== FORMAS DE APORTAR ===================== -->
-  <section class="section section--alt" id="aportar">
+  <!-- ===================== FORMAS DE APORTAR (rosa) ===================== -->
+  <section class="section section--rosa" id="aportar">
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">Cómo ayudar</span>
@@ -317,7 +320,7 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ===================== TESTIMONIOS ===================== -->
+  <!-- ===================== TESTIMONIOS (blanco, fichas pastel) ===================== -->
   <section class="section">
     <div class="wrap">
       <header class="sechead" data-reveal>
@@ -328,8 +331,8 @@ const fmt = (d: Date) =>
 
     <ul class="testim" tabindex="0" aria-label="Testimonios, desliza para ver más">
       {
-        testimonios.map((t) => (
-          <li class="testim__item">
+        testimonios.map((t, i) => (
+          <li class={`testim__item testim__item--${["lavanda", "cielo", "menta", "rosa"][i % 4]}`}>
             <Icon name="cita" size={26} class="testim__icono" />
             <blockquote>
               <p>{t.texto}</p>
@@ -341,7 +344,7 @@ const fmt = (d: Date) =>
     </ul>
   </section>
 
-  <!-- ===================== CTA ===================== -->
+  <!-- ===================== CTA (oscuro) ===================== -->
   <section class="cta">
     <div class="wrap-medio center" data-reveal="scale">
       <h2>Empieza a aportar hoy a la vejez digna en Arica</h2>
@@ -358,8 +361,8 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ===================== CONTACTO Y DENUNCIAS ===================== -->
-  <section class="section">
+  <!-- ===================== CONTACTO (cielo) ===================== -->
+  <section class="section section--cielo">
     <div class="wrap">
       <header class="sechead" data-reveal>
         <span class="eyebrow">¿Cómo podemos ayudarte?</span>
@@ -368,7 +371,7 @@ const fmt = (d: Date) =>
 
       <div class="grid grid--3">
         <article class="card" data-reveal>
-          <div class="card__icon card__icon--lavanda"><Icon name="mano" size={22} /></div>
+          <div class="card__icon"><Icon name="mano" size={22} /></div>
           <h3>Quiero colaborar</h3>
           <p>Voluntariado, donaciones de insumos, charlas o alianzas.</p>
           <a href="/contacto/#voluntariado" class="link-arrow">
@@ -378,7 +381,7 @@ const fmt = (d: Date) =>
         </article>
 
         <article class="card" data-reveal style="--reveal-delay:80ms">
-          <div class="card__icon"><Icon name="comunidad" size={22} /></div>
+          <div class="card__icon card__icon--menta"><Icon name="comunidad" size={22} /></div>
           <h3>Consultas sobre el ELEAM</h3>
           <p>Postulaciones, visitas y coordinación con familias.</p>
           <a href="/eleam/#postular" class="link-arrow">
@@ -387,10 +390,10 @@ const fmt = (d: Date) =>
           </a>
         </article>
 
-        <article class="card card--denuncia" data-reveal style="--reveal-delay:160ms">
+        <article class="card" data-reveal style="--reveal-delay:160ms">
           <div class="card__icon card__icon--rosa"><Icon name="escudo" size={22} /></div>
           <h3>Canal de denuncias</h3>
-          <p>{denuncias.intro.slice(0, 150)}…</p>
+          <p>{denuncias.intro.slice(0, 130)}…</p>
           <ul class="garantias">
             {denuncias.garantias.map((g) => <li>{g}</li>)}
           </ul>
@@ -451,7 +454,7 @@ const fmt = (d: Date) =>
     justify-items: center;
     gap: 0.6rem;
     height: 100%;
-    color: var(--azul-500);
+    color: var(--ink-400);
   }
   .hero__hueco p {
     font-size: var(--fs-xs);
@@ -471,13 +474,12 @@ const fmt = (d: Date) =>
     box-shadow: var(--shadow-md);
     font-size: var(--fs-sm);
     font-weight: 600;
-    color: var(--azul-900);
+    color: var(--ink-900);
   }
   .hero__sello svg {
-    color: var(--magenta-600);
+    color: var(--azul-600);
   }
 
-  /* Barra de cifras: tarjeta blanca montada sobre el cambio de fondo. */
   .cifras {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
@@ -495,6 +497,7 @@ const fmt = (d: Date) =>
   .cifras li:last-child {
     border-right: 0;
   }
+  /* Las cifras sí llevan color de marca: son el dato duro de la página. */
   .cifras__n {
     display: block;
     font-size: var(--fs-h1);
@@ -560,12 +563,17 @@ const fmt = (d: Date) =>
     transition: color 0.2s var(--ease-out);
   }
   .instituciones__lista li:hover {
-    color: var(--azul-600);
+    color: var(--ink-700);
   }
 
   /* ===================== DUO ===================== */
+  .duo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: clamp(1.25rem, 2.2vw, 1.75rem);
+  }
   .duo__card {
-    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    padding: clamp(1.75rem, 3.5vw, 3rem);
     border-radius: var(--radius-xl);
   }
   .duo__card--lavanda {
@@ -582,7 +590,7 @@ const fmt = (d: Date) =>
     margin-bottom: 1.5rem;
     background: #fff;
     border-radius: var(--radius-lg);
-    color: var(--azul-600);
+    color: var(--ink-700);
   }
   .duo__card h2 {
     font-size: var(--fs-h2);
@@ -594,84 +602,120 @@ const fmt = (d: Date) =>
     max-width: 44ch;
   }
 
-  /* ===================== DIFERENCIAS ===================== */
-  .dif {
+  /* ===================== PAREJA (texto + imagen) ===================== */
+  .pareja {
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
     gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
   }
-  .dif__lista {
+  .pareja--invertida .pareja__figura {
+    order: -1;
+  }
+  .pareja h2 {
+    font-size: var(--fs-h1);
+    max-width: 20ch;
+  }
+  .pareja .lead {
+    margin-top: 1rem;
+    margin-bottom: 1.75rem;
+    color: var(--ink-700);
+  }
+
+  .hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.6rem;
+    aspect-ratio: 4 / 3;
+    background: #fff;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    color: var(--ink-400);
+  }
+  .hueco--alto {
+    aspect-ratio: 4 / 5;
+  }
+  .hueco p {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .puntos {
     list-style: none;
     padding: 0;
     margin: 2rem 0 0;
     display: grid;
     gap: 1.5rem;
   }
-  .dif__lista li {
+  .puntos li {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 1rem;
   }
-  .dif__icono {
+  .puntos__icono {
     display: grid;
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
     background: #fff;
     border-radius: var(--radius);
-    color: var(--azul-600);
+    color: var(--ink-700);
     box-shadow: var(--shadow-sm);
   }
-  .dif__lista h3 {
+  .puntos h3 {
     font-size: var(--fs-lg);
     margin-bottom: 0.2rem;
   }
-  .dif__lista p {
+  .puntos p {
     font-size: var(--fs-base);
     color: var(--text-muted);
   }
-  .dif__hueco {
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    gap: 0.6rem;
-    aspect-ratio: 4 / 5;
-    background: #fff;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    color: var(--azul-500);
-  }
-  .dif__hueco p {
-    font-size: var(--fs-xs);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
+
   @media (max-width: 900px) {
-    .dif {
+    .pareja {
       grid-template-columns: 1fr;
     }
-    .dif__hueco {
+    .pareja--invertida .pareja__figura {
+      order: 0;
+    }
+    .hueco--alto {
       aspect-ratio: 3 / 2;
     }
   }
 
   /* ===================== NOTICIAS ===================== */
   .nota {
-    padding: 0;
+    background: #fff;
+    border-radius: var(--radius-lg);
     overflow: hidden;
+    transition:
+      transform 0.25s var(--ease-out),
+      box-shadow 0.25s var(--ease-out);
+  }
+  .nota:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
   }
   .nota a {
     display: block;
-    padding: 0 1.5rem 1.5rem;
     text-decoration: none;
     color: inherit;
   }
   .nota__media {
     aspect-ratio: 16 / 9;
-    margin: 0 -1.5rem 1.25rem;
     background: var(--lavanda);
     overflow: hidden;
+  }
+  .nota__media--cielo {
+    background: var(--cielo);
+  }
+  .nota__media--menta {
+    background: var(--menta);
+  }
+  .nota__media--rosa {
+    background: var(--rosa);
   }
   .nota__media img {
     width: 100%;
@@ -682,7 +726,10 @@ const fmt = (d: Date) =>
     display: grid;
     place-items: center;
     height: 100%;
-    color: var(--azul-500);
+    color: var(--ink-400);
+  }
+  .nota__cuerpo {
+    padding: 1.5rem;
   }
   .nota time {
     font-size: var(--fs-sm);
@@ -695,33 +742,14 @@ const fmt = (d: Date) =>
   .nota p {
     margin-bottom: 1rem;
     font-size: var(--fs-base);
-  }
-
-  /* ===================== DOS COLUMNAS ===================== */
-  .dos-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: center;
-  }
-  .dos-col h2 {
-    font-size: var(--fs-h1);
-    max-width: 18ch;
-  }
-  .dos-col__texto .lead {
-    margin-bottom: 1.75rem;
-    color: var(--ink-700);
-  }
-  @media (max-width: 860px) {
-    .dos-col {
-      grid-template-columns: 1fr;
-    }
+    color: var(--text-muted);
   }
 
   /* ===================== OBJETIVOS ===================== */
   .num {
     font-size: var(--fs-lg);
     font-weight: 700;
+    color: var(--ink-700);
   }
 
   /* ===================== PLANES ===================== */
@@ -731,7 +759,6 @@ const fmt = (d: Date) =>
     flex-direction: column;
     padding: clamp(1.75rem, 3vw, 2.25rem);
     background: #fff;
-    border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     transition:
       transform 0.25s var(--ease-out),
@@ -741,9 +768,10 @@ const fmt = (d: Date) =>
     transform: translateY(-4px);
     box-shadow: var(--shadow-md);
   }
+  /* La columna destacada es la única que lleva el azul de marca a fondo
+     completo: es la acción que queremos que la gente tome. */
   .plan--destacado {
     background: var(--azul-900);
-    border-color: var(--azul-900);
     color: #fff;
   }
   .plan--destacado h3 {
@@ -810,21 +838,32 @@ const fmt = (d: Date) =>
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
-    scrollbar-color: var(--azul-300) transparent;
+    scrollbar-color: var(--neutro-300) transparent;
   }
   .testim__item {
     flex: 0 0 min(85%, 22rem);
     scroll-snap-align: start;
     padding: 1.75rem;
-    background: var(--cielo);
     border-radius: var(--radius-lg);
     transition: transform 0.25s var(--ease-out);
   }
   .testim__item:hover {
     transform: translateY(-4px);
   }
+  .testim__item--lavanda {
+    background: var(--lavanda);
+  }
+  .testim__item--cielo {
+    background: var(--cielo);
+  }
+  .testim__item--menta {
+    background: var(--menta);
+  }
+  .testim__item--rosa {
+    background: var(--rosa);
+  }
   .testim__icono {
-    color: var(--magenta-600);
+    color: var(--ink-400);
     margin-bottom: 0.9rem;
   }
   .testim__item blockquote {
@@ -839,7 +878,7 @@ const fmt = (d: Date) =>
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-400);
+    color: var(--ink-500);
   }
 
   /* ===================== CTA ===================== */
@@ -861,10 +900,6 @@ const fmt = (d: Date) =>
   }
 
   /* ===================== DENUNCIAS ===================== */
-  .card--denuncia {
-    background: var(--rosa);
-    border-color: transparent;
-  }
   .garantias {
     list-style: none;
     padding: 0;
@@ -875,9 +910,10 @@ const fmt = (d: Date) =>
   .garantias li {
     font-size: var(--fs-sm);
     font-weight: 600;
-    color: var(--magenta-700);
+    color: var(--ink-700);
   }
   .garantias li::before {
     content: "✓ ";
+    color: var(--azul-600);
   }
 </style>

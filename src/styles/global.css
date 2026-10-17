@@ -180,7 +180,7 @@ h4 {
   line-height: 1.25;
   letter-spacing: -0.015em;
   text-wrap: balance;
-  color: var(--azul-900);
+  color: var(--ink-900);
 }
 h1 {
   font-size: var(--fs-h1);
@@ -236,6 +236,9 @@ p {
 .section--menta {
   background: var(--menta);
 }
+.section--rosa {
+  background: var(--rosa);
+}
 .section--oscura {
   background: var(--azul-900);
   color: #fff;
@@ -244,6 +247,24 @@ p {
 .section--oscura h2,
 .section--oscura h3 {
   color: #fff;
+}
+
+/* Bloque pastel redondeado, para agrupar una sección completa. */
+.bloque {
+  padding: clamp(2rem, 4.5vw, 4rem);
+  border-radius: var(--radius-xl);
+}
+.bloque--lavanda {
+  background: var(--lavanda);
+}
+.bloque--cielo {
+  background: var(--cielo);
+}
+.bloque--menta {
+  background: var(--menta);
+}
+.bloque--rosa {
+  background: var(--rosa);
 }
 
 .grid {
@@ -301,16 +322,11 @@ p {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ink-500);
   margin-bottom: 0.9rem;
 }
 .section--oscura .eyebrow {
-  color: var(--magenta-500);
-}
-.section--lavanda .eyebrow,
-.section--menta .eyebrow,
-.section--cielo .eyebrow {
-  color: var(--azul-700);
+  color: var(--azul-300);
 }
 
 .lead {
@@ -441,7 +457,7 @@ p {
 .card {
   position: relative;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
   padding: clamp(1.5rem, 2.5vw, 2rem);
   transition:
@@ -457,24 +473,21 @@ p {
 .card__icon {
   display: grid;
   place-items: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3.25rem;
+  height: 3.25rem;
   margin-bottom: 1.1rem;
-  background: var(--azul-100);
-  color: var(--azul-600);
+  background: var(--lavanda);
+  color: var(--ink-700);
   border-radius: var(--radius);
 }
-.card__icon--lavanda {
-  background: var(--lavanda);
-  color: var(--azul-700);
+.card__icon--cielo {
+  background: var(--cielo);
 }
 .card__icon--menta {
   background: var(--menta);
-  color: #157347;
 }
 .card__icon--rosa {
   background: var(--rosa);
-  color: var(--magenta-700);
 }
 .card h3 {
   font-size: var(--fs-h3);

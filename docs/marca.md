@@ -14,21 +14,38 @@ visual sí son propuesta nueva, porque el encargo es rediseñar, no maquillar.
 | `--magenta-700` | `#b82068` | Acento para texto y rellenos sobre fondo claro (ver abajo) |
 | `--azul-900`    | `#0a2c45` | Fondo de las secciones oscuras y del pie                   |
 
-### Los pasteles
+### Los pasteles, que son los que mandan
 
-Muestreados del sitio anterior, donde ya se usaban como fondo de sección. No
-son decoración: son los que dan aire y ritmo a la página. Al ir rotando entre
-secciones y entre filas de una misma lista, evitan que todo se lea igual sin
-tener que meter más tinta.
+Muestreados del sitio anterior. **Llevan el peso visual del sitio: ocupan
+cerca del 60% de la superficie**, rotando sección a sección para que ninguna
+se lea igual a la anterior.
 
-| Token       | Valor     | Dónde se usa                                   |
-| ----------- | --------- | ---------------------------------------------- |
-| `--lavanda` | `#ece5fa` | Fondo del hero, mitad "Misión", fichas          |
-| `--cielo`   | `#eef6ff` | Sección de testimonios, hueco de la foto        |
-| `--menta`   | `#dff3e8` | Mitad "Visión", fichas                          |
-| `--rosa`    | `#fdeaf3` | Franja de denuncias, fichas                     |
+| Token       | Valor     | Dónde se usa                                       |
+| ----------- | --------- | -------------------------------------------------- |
+| `--lavanda` | `#ece5fa` | Hero, noticias, bloque "sobre nosotros", fichas     |
+| `--cielo`   | `#eef6ff` | Qué nos diferencia, contacto, fichas                |
+| `--menta`   | `#dff3e8` | Objetivos, segundo bloque de servicios, fichas      |
+| `--rosa`    | `#fdeaf3` | Formas de aportar, fichas                           |
 
 Cada uno tiene su versión `-fuerte` para bordes y estados.
+
+Para teñir una sección completa: `.section--lavanda`, `--cielo`, `--menta`,
+`--rosa`. Para un bloque redondeado dentro de una sección blanca:
+`.bloque.bloque--lavanda` y sus variantes.
+
+### Dónde va el color de marca
+
+Regla: **el azul y el magenta se reservan para la acción y el dato**. Si
+aparecieran en titulares, iconos y etiquetas, el sitio se volvería azul y los
+botones dejarían de destacar.
+
+| Sí lleva color de marca            | No lo lleva                     |
+| ---------------------------------- | ------------------------------- |
+| Botones                            | Titulares (van en `--ink-900`)  |
+| Enlaces y "leer más"               | Etiquetas en versales (`--ink-500`) |
+| Las cifras del hero                | Iconos de tarjeta (fondo pastel, trazo `--ink-700`) |
+| La columna destacada de "aportar"  | Bordes y separadores            |
+| El subrayado del menú activo       | Texto corrido                   |
 
 ### Por qué hay dos magentas
 
