@@ -462,16 +462,16 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     overflow: hidden;
     padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
     /* Tintes más cargados que los pasteles base: a los claros el degradado
-       no se les notaba. */
+       no se les notaba. Solo morado, azul y rosa: el verde se asomaba por
+       debajo de la tarjeta de cifras y rompía la mezcla. */
     --mezcla-lavanda: #c4abef;
     --mezcla-rosa: #f7aece;
     --mezcla-cielo: #aed3f6;
-    --mezcla-menta: #b2e2c8;
     background:
       radial-gradient(74% 66% at 6% 10%, var(--mezcla-lavanda) 0%, transparent 62%),
       radial-gradient(62% 58% at 96% 4%, var(--mezcla-cielo) 0%, transparent 64%),
       radial-gradient(70% 72% at 78% 96%, var(--mezcla-rosa) 0%, transparent 62%),
-      radial-gradient(52% 50% at 38% 104%, var(--mezcla-menta) 0%, transparent 60%),
+      radial-gradient(58% 56% at 30% 106%, var(--mezcla-lavanda) 0%, transparent 62%),
       linear-gradient(145deg, var(--lavanda) 0%, var(--rosa) 48%, var(--cielo) 100%);
   }
   /* El grano le quita el aspecto plano al degradado. */
