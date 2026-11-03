@@ -12,6 +12,17 @@ import fotoAlexandra from "../assets/testimonios/alexandra-bustos.jpg";
 import fotoDavid from "../assets/testimonios/david-henriquez.jpg";
 import fotoAlfredo from "../assets/testimonios/alfredo-torrejon.jpg";
 
+// Fotos reales del ELEAM (carpeta "Gente Grande Web", noviembre 2026)
+import fotoEquipoAtencion from "../assets/fotos-eleam/equipo-atencion.jpg";
+import fotoBaile from "../assets/fotos-eleam/baile-residente.jpg";
+import fotoMisa from "../assets/fotos-eleam/misa-eleam.jpg";
+import fotoAcompanamiento from "../assets/fotos-eleam/acompanamiento.jpg";
+import fotoCineTeatro from "../assets/fotos-eleam/cine-teatro.jpg";
+import fotoTallerBandera from "../assets/fotos-eleam/taller-manualidades-bandera.jpg";
+import fotoPlaya from "../assets/fotos-eleam/paseo-playa-volantines.jpg";
+import fotoVisitaMascota from "../assets/fotos-eleam/visita-mascota.jpg";
+import fotoFiestasPatrias from "../assets/fotos-eleam/fiestas-patrias.jpg";
+
 export const site = {
   name: "Fundación Gente Grande",
   shortName: "Gente Grande",
@@ -72,7 +83,7 @@ export const historia = {
     "Nacimos en 2014 de un grupo de profesionales de Arica que quería mirar la vejez desde otro lugar: moderno, activo y respetuoso, lejos de la caridad tradicional.",
   parrafos: [
     "La Fundación Gente Grande fue constituida en 2014 por un grupo de profesionales de Arica que buscaba abordar el envejecimiento desde una perspectiva moderna, activa y respetuosa, alejándose de la mirada asistencialista tradicional.",
-    "Desde septiembre de 2014 administramos un ELEAM —Establecimiento de Larga Estadía para el Adulto Mayor— bajo la fiscalización de SENAMA, y mantenemos una presencia social activa en Arica y en la XV Región.",
+    "Desde septiembre de 2014 administramos un ELEAM (Establecimiento de Larga Estadía para el Adulto Mayor) bajo la fiscalización de SENAMA, y mantenemos una presencia social activa en Arica y en la XV Región.",
     "Nuestro nombre dice lo que creemos: la grandeza se ve en el aspecto, en los logros, en la resiliencia, en los años y en el espíritu. Por eso somos Gente Grande.",
   ],
   objetivos: [
@@ -80,16 +91,22 @@ export const historia = {
       titulo: "Desarrollo pleno",
       texto:
         "Promover el desarrollo de las personas mayores con acompañamiento significativo y pertinente.",
+      foto: fotoPlaya,
+      fotoAlt: "Residente del ELEAM mirando volantines durante un paseo a la playa",
     },
     {
       titulo: "Trabajo en red",
       texto:
         "Articularnos con organizaciones sociales, servicios públicos e instituciones académicas de la región.",
+      foto: fotoVisitaMascota,
+      fotoAlt: "Residentes saludando junto a la mascota de una institución que visitó el ELEAM",
     },
     {
       titulo: "Conciencia comunitaria",
       texto:
         "Sensibilizar a la comunidad sobre el envejecimiento como un proceso vital y natural.",
+      foto: fotoFiestasPatrias,
+      fotoAlt: "Residente celebrando Fiestas Patrias en el ELEAM con un marco de fotos",
     },
   ],
 };
@@ -158,36 +175,48 @@ export const servicios = [
     texto:
       "Equipo multidisciplinario de médicos, psicólogos, terapeutas ocupacionales y asistentes sociales.",
     icono: "corazon",
+    foto: fotoEquipoAtencion,
+    fotoAlt: "Funcionarios del ELEAM sirviendo una torta a residentes",
   },
   {
     titulo: "Envejecimiento activo",
     texto:
       "Actividades físicas, cognitivas y sociales orientadas a mantener la autonomía.",
     icono: "actividad",
+    foto: fotoBaile,
+    fotoAlt: "Residente bailando en el hall del ELEAM",
   },
   {
     titulo: "Comunidad y familia",
     texto:
       "Visitas de autoridades, organizaciones y familias como parte de la vida cotidiana del ELEAM.",
     icono: "comunidad",
+    foto: fotoMisa,
+    fotoAlt: "Sacerdote dando la comunión a una residente durante una misa en el ELEAM",
   },
   {
     titulo: "Regulación SENAMA",
     texto:
       "Operamos bajo los estándares y la fiscalización del Servicio Nacional del Adulto Mayor.",
     icono: "escudo",
+    foto: fotoAcompanamiento,
+    fotoAlt: "Residente sonriendo junto a un funcionario que lo acompaña",
   },
   {
     titulo: "Participación social",
     texto:
       "Charlas, visitas de servicios públicos y trabajo conjunto con agrupaciones locales.",
     icono: "megafono",
+    foto: fotoCineTeatro,
+    fotoAlt: "Afiche del Cine-Teatro del ELEAM de Arica con carteleras de películas clásicas",
   },
   {
     titulo: "Formación y talleres",
     texto:
       "Capacitaciones dirigidas a cuidadores, familias y estudiantes en práctica.",
     icono: "libro",
+    foto: fotoTallerBandera,
+    fotoAlt: "Residente armando una bandera chilena en un taller de manualidades",
   },
 ];
 

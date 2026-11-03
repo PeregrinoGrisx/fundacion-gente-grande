@@ -466,11 +466,12 @@ p {
 
 /* --- Tarjetas ------------------------------------------------------------- */
 .card {
+  --card-pad: clamp(1.5rem, 2.5vw, 2rem);
   position: relative;
   background: var(--surface);
   border: 1px solid transparent;
   border-radius: var(--radius-xl);
-  padding: clamp(1.5rem, 2.5vw, 2rem);
+  padding: var(--card-pad);
   transition:
     transform 0.25s var(--ease-out),
     box-shadow 0.25s var(--ease-out),
@@ -480,6 +481,20 @@ p {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
   border-color: transparent;
+}
+/* Foto de cabecera: ocupa todo el ancho de la tarjeta, pegada al borde
+   superior. Las fotos reales del ELEAM son casi todas verticales, así que se
+   encuadran por el tercio superior (donde suelen estar las caras); cada una
+   puede ajustarlo con --foto-pos. */
+.card__foto {
+  display: block;
+  width: calc(100% + var(--card-pad) * 2);
+  max-width: none;
+  aspect-ratio: 4 / 3;
+  margin: calc(var(--card-pad) * -1) calc(var(--card-pad) * -1) 1.25rem;
+  object-fit: cover;
+  object-position: var(--foto-pos, center 30%);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 .card__icon {
   display: grid;

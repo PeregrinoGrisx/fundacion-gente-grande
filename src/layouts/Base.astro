@@ -17,7 +17,7 @@ const {
   image = "/img/og-default.jpg",
 } = Astro.props;
 
-const tituloCompleto = title === site.name ? title : `${title} — ${site.name}`;
+const tituloCompleto = title === site.name ? title : `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL(image, Astro.site ?? site.url).href;
 ---

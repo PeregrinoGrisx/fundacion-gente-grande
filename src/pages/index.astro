@@ -13,6 +13,8 @@ import { Image } from "astro:assets";
 import heroRetrato from "../assets/fotos/hero-retrato.jpg";
 import fotoActividades from "../assets/fotos/taller-manualidades.jpg";
 import fotoComunidad from "../assets/fotos/comunidad-conversacion.jpg";
+import fotoResidencia from "../assets/fotos-eleam/residente-celebracion.jpg";
+import fotoFormacion from "../assets/fotos-eleam/visita-folclorica.jpg";
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Pendiente from "../components/Pendiente.astro";
@@ -195,9 +197,14 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     <div class="wrap">
       <div class="duo">
         <article class="duo__card duo__card--lavanda" data-reveal="left">
-          <div class="duo__media" aria-hidden="true">
-            <Icon name="comunidad" size={38} />
-          </div>
+          <Image
+            class="duo__foto"
+            src={fotoResidencia}
+            alt="Residente del ELEAM sonriendo con el pulgar arriba durante una celebración"
+            widths={[480, 720, 960]}
+            sizes="(max-width: 800px) 92vw, 45vw"
+            loading="lazy"
+          />
           <h2>Residencia de larga estadía</h2>
           <p>
             Un ELEAM en Arica fiscalizado por SENAMA desde 2014, con equipo
@@ -210,9 +217,14 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
         </article>
 
         <article class="duo__card duo__card--menta" data-reveal="right">
-          <div class="duo__media" aria-hidden="true">
-            <Icon name="megafono" size={38} />
-          </div>
+          <Image
+            class="duo__foto"
+            src={fotoFormacion}
+            alt="Jóvenes con trajes folclóricos visitando a una residente del ELEAM"
+            widths={[480, 720, 960]}
+            sizes="(max-width: 800px) 92vw, 45vw"
+            loading="lazy"
+          />
           <h2>Conciencia y formación</h2>
           <p>
             Charlas, talleres y capacitaciones para cuidadores, familias y
@@ -353,6 +365,14 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
         {
           historia.objetivos.map((o, i) => (
             <article class="card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <Image
+                class="card__foto"
+                src={o.foto}
+                alt={o.fotoAlt}
+                widths={[360, 540, 720]}
+                sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 30vw"
+                loading="lazy"
+              />
               <div class={`card__icon card__icon${tintesIcono[i % 4]}`}>
                 <span class="num">{String(i + 1).padStart(2, "0")}</span>
               </div>
@@ -847,15 +867,13 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
   .duo__card--menta {
     background: var(--menta);
   }
-  .duo__media {
-    display: grid;
-    place-items: center;
-    width: 4.5rem;
-    height: 4.5rem;
+  .duo__foto {
+    width: 100%;
+    aspect-ratio: 16 / 10;
     margin-bottom: 1.5rem;
-    background: #fff;
-    border-radius: 50%;
-    color: var(--ink-700);
+    object-fit: cover;
+    object-position: center 30%;
+    border-radius: var(--radius-lg);
   }
   .duo__card h2 {
     font-size: var(--fs-h2);

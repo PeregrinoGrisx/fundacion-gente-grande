@@ -75,7 +75,14 @@ const datos = [
         {
           servicios.map((s, i) => (
             <article class="card" data-reveal style={`--reveal-delay:${i * 70}ms`}>
-              <div class="card__icon"><Icon name={s.icono as any} size={24} /></div>
+              <Image
+                class="card__foto"
+                src={s.foto}
+                alt={s.fotoAlt}
+                widths={[360, 540, 720]}
+                sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 30vw"
+                loading="lazy"
+              />
               <h3>{s.titulo}</h3>
               <p>{s.texto}</p>
             </article>

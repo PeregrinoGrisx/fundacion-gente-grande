@@ -3,6 +3,9 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import Icon from "../components/Icon.astro";
 import Pendiente from "../components/Pendiente.astro";
+import { Image } from "astro:assets";
+import fotoMision from "../assets/fotos-eleam/residente-taller.jpg";
+import fotoVision from "../assets/fotos-eleam/residente-retrato.jpg";
 import {
   directorio,
   historia,
@@ -71,12 +74,26 @@ const iniciales = (nombre: string) =>
       </header>
       <div class="grid grid--2">
         <article class="card" data-reveal="left">
-          <div class="card__icon"><Icon name="mano" size={24} /></div>
+          <Image
+            class="card__foto"
+            src={fotoMision}
+            alt="Residente del ELEAM sonriendo con delantal durante un taller"
+            widths={[480, 720, 960]}
+            sizes="(max-width: 800px) 92vw, 45vw"
+            loading="lazy"
+          />
           <h3>Misión</h3>
           <p>{misionVision.mision}</p>
         </article>
         <article class="card" data-reveal="right">
-          <div class="card__icon"><Icon name="actividad" size={24} /></div>
+          <Image
+            class="card__foto"
+            src={fotoVision}
+            alt="Residente del ELEAM con lentes de sol y collares, sonriendo"
+            widths={[480, 720, 960]}
+            sizes="(max-width: 800px) 92vw, 45vw"
+            loading="lazy"
+          />
           <h3>Visión</h3>
           <p>{misionVision.vision}</p>
         </article>
