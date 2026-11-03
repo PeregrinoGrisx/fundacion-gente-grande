@@ -1,0 +1,154 @@
+---
+/**
+ * Barra flotante de accesibilidad: achicar y agrandar la letra (cuatro
+ * niveles, con saltos grandes para que el cambio se note) y modo oscuro.
+ *
+ * Las preferencias se guardan en localStorage (gg-texto, gg-tema) y un
+ * script en el <head> de Base.astro las aplica antes del primer pintado,
+ * así la página no parpadea al cargar. Las medidas de la barra van en px
+ * para que no crezca ni se achique con el texto.
+ */
+import Icon from "./Icon.astro";
+---
+
+<div class="acc" role="group" aria-label="Tamaño de letra y modo oscuro">
+  <button type="button" class="acc__btn" data-acc="menos" aria-label="Achicar la letra" title="Achicar la letra">
+    <span class="acc__a acc__a--chica" aria-hidden="true">A</span><span aria-hidden="true">−</span>
+  </button>
+  <button type="button" class="acc__btn" data-acc="mas" aria-label="Agrandar la letra" title="Agrandar la letra">
+    <span class="acc__a" aria-hidden="true">A</span><span aria-hidden="true">+</span>
+  </button>
+  <button
+    type="button"
+    class="acc__btn acc__btn--tema"
+    data-acc="tema"
+    aria-pressed="false"
+    aria-label="Modo oscuro"
+    title="Modo oscuro"
+  >
+    <Icon name="luna" size={20} class="acc__luna" />
+    <Icon name="sol" size={20} class="acc__sol" />
+  </button>
+  <span class="visually-hidden" aria-live="polite" data-acc="aviso"></span>
+</div>
+
+<style>
+  .acc {
+    position: fixed;
+    left: max(14px, env(safe-area-inset-left));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    z-index: 90;
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+    background: var(--lavanda);
+    border: 1px solid var(--lavanda-fuerte);
+    border-radius: 999px;
+    box-shadow: var(--shadow-md);
+  }
+  .acc__btn {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 1px;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    font: 800 19px/46px var(--font-sans);
+    color: var(--text-strong);
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    cursor: var(--cursor-mano);
+    transition:
+      background-color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+  .acc__btn:hover {
+    background: var(--lavanda-fuerte);
+  }
+  .acc__btn:active {
+    transform: scale(0.94);
+  }
+  .acc__a--chica {
+    font-size: 15px;
+  }
+  /* El botón del nivel actual queda resaltado, como en la referencia */
+  .acc__btn.is-activo {
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .acc__btn--tema {
+    align-items: center;
+  }
+  .acc__btn--tema :global(.acc__sol) {
+    display: none;
+  }
+  :global(:root[data-theme="oscuro"]) .acc__btn--tema :global(.acc__luna) {
+    display: none;
+  }
+  :global(:root[data-theme="oscuro"]) .acc__btn--tema :global(.acc__sol) {
+    display: block;
+  }
+
+  @media (max-width: 600px) {
+    .acc__btn {
+      width: 42px;
+      height: 42px;
+      line-height: 42px;
+      font-size: 17px;
+    }
+  }
+</style>
+
+<script>
+  const NIVELES = ["chica", "normal", "grande", "muy-grande"] as const;
+  const NOMBRES = { chica: "pequeña", normal: "normal", grande: "grande", "muy-grande": "muy grande" };
+  const raiz = document.documentElement;
+  const menos = document.querySelector<HTMLButtonElement>('[data-acc="menos"]');
+  const mas = document.querySelector<HTMLButtonElement>('[data-acc="mas"]');
+  const tema = document.querySelector<HTMLButtonElement>('[data-acc="tema"]');
+  const aviso = document.querySelector<HTMLElement>('[data-acc="aviso"]');
+
+  const guardar = (clave: string, valor: string) => {
+    try {
+      localStorage.setItem(clave, valor);
+    } catch {}
+  };
+
+  const nivelActual = () => {
+    const n = raiz.dataset.texto as (typeof NIVELES)[number] | undefined;
+    return n && NIVELES.includes(n) ? NIVELES.indexOf(n) : 1;
+  };
+
+  const pintar = () => {
+    const i = nivelActual();
+    menos?.classList.toggle("is-activo", i < 1);
+    mas?.classList.toggle("is-activo", i > 1);
+    const oscuro = raiz.dataset.theme === "oscuro";
+    tema?.setAttribute("aria-pressed", String(oscuro));
+    tema?.classList.toggle("is-activo", oscuro);
+  };
+
+  const cambiarTexto = (paso: number) => {
+    const i = Math.min(NIVELES.length - 1, Math.max(0, nivelActual() + paso));
+    const nivel = NIVELES[i];
+    if (nivel === "normal") delete raiz.dataset.texto;
+    else raiz.dataset.texto = nivel;
+    guardar("gg-texto", nivel);
+    if (aviso) aviso.textContent = `Letra ${NOMBRES[nivel]}`;
+    pintar();
+  };
+
+  menos?.addEventListener("click", () => cambiarTexto(-1));
+  mas?.addEventListener("click", () => cambiarTexto(1));
+  tema?.addEventListener("click", () => {
+    const oscuro = raiz.dataset.theme !== "oscuro";
+    raiz.dataset.theme = oscuro ? "oscuro" : "claro";
+    guardar("gg-tema", raiz.dataset.theme);
+    if (aviso) aviso.textContent = oscuro ? "Modo oscuro activado" : "Modo claro activado";
+    pintar();
+  });
+
+  pintar();
+</script>

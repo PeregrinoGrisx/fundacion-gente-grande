@@ -57,8 +57,8 @@
 
   --ink-900: #212529;
   --ink-700: #495057;
-  --ink-500: #6c757d;
-  --ink-400: #adb5bd;
+  --ink-500: #5a636b; /* 6,1:1 sobre blanco (antes #6c757d) */
+  --ink-400: #6c757d; /* 4,7:1 sobre blanco (antes #adb5bd, 2,1:1) */
 
   /* Roles semánticos */
   --bg: #ffffff;
@@ -66,6 +66,16 @@
   --surface: #ffffff;
   --text: var(--ink-900);
   --text-muted: var(--ink-500);
+  /* Títulos y textos fuertes: azul profundo en claro, casi blanco en oscuro. */
+  --text-strong: var(--azul-900);
+  /* Magenta para texto (no para rellenos de botón): en oscuro se aclara. */
+  --accent-text: var(--magenta-700);
+  /* Azules para texto y enlaces: en oscuro se aclaran. */
+  --link: var(--azul-600);
+  --link-strong: var(--azul-700);
+  /* Texto claro sobre los bloques azul profundo (pie, CTA, denuncias):
+     es el mismo en los dos modos, porque esos bloques no cambian. */
+  --sobre-oscuro: #eef6ff;
   --border: var(--neutro-200);
   --brand: var(--azul-600);
   --brand-strong: var(--azul-900);
@@ -125,6 +135,79 @@
   --shadow-lg: 0 8px 16px rgb(0 0 0 / 0.15);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Cursor del sitio: el Morro de Arica con la bandera en la cumbre
+     (public/img/cursor-morro.svg). El punto que hace clic es la punta del
+     mástil (5, 2). Si el navegador no puede usarlo, cae al cursor normal. */
+  --cursor-morro: url("/img/cursor-morro.svg") 5 2, auto;
+  --cursor-mano: url("/img/cursor-morro.svg") 5 2, pointer;
+  color-scheme: light;
+}
+
+/* --- Modo oscuro -----------------------------------------------------------
+   Lo activa el botón de la luna (data-theme en <html>, guardado en
+   localStorage); sin elección guardada sigue al sistema. Se redefinen los
+   fondos, las tintas y los pasteles: como los componentes usan esas mismas
+   variables, cambian solos. Los colores de marca (azul y magenta de botones)
+   no cambian.
+   ----------------------------------------------------------------------- */
+:root[data-theme="oscuro"] {
+  --bg: #0e1620;
+  --bg-alt: #121c27;
+  --surface: #172230;
+  --text: #edf1f5;
+  --text-muted: #a4afba;
+  --text-strong: #f4f7fa;
+  --accent-text: var(--magenta-500);
+  --link: #8ebfe4;
+  --link-strong: #a9d0ee;
+  --brand: #8ebfe4;
+  --border: #2a3746;
+
+  --neutro-50: #111a24;
+  --neutro-100: #172230;
+  --neutro-200: #2a3746;
+  --neutro-300: #3b4a5b;
+
+  --ink-900: #edf1f5;
+  --ink-700: #c6ced7;
+  --ink-500: #a4afba;
+  --ink-400: #7f8b97;
+
+  --lavanda: #221d35;
+  --lavanda-fuerte: #31294d;
+  --cielo: #12243a;
+  --cielo-fuerte: #1a3452;
+  --menta: #132a22;
+  --menta-fuerte: #1c3b30;
+  --rosa: #2c1726;
+  --rosa-fuerte: #42213a;
+
+  --azul-100: #15304a;
+  --azul-300: #6aa9dc;
+  --magenta-100: #3a1a2c;
+  --magenta-200: #6b2f50;
+
+  --linea: rgb(160 140 230 / 0.08);
+  --shadow-sm: 0 2px 4px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 8px 16px rgb(0 0 0 / 0.5);
+  color-scheme: dark;
+}
+
+/* --- Tamaño de letra --------------------------------------------------------
+   Botones A− y A+ (data-texto en <html>). Todo el sitio está en rem, así que
+   cambiar el tamaño base escala textos, botones y espacios a la vez. Los
+   saltos son grandes a propósito para que el cambio se note.
+   ----------------------------------------------------------------------- */
+:root[data-texto="chica"] {
+  font-size: 87.5%;
+}
+:root[data-texto="grande"] {
+  font-size: 118.75%;
+}
+:root[data-texto="muy-grande"] {
+  font-size: 137.5%;
 }
 
 /* --- Reset ---------------------------------------------------------------- */
@@ -139,6 +222,21 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  cursor: var(--cursor-morro);
+}
+a,
+button,
+summary,
+select,
+label[for],
+[role="button"] {
+  cursor: var(--cursor-mano);
+}
+/* En los campos de texto se mantiene el cursor de escritura. */
+input:not([type="checkbox"], [type="radio"], [type="submit"], [type="button"]),
+textarea,
+[contenteditable="true"] {
+  cursor: text;
 }
 html:focus-within {
   scroll-padding-top: 6rem;
@@ -152,7 +250,10 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* clip (no hidden): recorta lo que asoma por los costados, como las
+     animaciones de entrada desde la izquierda/derecha, sin crear un
+     contenedor de scroll que rompa el encabezado sticky. */
+  overflow-x: clip;
 }
 
 img,
@@ -346,7 +447,7 @@ p {
   line-height: 1.7;
 }
 .section--oscura .lead {
-  color: var(--cielo);
+  color: var(--sobre-oscuro);
 }
 .muted {
   color: var(--text-muted);
@@ -390,13 +491,22 @@ p {
   font-size: var(--fs-base);
   font-weight: 600;
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--cursor-mano);
   white-space: nowrap;
   transition:
     transform 0.2s var(--ease-out),
     box-shadow 0.2s var(--ease-out),
     background-color 0.2s var(--ease-out),
     color 0.2s var(--ease-out);
+}
+/* En celular, una etiqueta larga ("Enviar denuncia por correo") no cabe en
+   una sola línea: se deja partir y el botón no pasa del ancho disponible. */
+@media (max-width: 480px) {
+  .btn {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
 }
 .btn:hover {
   transform: translateY(-2px);
@@ -421,7 +531,7 @@ p {
 }
 .btn--ghost {
   --btn-bg: transparent;
-  --btn-fg: var(--azul-700);
+  --btn-fg: var(--link-strong);
   border-color: var(--neutro-300);
 }
 .btn--ghost:hover {
@@ -452,6 +562,7 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  min-height: 44px; /* área de toque cómoda en celular, sin cambiar el texto */
   font-size: var(--fs-base);
   font-weight: 600;
   text-decoration: none;

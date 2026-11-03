@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Accesibilidad from "../components/Accesibilidad.astro";
 import { contacto, site } from "../data/site";
 import { markdownPath } from "../lib/agent-docs";
 
@@ -82,6 +83,24 @@ const structuredData = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Tema y tamaño de letra antes del primer pintado (sin parpadeo).
+      // Sin elección guardada, el tema sigue la preferencia del sistema.
+      (function () {
+        var raiz = document.documentElement;
+        var tema = null;
+        var texto = null;
+        try {
+          tema = localStorage.getItem("gg-tema");
+          texto = localStorage.getItem("gg-texto");
+        } catch (e) {}
+        if (tema !== "oscuro" && tema !== "claro") {
+          tema = matchMedia("(prefers-color-scheme: dark)").matches ? "oscuro" : "claro";
+        }
+        raiz.dataset.theme = tema;
+        if (texto === "chica" || texto === "grande" || texto === "muy-grande") raiz.dataset.texto = texto;
+      })();
+    </script>
     <title>{tituloCompleto}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -124,6 +143,7 @@ const structuredData = {
       <slot />
     </main>
     <Footer />
+    <Accesibilidad />
 
     <button type="button" class="to-top" data-to-top aria-label="Volver arriba">
       <svg
@@ -156,7 +176,7 @@ const structuredData = {
         border: none;
         border-radius: 50%;
         box-shadow: var(--shadow-md);
-        cursor: pointer;
+        cursor: var(--cursor-mano);
         opacity: 0;
         transform: translateY(12px) scale(0.9);
         pointer-events: none;

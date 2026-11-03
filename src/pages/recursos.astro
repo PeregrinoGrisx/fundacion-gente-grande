@@ -181,7 +181,7 @@ const formatearFecha = (iso: string) =>
     width: 2.75rem;
     height: 2.75rem;
     background: var(--azul-100);
-    color: var(--azul-700);
+    color: var(--link-strong);
     border-radius: 50%;
     flex: none;
   }
@@ -216,12 +216,20 @@ const formatearFecha = (iso: string) =>
   @media (max-width: 640px) {
     .doc,
     .vacio {
-      grid-template-columns: auto 1fr;
+      grid-template-columns: auto minmax(0, 1fr);
     }
     .doc__btn,
     .vacio .btn {
       grid-column: 1 / -1;
       justify-content: center;
+    }
+  }
+  /* En celular el aviso vacío apila el ícono sobre el texto para que el texto
+     use todo el ancho de la tarjeta. */
+  @media (max-width: 480px) {
+    .vacio {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.85rem;
     }
   }
 </style>

@@ -117,7 +117,7 @@ const redes = [
 <style>
   .pie {
     background: var(--azul-900);
-    color: var(--cielo);
+    color: var(--sobre-oscuro);
   }
   .pie__grid {
     display: grid;
@@ -143,7 +143,7 @@ const redes = [
     max-width: 32ch;
     font-size: var(--fs-sm);
     line-height: 1.7;
-    color: color-mix(in srgb, var(--cielo) 78%, transparent);
+    color: color-mix(in srgb, var(--sobre-oscuro) 78%, transparent);
   }
 
   .pie__redes {
@@ -158,7 +158,7 @@ const redes = [
     place-items: center;
     width: 2.3rem;
     height: 2.3rem;
-    color: var(--cielo);
+    color: var(--sobre-oscuro);
     background: rgb(255 255 255 / 0.08);
     border-radius: 50%;
     transition:
@@ -185,7 +185,7 @@ const redes = [
     gap: 0.65rem;
   }
   .pie__col a {
-    color: color-mix(in srgb, var(--cielo) 80%, transparent);
+    color: color-mix(in srgb, var(--sobre-oscuro) 80%, transparent);
     text-decoration: none;
     font-size: var(--fs-sm);
     transition:
@@ -208,7 +208,7 @@ const redes = [
     gap: 1rem;
     padding-block: 1.35rem;
     font-size: var(--fs-sm);
-    color: color-mix(in srgb, var(--cielo) 68%, transparent);
+    color: color-mix(in srgb, var(--sobre-oscuro) 68%, transparent);
   }
   .pie__credito {
     margin-top: 0.3rem;
@@ -234,6 +234,9 @@ const redes = [
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+    max-width: 100%;
+    /* el correo es largo: con letra grande, en celular se parte en dos líneas */
+    overflow-wrap: anywhere;
     color: inherit;
     text-decoration: none;
   }
@@ -246,16 +249,24 @@ const redes = [
 
   @media (max-width: 1000px) {
     .pie__grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .pie__marca {
       grid-column: 1 / -1;
     }
   }
+  /* En celular las cuatro columnas de enlaces siguen de a dos (no una lista
+     larguísima) y cada enlace tiene más alto para tocarlo con el dedo. */
   @media (max-width: 560px) {
     .pie__grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 2rem 1.25rem;
+    }
+    .pie__col ul {
+      gap: 0.15rem;
+    }
+    .pie__col a {
+      display: inline-block;
+      padding-block: 0.55rem;
     }
   }
 </style>

@@ -230,7 +230,7 @@ const vias = [
 <style>
   .contacto {
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: clamp(2rem, 5vw, 4rem);
     align-items: start;
   }
@@ -297,6 +297,9 @@ const vias = [
   .campo input,
   .campo select,
   .campo textarea {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem; /* 16 px: en iPhone evita el zoom automático al tocar el campo */
     padding: 0.75rem 0.95rem;
     background: var(--bg);
     border: 1px solid var(--neutro-300);
@@ -326,7 +329,7 @@ const vias = [
 
   @media (max-width: 880px) {
     .contacto {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 
@@ -350,10 +353,11 @@ const vias = [
   .datos-banco dd {
     margin: 0;
     font-size: 0.95rem;
+    overflow-wrap: anywhere; /* el correo largo no empuja la tarjeta en 320 px */
   }
   @media (max-width: 480px) {
     .datos-banco div {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 0.15rem;
     }
   }

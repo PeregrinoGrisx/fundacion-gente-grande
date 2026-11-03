@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Cursor del sitio: el Morro de Arica con la bandera chilena en la cumbre.
+       El punto activo es la punta del mástil (5, 2). Borde blanco para que se
+       vea sobre fondos oscuros y contorno azul profundo para fondos claros. -->
+  <path d="M1.5 30.5 L4.6 16.2 Q5 14.6 6.6 14.5 L12.2 14.1 Q14.2 14 15.9 15.8 L21.8 22 Q25.6 25.6 30.5 26.6 L30.5 30.5 Z" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linejoin="round"/>
+  <line x1="5" y1="15" x2="5" y2="1.6" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>
+  <rect x="5.6" y="1.2" width="11.4" height="7.6" rx="0.6" fill="#ffffff"/>
+  <path d="M1.5 30.5 L4.6 16.2 Q5 14.6 6.6 14.5 L12.2 14.1 Q14.2 14 15.9 15.8 L21.8 22 Q25.6 25.6 30.5 26.6 L30.5 30.5 Z" fill="#c98a4e" stroke="#0a2c45" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M6 18.5 Q8.5 17.6 11 18.4 M8 22.5 Q11.5 21.4 15 22.8" fill="none" stroke="#8f5a2b" stroke-width="0.9" stroke-linecap="round"/>
+  <line x1="5" y1="15" x2="5" y2="1.6" stroke="#0a2c45" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="5.8" y="1.6" width="10.8" height="3.5" fill="#ffffff"/>
+  <rect x="5.8" y="5.1" width="10.8" height="3.4" fill="#d52b1e"/>
+  <rect x="5.8" y="1.6" width="3.6" height="3.5" fill="#0039a6"/>
+  <path d="M7.6 2.3 L7.95 3.1 L8.8 3.15 L8.15 3.65 L8.35 4.45 L7.6 4 L6.85 4.45 L7.05 3.65 L6.4 3.15 L7.25 3.1 Z" fill="#ffffff"/>
+  <rect x="5.8" y="1.6" width="10.8" height="6.9" fill="none" stroke="#0a2c45" stroke-width="0.8"/>
+</svg>

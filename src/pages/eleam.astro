@@ -204,7 +204,7 @@ const datos = [
     height: 2.5rem;
     margin-bottom: 0.9rem;
     background: var(--azul-100);
-    color: var(--azul-700);
+    color: var(--link-strong);
     border-radius: 50%;
   }
   .datos__label {
@@ -220,6 +220,27 @@ const datos = [
     margin-top: 0.35rem;
     font-weight: 500;
     line-height: 1.45;
+  }
+  /* En celular cada dato es una fila: ícono a la izquierda, etiqueta y valor
+     a la derecha. Así los cuatro caben en menos de una pantalla. */
+  @media (max-width: 560px) {
+    .datos {
+      gap: 0.75rem;
+    }
+    .datos li {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: 1rem;
+      align-items: center;
+      padding: 1rem 1.15rem;
+    }
+    .datos__icon {
+      grid-row: span 2;
+      margin-bottom: 0;
+    }
+    .datos__valor {
+      margin-top: 0.1rem;
+    }
   }
 
   .galeria {
@@ -267,7 +288,7 @@ const datos = [
   }
   @media (max-width: 880px) {
     .pasos {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 

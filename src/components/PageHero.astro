@@ -66,7 +66,11 @@ const { eyebrow, title, lead, tono = "lavanda" } = Astro.props;
     color: var(--ink-500);
   }
   .miga a {
-    color: var(--azul-700);
+    /* Relleno con margen negativo: el área de toque llega a ~44 px sin
+       mover el texto. */
+    padding-block: 0.75rem;
+    margin-block: -0.75rem;
+    color: var(--link-strong);
     text-decoration: none;
     font-weight: 500;
   }
@@ -78,7 +82,7 @@ const { eyebrow, title, lead, tono = "lavanda" } = Astro.props;
   }
   .miga span {
     font-weight: 600;
-    color: var(--azul-900);
+    color: var(--text-strong);
   }
 
   .pagehero__texto {
