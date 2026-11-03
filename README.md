@@ -29,7 +29,7 @@ Para retomar el trabajo, ver [docs/proximos-pasos.md](docs/proximos-pasos.md).
   Todo respeta `prefers-reduced-motion`.
 
 Resultado: páginas de pocos kB, sin dependencias de runtime, desplegables en
-cualquier hosting que sirva archivos estáticos (incluido el actual).
+cualquier hosting que sirva archivos estáticos.
 
 ## Comandos
 
@@ -77,16 +77,63 @@ Copiar `.env.example` a `.env` y completar:
 Sin ellas el sitio compila igual: la sección de documentos muestra el enlace a
 la carpeta de Drive y el formulario cae a `mailto:`.
 
+Para el sitio publicado se cargan como secrets del repositorio con el mismo
+nombre (ver [Despliegue](#despliegue)); el workflow las pasa al build.
+
 ## Despliegue
 
-`npm run build` deja todo en `dist/`. Ese directorio es el sitio completo.
+El sitio se sirve desde **Cloudflare Workers**: el Worker
+`fundacion-gente-grande` publica los archivos estáticos de `dist/` y atiende
+`fundaciongentegrandearica.org` y `www.fundaciongentegrandearica.org` como
+Custom Domains. La configuración está en [wrangler.jsonc](wrangler.jsonc).
 
-- **Hosting actual (Bluehost u otro cPanel)**: subir el contenido de `dist/` a
-  `public_html/` por FTP. El dominio ya apunta ahí, así que no hay que tocar
-  DNS.
-- **Cloudflare Pages / Netlify / Vercel**: conectar este repositorio, comando
-  de build `npm run build`, directorio de salida `dist`. Cada push publica solo.
-  Recomendado: evita subir archivos a mano y da entornos de previsualización.
+El dominio sigue registrado en Wix, pero sus servidores de nombres son los de
+Cloudflare: el DNS se administra en Cloudflare, no en Wix.
+
+### Publicación automática
+
+Cada push a `main` ejecuta [.github/workflows/deploy.yml](.github/workflows/deploy.yml):
+compila con `npm run build` y publica con `wrangler deploy`. También se puede
+lanzar a mano desde **Actions → Publicar en Cloudflare Workers → Run workflow**,
+por ejemplo para que aparezcan PDF nuevos de Drive sin cambiar código.
+
+El workflow lee estos secrets del repositorio (**Settings → Secrets and
+variables → Actions → New repository secret**; solo puede cargarlos la cuenta
+dueña del repositorio):
+
+| Secret                  | Qué es                                                        |
+| ----------------------- | ------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | Token de API de Cloudflare para publicar el Worker            |
+| `CLOUDFLARE_ACCOUNT_ID` | ID de la cuenta de Cloudflare dueña del Worker                |
+| `PUBLIC_GOOGLE_API_KEY` | Opcional. Ver [Variables de entorno](#variables-de-entorno)   |
+| `PUBLIC_FORM_ENDPOINT`  | Opcional. Ver [Variables de entorno](#variables-de-entorno)   |
+
+**Crear el token** (en la cuenta de Cloudflare de la Fundación):
+
+1. **My Profile → API Tokens → Create Token → Create Custom Token**.
+2. Permisos:
+   - *Account* · *Workers Scripts* · *Edit*
+   - *Account* · *Account Settings* · *Read*
+   - *Zone* · *Workers Routes* · *Edit* (Cloudflare lo pide cuando un deploy
+     toca los Custom Domains)
+3. *Account Resources*: solo la cuenta de la Fundación. *Zone Resources*:
+   solo la zona `fundaciongentegrandearica.org`.
+4. Crear, copiar el token (se muestra una sola vez) y cargarlo como
+   `CLOUDFLARE_API_TOKEN`.
+
+El ID de cuenta aparece en el panel de Cloudflare, en **Workers & Pages** (columna
+derecha, *Account ID*), o en la URL del panel: `dash.cloudflare.com/<ID>/...`.
+
+### Publicación manual
+
+Con una sesión de Cloudflare iniciada (`npx wrangler login`):
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+Sirve para emergencias; lo normal es dejar que publique el workflow.
 
 ## Accesibilidad
 

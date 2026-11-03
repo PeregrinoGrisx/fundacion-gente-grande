@@ -24,12 +24,10 @@ navegador, esa clave quedaría a la vista en el código del sitio. Haciéndolo e
 el build, la clave vive solo en el servidor que compila.
 
 **Consecuencia a tener presente:** un PDF nuevo aparece en el sitio recién
-después del siguiente despliegue. Se resuelve de dos formas, según el hosting:
-
-- **Cloudflare Pages / Netlify / Vercel**: configurar un *deploy hook* y
-  llamarlo con un cron diario. El sitio se reconstruye solo cada noche.
-- **Hosting actual por FTP**: reconstruir y subir cuando se agreguen
-  documentos. Menos cómodo, pero funciona.
+después del siguiente despliegue. Hoy se resuelve lanzando el workflow a mano
+(**Actions → Publicar en Cloudflare Workers → Run workflow**). Si se quiere
+automático, basta con agregar un `schedule` (cron diario) al `on:` de
+`.github/workflows/deploy.yml` para que el sitio se reconstruya solo cada noche.
 
 Si más adelante se quiere que los documentos aparezcan al instante, la
 alternativa es una función serverless que haga de intermediaria con la API
@@ -68,8 +66,10 @@ El ID es la parte final del enlace de la carpeta:
 PUBLIC_GOOGLE_API_KEY=AIza...
 ```
 
-En Cloudflare Pages / Netlify / Vercel, cargarla como variable de entorno del
-proyecto. **Nunca** commitearla al repositorio.
+Para el sitio publicado, cargarla como secret del repositorio en GitHub
+(**Settings → Secrets and variables → Actions**) con el nombre
+`PUBLIC_GOOGLE_API_KEY`; el workflow de despliegue la pasa al build. **Nunca**
+commitearla al repositorio.
 
 ### 3. Verificar
 
