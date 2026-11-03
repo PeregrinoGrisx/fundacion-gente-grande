@@ -1,0 +1,127 @@
+// Worker de fundaciongentegrandearica.org: sirve el sitio estático (binding
+// ASSETS) y negocia HTML / Markdown en las páginas según el encabezado Accept.
+// - Accept: text/markdown → la versión Markdown de la página (/ruta/index.md),
+//   con Content-Type: text/markdown y Vary: Accept.
+// - Navegadores y clientes sin Accept → el HTML de siempre, con Vary: Accept.
+// - Una ruta que no existe → 404; en Markdown si eso es lo que se pidió.
+import { chooseRepresentation } from './negotiate.js';
+
+const SITE = 'https://fundaciongentegrandearica.org';
+const MARKDOWN = 'text/markdown; charset=utf-8';
+
+// Páginas = rutas sin extensión o terminadas en .html (no imágenes, CSS, .md, .txt…).
+export function isPagePath(pathname) {
+  const last = pathname.split('/').pop();
+  return last === '' || last.endsWith('.html') || !last.includes('.');
+}
+
+// Versión Markdown de cada página (llmstxt.org: las URL terminadas en / usan index.md).
+export function markdownPathFor(pathname) {
+  let path = pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
+  if (!path.endsWith('/')) path += '/';
+  return `${path}index.md`;
+}
+
+// Cloudflare sirve HTML, texto y XML sin charset; el contenido es UTF-8 (tildes,
+// eñes) y algunos clientes asumen ISO-8859-1 si no se declara.
+const TEXT_TYPES = /^(text\/(html|plain|xml|css)|application\/(xml|javascript)|image\/svg\+xml)$/i;
+export function withUtf8(response) {
+  const type = response.headers.get('Content-Type');
+  if (!type || /charset=/i.test(type) || !TEXT_TYPES.test(type.trim())) return response;
+  const fixed = new Response(response.body, response);
+  fixed.headers.set('Content-Type', `${type.trim()}; charset=utf-8`);
+  return fixed;
+}
+
+const appendVary = (headers) => {
+  const vary = headers.get('Vary');
+  if (!vary) headers.set('Vary', 'Accept');
+  else if (!/(^|,)\s*accept\s*(,|$)/i.test(vary)) headers.set('Vary', `${vary}, Accept`);
+};
+
+export function notFoundMarkdown(pathname) {
+  return [
+    '# 404: página no encontrada',
+    '',
+    `No existe ninguna página en \`${pathname}\` dentro de fundaciongentegrandearica.org. Puede que haya cambiado de dirección o que el enlace esté incompleto. Prueba con uno de estos enlaces:`,
+    '',
+    `- [Inicio](${SITE}/index.md)`,
+    `- [Índice para agentes (llms.txt)](${SITE}/llms.txt)`,
+    `- [Mapa del sitio](${SITE}/sitemap-index.xml)`,
+    `- [Contacto](${SITE}/contacto/index.md)`,
+    '',
+  ].join('\n');
+}
+
+function markdownNotFound(request, url) {
+  const body = notFoundMarkdown(url.pathname);
+  return new Response(request.method === 'HEAD' ? null : body, {
+    status: 404,
+    headers: {
+      'Content-Type': MARKDOWN,
+      'Content-Length': String(new TextEncoder().encode(body).length),
+      Vary: 'Accept',
+      'Cache-Control': 'no-store',
+    },
+  });
+}
+
+function notAcceptable(request) {
+  const body = '406 Not Acceptable: esta página está disponible como text/html y text/markdown.\n';
+  return new Response(request.method === 'HEAD' ? null : body, {
+    status: 406,
+    headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
+  });
+}
+
+export default {
+  /**
+   * @param {Request} request
+   * @param {{ ASSETS: { fetch: (req: Request) => Promise<Response> } }} env
+   */
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const isRead = request.method === 'GET' || request.method === 'HEAD';
+
+    // Archivos (imágenes, CSS, .md, llms.txt, sitemap…) y métodos que no son de lectura
+    if (!isRead || !isPagePath(url.pathname)) {
+      const response = await env.ASSETS.fetch(request);
+      if (url.pathname.endsWith('.md') && response.ok) {
+        const md = new Response(response.body, response);
+        md.headers.set('Content-Type', MARKDOWN);
+        return md;
+      }
+      if (url.pathname.endsWith('.md') && response.status === 404) return markdownNotFound(request, url);
+      return withUtf8(response);
+    }
+
+    const choice = chooseRepresentation(request.headers.get('Accept'));
+
+    if (choice === 'markdown') {
+      const mdUrl = new URL(markdownPathFor(url.pathname), url);
+      const md = await env.ASSETS.fetch(new Request(mdUrl, { method: request.method, headers: request.headers }));
+      if (md.status === 304) {
+        const notModified = new Response(null, md);
+        notModified.headers.set('Vary', 'Accept');
+        return notModified;
+      }
+      if (!md.ok) return markdownNotFound(request, url);
+      const response = new Response(md.body, md);
+      response.headers.set('Content-Type', MARKDOWN);
+      response.headers.set('Vary', 'Accept');
+      response.headers.set('Link', `<${new URL(url.pathname, SITE).href}>; rel="canonical"`);
+      return response;
+    }
+
+    const asset = await env.ASSETS.fetch(request);
+    if (choice === null && asset.status !== 404) return notAcceptable(request);
+
+    const base = withUtf8(asset);
+    const response = new Response(base.body, base);
+    appendVary(response.headers);
+    if (asset.status === 200) {
+      response.headers.set('Link', `<${markdownPathFor(url.pathname)}>; rel="alternate"; type="text/markdown"`);
+    }
+    return response;
+  },
+};

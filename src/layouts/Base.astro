@@ -2,24 +2,79 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { site } from "../data/site";
+import { contacto, site } from "../data/site";
+import { markdownPath } from "../lib/agent-docs";
 
 interface Props {
   title: string;
   description?: string;
   /** Imagen para compartir en redes, relativa a /public. */
   image?: string;
+  /** false en páginas sin versión Markdown (el 404). */
+  markdown?: boolean;
 }
 
 const {
   title,
   description = site.description,
   image = "/img/og-default.jpg",
+  markdown = true,
 } = Astro.props;
 
 const tituloCompleto = title === site.name ? title : `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL(image, Astro.site ?? site.url).href;
+
+// Datos estructurados: la Fundación (Organization + NGO, con contacto y
+// dirección) y el sitio web. Todo sale de src/data/site.ts.
+const orgId = `${site.url}/#organizacion`;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["Organization", "NGO"],
+      "@id": orgId,
+      name: site.name,
+      alternateName: site.shortName,
+      description: site.description,
+      slogan: site.tagline,
+      url: site.url,
+      logo: new URL("/img/marca/Isotipo.png", site.url).href,
+      foundingDate: String(site.foundedYear),
+      taxID: site.rut,
+      email: contacto.email,
+      ...(contacto.telefono && { telephone: contacto.telefono }),
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: contacto.direccionPostal.split(",")[0].trim(),
+        addressLocality: "Arica",
+        addressRegion: "Arica y Parinacota",
+        addressCountry: "CL",
+      },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          email: contacto.email,
+          ...(contacto.telefono && { telephone: contacto.telefono }),
+          url: new URL("/contacto/", site.url).href,
+          availableLanguage: ["es"],
+          areaServed: "CL",
+        },
+      ],
+      areaServed: { "@type": "Place", name: "Arica y Parinacota, Chile" },
+      sameAs: Object.values(contacto.redes).filter(Boolean),
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#sitio`,
+      name: site.name,
+      url: site.url,
+      inLanguage: "es-CL",
+      publisher: { "@id": orgId },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -52,26 +107,14 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
       href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap"
     />
 
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "NGO",
-        name: site.name,
-        alternateName: site.shortName,
-        description: site.description,
-        url: site.url,
-        foundingDate: String(site.foundedYear),
-        taxID: site.rut,
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "Volcán Cotacotani #131",
-          addressLocality: "Arica",
-          addressRegion: "Arica y Parinacota",
-          addressCountry: "CL",
-        },
-      })}
-    />
+    {
+      markdown && (
+        <link rel="alternate" type="text/markdown" href={markdownPath(Astro.url.pathname)} />
+      )
+    }
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
 
   <body>

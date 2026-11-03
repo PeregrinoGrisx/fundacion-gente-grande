@@ -1,8 +1,11 @@
-// Despliegue en Cloudflare Workers (solo archivos estáticos de dist/).
+// Despliegue en Cloudflare Workers.
 // Publicar: `npm run build` y luego `npx wrangler deploy`.
+// El Worker (worker/index.js) recibe todas las peticiones, negocia HTML / Markdown
+// según el encabezado Accept y sirve los archivos de dist/ mediante el binding ASSETS.
 // El dominio fundaciongentegrandearica.org se conecta como Custom Domain del Worker.
 {
   "name": "fundacion-gente-grande",
+  "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
   "workers_dev": true,
   "routes": [
@@ -11,6 +14,8 @@
   ],
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": true
   }
 }
