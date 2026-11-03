@@ -91,7 +91,8 @@ ELEAM.
 - `PUBLIC_GOOGLE_API_KEY` para que las descargas de Drive se listen solas
   (ver [documentos-drive.md](documentos-drive.md))
 - `PUBLIC_FORM_ENDPOINT` para el formulario de contacto
-- Decidir el despliegue: Cloudflare Pages (recomendado) o FTP al hosting actual
+- Cargar los secrets de Cloudflare para que cada push a `main` publique solo
+  (ver la sección Despliegue del [README](../README.md#despliegue))
 
 ### 5. Noticias
 

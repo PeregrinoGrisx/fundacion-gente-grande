@@ -1,5 +1,6 @@
 // Despliegue en Cloudflare Workers (solo archivos estáticos de dist/).
-// Publicar: `npm run build` y luego `npx wrangler deploy`.
+// Cada push a main publica solo (.github/workflows/deploy.yml). A mano:
+// `npm run build` y luego `npx wrangler deploy`.
 // El dominio fundaciongentegrandearica.org se conecta como Custom Domain del Worker.
 {
   "name": "fundacion-gente-grande",
