@@ -92,7 +92,12 @@ const redes = [
 
   <div class="pie__barra">
     <div class="wrap pie__barra-inner">
-      <p>© {new Date().getFullYear()} {site.name} · RUT {site.rut} · {site.ley}</p>
+      <div>
+        <p>© {new Date().getFullYear()} {site.name} · RUT {site.rut} · {site.ley}</p>
+        <p class="pie__credito">
+          Sitio realizado por <a href="https://puntogris.cl" target="_blank" rel="noopener">puntogris.cl</a>
+        </p>
+      </div>
       <ul class="pie__datos">
         <li>
           <Icon name="ubicacion" size={15} />
@@ -204,6 +209,17 @@ const redes = [
     padding-block: 1.35rem;
     font-size: var(--fs-sm);
     color: color-mix(in srgb, var(--cielo) 68%, transparent);
+  }
+  .pie__credito {
+    margin-top: 0.3rem;
+    font-size: var(--fs-xs);
+  }
+  .pie__credito a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+  .pie__credito a:hover {
+    color: #fff;
   }
   .pie__datos {
     display: flex;

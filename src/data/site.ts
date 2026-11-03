@@ -7,6 +7,11 @@
  * completarse con material que todavía no tenemos.
  */
 
+import fotoSilvia from "../assets/testimonios/silvia-farina.jpg";
+import fotoAlexandra from "../assets/testimonios/alexandra-bustos.jpg";
+import fotoDavid from "../assets/testimonios/david-henriquez.jpg";
+import fotoAlfredo from "../assets/testimonios/alfredo-torrejon.jpg";
+
 export const site = {
   name: "Fundación Gente Grande",
   shortName: "Gente Grande",
@@ -214,36 +219,40 @@ export const vinculacionAcademica = {
   ],
 };
 
+/**
+ * Extractos del documento "TESTIMONIOS FGG" (noviembre 2026). Los textos
+ * completos están en ese documento; acá va solo un fragmento textual de cada
+ * uno. Las fotos son las que enviaron las mismas personas, recortadas en
+ * cuadrado centrado en la cara (src/assets/testimonios/).
+ */
 export const testimonios = [
   {
+    nombre: "Silvia Fariña",
+    rol: "Colaboradora de la Fundación",
+    foto: fotoSilvia,
     texto:
-      "Al principio tenía algunas dudas, pero poco a poco fui sintiéndome como en casa. Hoy disfruto mucho conversar y compartir con mis compañeros.",
-    autor: "Residente",
+      "Fundación Gente Grande para mí es un refugio, al cual gente vulnerable tiene la fortuna de acceder para ser acogida y tener una vida digna en una etapa avanzada de su vida.",
   },
   {
+    nombre: "Alexandra Bustos Ortuño",
+    rol: "Hija de Sandra Ortuño, residente",
+    foto: fotoAlexandra,
     texto:
-      "Lo que más valoramos es el trato cercano del equipo. Siempre sentimos que nuestras inquietudes son escuchadas y que nuestro familiar está bien acompañado.",
-    autor: "Hija de residente",
+      "Encontrarlos a ustedes fue una verdadera bendición en nuestras vidas. Gracias a su entrega, cariño y profesionalismo, mi mamá hoy recibe una atención integral, digna y sumamente humana.",
   },
   {
+    nombre: "David Henríquez",
+    rol: "Académico, carrera de Educación Física",
+    foto: fotoDavid,
     texto:
-      "Aquí he encontrado compañía, nuevas amistades y momentos para disfrutar. Me gusta sentir que cada día tengo algo nuevo que compartir.",
-    autor: "Residente",
+      "Una institución como ELEAM permite entregar un espacio humano de calidad de vida para las personas mayores que no han tenido una vida fácil. Desde el principio fuimos recibidos con los brazos abiertos.",
   },
   {
+    nombre: "Alfredo Torrejón Rivera",
+    rol: "Hijo de María Rivera Zora, residente desde 2021",
+    foto: fotoAlfredo,
     texto:
-      "Desde que mi mamá llegó, la vemos más tranquila y acompañada. Saber que está en buenas manos nos da mucha tranquilidad como familia.",
-    autor: "Hija de residente",
-  },
-  {
-    texto:
-      "Me gusta compartir con los demás y participar en las actividades. Aquí me siento acompañada y tengo cosas que disfrutar cada día.",
-    autor: "Residente",
-  },
-  {
-    texto:
-      "Encontrar este lugar fue un alivio para nuestra familia. Sabemos que nuestro padre recibe atención, cariño y el respeto que merece.",
-    autor: "Hija de residente",
+      "Con el paso del tiempo, esa tristeza inicial fue dando paso a una enorme tranquilidad y gratitud. Gracias por cuidar a mi madre como si fuera parte de su propia familia.",
   },
 ];
 

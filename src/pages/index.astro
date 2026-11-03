@@ -127,6 +127,53 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     </div>
   </section>
 
+  <!-- ===================== TESTIMONIOS (carrusel automático) ===================== -->
+  <section class="section section--tight testim-seccion" aria-labelledby="testim-titulo">
+    <div class="wrap testim__head">
+      <header class="sechead sechead--left" data-reveal>
+        <span class="eyebrow">Voces de nuestra comunidad</span>
+        <h2 id="testim-titulo">Lo que nos cuentan familias y amigos</h2>
+      </header>
+      <div class="testim__controles">
+        <button type="button" class="testim__btn testim__btn--atras" data-testim="anterior" aria-label="Testimonio anterior">
+          <Icon name="arrow-right" size={18} />
+        </button>
+        <button type="button" class="testim__btn" data-testim="pausa" aria-pressed="false" aria-label="Pausar el carrusel">
+          <span class="testim__icono-pausa" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="testim__btn" data-testim="siguiente" aria-label="Testimonio siguiente">
+          <Icon name="arrow-right" size={18} />
+        </button>
+      </div>
+    </div>
+
+    <ul class="testim" data-testim="pista" tabindex="0" aria-label="Testimonios">
+      {
+        testimonios.map((t, i) => (
+          <li class={`testim__item testim__item--${["lavanda", "cielo", "menta", "rosa"][i % 4]}`}>
+            <figure>
+              <Image
+                class="testim__foto"
+                src={t.foto}
+                alt={`Retrato de ${t.nombre}`}
+                widths={[96, 192]}
+                sizes="96px"
+                loading="lazy"
+              />
+              <blockquote>
+                <p>“{t.texto}”</p>
+              </blockquote>
+              <figcaption>
+                <strong>{t.nombre}</strong>
+                <span>{t.rol}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
   <Pendiente que="Las fotos son de stock (Envato Elements, licencia comercial) y son PROVISIONALES: hay que reemplazarlas por fotografías reales del ELEAM y sus residentes. Falta además la imagen para compartir en redes (/public/img/og-default.jpg)." />
 
   <!-- ===================== INSTITUCIONES (blanco) ===================== -->
@@ -362,31 +409,6 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     </div>
   </section>
 
-  <!-- ===================== TESTIMONIOS (blanco, fichas pastel) ===================== -->
-  <section class="section">
-    <Lineas desfase={6} />
-    <div class="wrap">
-      <header class="sechead" data-reveal>
-        <span class="eyebrow">Voces de nuestra comunidad</span>
-        <h2>Lo que nos cuentan residentes y familias</h2>
-      </header>
-    </div>
-
-    <ul class="testim" tabindex="0" aria-label="Testimonios, desliza para ver más">
-      {
-        testimonios.map((t, i) => (
-          <li class={`testim__item testim__item--${["lavanda", "cielo", "menta", "rosa"][i % 4]}`}>
-            <Icon name="cita" size={26} class="testim__icono" />
-            <blockquote>
-              <p>{t.texto}</p>
-              <footer>{t.autor}</footer>
-            </blockquote>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
   <!-- ===================== CTA (oscuro) ===================== -->
   <section class="cta">
     <div class="wrap-medio center" data-reveal="scale">
@@ -449,6 +471,96 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     </div>
   </section>
 </Base>
+
+<script>
+  // Carrusel de testimonios: avanza una ficha cada INTERVALO ms y vuelve al
+  // inicio al llegar al final. Se detiene con el botón de pausa, al pasar el
+  // mouse, al enfocarlo con teclado o cuando no está en pantalla.
+  const INTERVALO = 6000;
+
+  const pista = document.querySelector<HTMLElement>('[data-testim="pista"]');
+  const btnPausa = document.querySelector<HTMLButtonElement>('[data-testim="pausa"]');
+  const btnAnterior = document.querySelector<HTMLButtonElement>('[data-testim="anterior"]');
+  const btnSiguiente = document.querySelector<HTMLButtonElement>('[data-testim="siguiente"]');
+
+  if (pista && btnPausa && btnAnterior && btnSiguiente) {
+    const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let pausadoPorPersona = reducido;
+    let encima = false;
+    let visible = false;
+    let timer: number | undefined;
+
+    const paso = () => {
+      const ficha = pista.querySelector<HTMLElement>(".testim__item");
+      const gap = parseFloat(getComputedStyle(pista).columnGap) || 0;
+      return ficha ? ficha.offsetWidth + gap : pista.clientWidth;
+    };
+    const alFinal = () => pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 4;
+    const alInicio = () => pista.scrollLeft <= 4;
+    const comportamiento = (): ScrollBehavior => (reducido ? "auto" : "smooth");
+
+    const siguiente = () =>
+      alFinal()
+        ? pista.scrollTo({ left: 0, behavior: comportamiento() })
+        : pista.scrollBy({ left: paso(), behavior: comportamiento() });
+    const anterior = () =>
+      alInicio()
+        ? pista.scrollTo({ left: pista.scrollWidth, behavior: comportamiento() })
+        : pista.scrollBy({ left: -paso(), behavior: comportamiento() });
+
+    const programar = () => {
+      window.clearInterval(timer);
+      timer = undefined;
+      if (!pausadoPorPersona && !encima && visible && !document.hidden) {
+        timer = window.setInterval(siguiente, INTERVALO);
+      }
+    };
+
+    const marcarPausa = (pausado: boolean) => {
+      pausadoPorPersona = pausado;
+      btnPausa.setAttribute("aria-pressed", String(pausado));
+      btnPausa.setAttribute("aria-label", pausado ? "Reanudar el carrusel" : "Pausar el carrusel");
+      programar();
+    };
+    marcarPausa(pausadoPorPersona);
+
+    btnPausa.addEventListener("click", () => marcarPausa(!pausadoPorPersona));
+    btnSiguiente.addEventListener("click", () => {
+      siguiente();
+      programar();
+    });
+    btnAnterior.addEventListener("click", () => {
+      anterior();
+      programar();
+    });
+
+    const seccion = pista.closest("section") ?? pista;
+    seccion.addEventListener("pointerenter", () => {
+      encima = true;
+      programar();
+    });
+    seccion.addEventListener("pointerleave", () => {
+      encima = false;
+      programar();
+    });
+    seccion.addEventListener("focusin", () => {
+      encima = true;
+      programar();
+    });
+    seccion.addEventListener("focusout", (e) => {
+      if (!seccion.contains(e.relatedTarget as Node | null)) {
+        encima = false;
+        programar();
+      }
+    });
+    document.addEventListener("visibilitychange", programar);
+
+    new IntersectionObserver(([entrada]) => {
+      visible = entrada.isIntersecting;
+      programar();
+    }, { threshold: 0.4 }).observe(pista);
+  }
+</script>
 
 <style>
   /* ===================== HERO =====================
@@ -972,7 +1084,65 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     color: var(--magenta-500);
   }
 
-  /* ===================== TESTIMONIOS ===================== */
+  /* ===================== TESTIMONIOS =====================
+     Carrusel horizontal con scroll-snap. El script de abajo lo avanza solo
+     cada pocos segundos; se detiene con el botón de pausa, al pasar el mouse
+     o al enfocarlo con teclado, y no arranca si la persona pidió reducir el
+     movimiento. Sin JavaScript queda como una fila que se desliza a mano. */
+  .testim__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .testim__head .sechead {
+    margin-bottom: 0;
+  }
+  .testim__controles {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .testim__btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    color: var(--azul-600);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out);
+  }
+  .testim__btn:hover {
+    color: #fff;
+    background: var(--azul-600);
+  }
+  /* El ícono vive en otro componente (sin el scope de esta página), así que
+     se voltea el botón completo: es un círculo y queda igual. */
+  .testim__btn--atras {
+    transform: scaleX(-1);
+  }
+  /* Ícono de pausa (dos barras) que pasa a triángulo de "reproducir" */
+  .testim__icono-pausa {
+    width: 0.75rem;
+    height: 0.85rem;
+    border-inline: 0.25rem solid currentColor;
+  }
+  .testim__btn[aria-pressed="true"] .testim__icono-pausa {
+    width: 0;
+    height: 0;
+    border-inline: 0;
+    border-block: 0.45rem solid transparent;
+    border-left: 0.75rem solid currentColor;
+    margin-left: 0.2rem;
+  }
+
   .testim {
     display: flex;
     gap: 1.25rem;
@@ -981,18 +1151,17 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
     padding: 0.5rem max(var(--gutter), calc((100vw - var(--wrap)) / 2)) 1.5rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-    scrollbar-color: var(--neutro-300) transparent;
+    scroll-padding-inline: max(var(--gutter), calc((100vw - var(--wrap)) / 2));
+    scrollbar-width: none;
+  }
+  .testim::-webkit-scrollbar {
+    display: none;
   }
   .testim__item {
-    flex: 0 0 min(85%, 22rem);
+    flex: 0 0 min(86%, 24rem);
     scroll-snap-align: start;
     padding: 1.75rem;
     border-radius: var(--radius-xl);
-    transition: transform 0.25s var(--ease-out);
-  }
-  .testim__item:hover {
-    transform: translateY(-4px);
   }
   .testim__item--lavanda {
     background: var(--lavanda);
@@ -1006,22 +1175,40 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
   .testim__item--rosa {
     background: var(--rosa);
   }
-  .testim__icono {
-    color: var(--ink-400);
-    margin-bottom: 0.9rem;
-  }
-  .testim__item blockquote {
+  .testim__item figure {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     margin: 0;
   }
+  .testim__foto {
+    width: 5.5rem;
+    height: 5.5rem;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: var(--shadow-sm);
+  }
+  .testim__item blockquote {
+    flex: 1;
+    margin: 1.25rem 0 0;
+  }
   .testim__item p {
+    font-size: var(--fs-md);
+    line-height: 1.65;
     color: var(--ink-700);
   }
-  .testim__item footer {
-    margin-top: 1.1rem;
-    font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .testim__item figcaption {
+    margin-top: 1.25rem;
+  }
+  .testim__item figcaption strong {
+    display: block;
+    color: var(--ink-900);
+  }
+  .testim__item figcaption span {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: var(--fs-sm);
     color: var(--ink-500);
   }
 
