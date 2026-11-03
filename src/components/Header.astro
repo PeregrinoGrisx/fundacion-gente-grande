@@ -1,9 +1,15 @@
 ---
 /**
- * Barra de navegación en el patrón del template: logo a la izquierda, menú
- * al centro y las acciones a la derecha. En el template son "Log in" y
- * "Sign up"; acá son "Contacto" y "Donar", que es lo que la Fundación
- * necesita que la gente haga.
+ * Barra de navegación con el logo al centro: tres enlaces a cada lado y la
+ * insignia de la Fundación en medio, colgando un poco bajo la barra. Como el
+ * logo ya lleva al inicio, "Inicio" no se repite en la barra (sí en el menú
+ * del celular). "Donar" cierra el lado derecho como botón destacado.
+ *
+ * Al pasar el mouse, cada enlace infla una burbuja de color detrás del texto
+ * y suelta una burbuja chica en la esquina.
+ *
+ * Bajo 1000 px vuelve al esquema de celular: logotipo a la izquierda, Donar y
+ * el botón de menú a la derecha.
  */
 import { nav, site } from "../data/site";
 import Icon from "./Icon.astro";
@@ -12,12 +18,65 @@ const path = Astro.url.pathname;
 const esActivo = (href: string) =>
   href === "/" ? path === "/" : path.startsWith(href);
 
-// "Contacto" vive en las acciones de la derecha, no en el menú central.
-const menu = nav.filter((n) => n.href !== "/contacto/");
+const sinInicio = nav.filter((n) => n.href !== "/");
+const izquierda = sinInicio.slice(0, 3);
+const derecha = sinInicio.slice(3);
 ---
 
 <header class="nav" data-nav>
   <div class="wrap nav__inner">
+    <nav class="nav__menu" aria-label="Navegación principal">
+      <ul class="nav__lado nav__lado--izq">
+        {
+          izquierda.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={["nav__link", { "is-active": esActivo(item.href) }]}
+                aria-current={esActivo(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a
+        href="/"
+        class="nav__centro"
+        aria-label={`${site.name}, ir al inicio`}
+        aria-current={path === "/" ? "page" : undefined}
+      >
+        <span class="nav__insignia">
+          <img src="/img/marca/Isotipo.png" alt="" width="266" height="255" />
+        </span>
+      </a>
+
+      <ul class="nav__lado nav__lado--der">
+        {
+          derecha.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={["nav__link", { "is-active": esActivo(item.href) }]}
+                aria-current={esActivo(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="/contacto/#donar" class="nav__donar">
+            <Icon name="corazon" size={16} />
+            Donar
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Barra de celular -->
     <a href="/" class="nav__marca" aria-label={`${site.name}, ir al inicio`}>
       <img
         class="nav__logotipo"
@@ -34,27 +93,7 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
         height="255"
       />
     </a>
-
-    <nav class="nav__menu" aria-label="Navegación principal">
-      <ul>
-        {
-          menu.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class:list={["nav__link", { "is-active": esActivo(item.href) }]}
-                aria-current={esActivo(item.href) ? "page" : undefined}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
     <div class="nav__acciones">
-      <a href="/contacto/" class="nav__link nav__link--suelto">Contacto</a>
       <a href="/contacto/#donar" class="btn btn--accent btn--sm">
         <Icon name="corazon" size={16} />
         Donar
@@ -91,6 +130,7 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
 
 <style>
   .nav {
+    --rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -108,18 +148,208 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
   .nav__inner {
     display: flex;
     align-items: center;
-    gap: 2rem;
     min-height: 5rem;
   }
 
-  .nav__marca {
+  /* ---------- Escritorio: tres enlaces · logo · tres enlaces ---------- */
+  .nav__menu {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+    width: 100%;
+  }
+  .nav__lado {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .nav__lado--izq {
+    justify-content: flex-end;
+  }
+  .nav__lado--der {
+    justify-content: flex-start;
+  }
+
+  /* Insignia central: círculo blanco que cuelga bajo la barra */
+  .nav__centro {
+    display: block;
+    border-radius: 50%;
+  }
+  .nav__insignia {
+    display: grid;
+    place-items: center;
+    width: 6.25rem;
+    height: 6.25rem;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 8px 22px rgb(10 44 69 / 0.14);
+    transform: translateY(1.35rem);
+    transition:
+      transform 0.45s var(--rebote),
+      box-shadow 0.25s var(--ease-out);
+  }
+  .nav__insignia img {
+    width: 3.9rem;
+    height: auto;
+  }
+  .nav__centro:hover .nav__insignia,
+  .nav__centro:focus-visible .nav__insignia {
+    transform: translateY(1.35rem) scale(1.07);
+    box-shadow: 0 10px 26px rgb(10 44 69 / 0.2);
+  }
+  .nav.is-scrolled .nav__insignia {
+    transform: translateY(0.6rem) scale(0.78);
+  }
+  .nav.is-scrolled .nav__centro:hover .nav__insignia {
+    transform: translateY(0.6rem) scale(0.84);
+  }
+
+  /* ---------- Enlaces con efecto burbuja ---------- */
+  .nav__link {
+    --burbuja: var(--lavanda-fuerte);
+    --burbuja-chica: var(--azul-300);
+    position: relative;
+    isolation: isolate;
+    display: block;
+    padding: 0.6rem 1.1rem;
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: var(--ink-700);
+    text-decoration: none;
+    border-radius: var(--radius-pill);
+    transition: color 0.2s var(--ease-out);
+  }
+  /* Burbuja grande: se infla desde el centro con un pequeño rebote */
+  .nav__link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--burbuja);
+    opacity: 0;
+    transform: scale(0.35);
+    transition:
+      transform 0.5s var(--rebote),
+      opacity 0.2s var(--ease-out);
+  }
+  /* Burbujas chicas: salen de la esquina y suben un poco. La segunda, más
+     pequeña, es una sombra con spread negativo del mismo pseudo-elemento. */
+  .nav__link::after {
+    content: "";
+    position: absolute;
+    top: -0.1rem;
+    right: 0.35rem;
+    z-index: -1;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--burbuja-chica);
+    box-shadow:
+      inset -2px -2px 0 rgb(255 255 255 / 0.55),
+      0.6rem -0.45rem 0 -0.18rem var(--burbuja-chica);
+    opacity: 0;
+    transform: translate(0, 0.4rem) scale(0);
+    transition:
+      transform 0.55s var(--rebote) 0.06s,
+      opacity 0.2s var(--ease-out) 0.06s;
+  }
+  .nav__link:hover,
+  .nav__link:focus-visible {
+    color: var(--azul-900);
+  }
+  .nav__link:hover::before,
+  .nav__link:focus-visible::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .nav__link:hover::after,
+  .nav__link:focus-visible::after {
+    opacity: 1;
+    transform: translate(0.3rem, -0.35rem) scale(1);
+  }
+  /* Un pastel distinto para cada enlace */
+  .nav__lado li:nth-child(4n + 2) .nav__link {
+    --burbuja: var(--azul-100);
+    --burbuja-chica: var(--magenta-200);
+  }
+  .nav__lado li:nth-child(4n + 3) .nav__link {
+    --burbuja: var(--menta);
+    --burbuja-chica: var(--lavanda-fuerte);
+  }
+  .nav__lado--der li:nth-child(4n + 1) .nav__link {
+    --burbuja: var(--magenta-100);
+    --burbuja-chica: var(--azul-300);
+  }
+
+  /* Página actual: la burbuja queda inflada, sin la chica */
+  .nav__link.is-active {
+    color: var(--azul-800);
+  }
+  .nav__link.is-active::before {
+    opacity: 1;
+    transform: scale(1);
+    background: var(--azul-100);
+    box-shadow: inset 0 0 0 1.5px var(--azul-300);
+  }
+
+  /* Donar: botón magenta que también rebota y suelta su burbuja */
+  .nav__donar {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    flex: none;
-    transition: opacity 0.2s var(--ease-out);
+    gap: 0.45rem;
+    margin-left: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    font-size: var(--fs-base);
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    background: var(--magenta-700);
+    border-radius: var(--radius-pill);
+    transition:
+      transform 0.45s var(--rebote),
+      background-color 0.2s var(--ease-out);
   }
-  .nav__marca:hover {
-    opacity: 0.85;
+  .nav__donar::after {
+    content: "";
+    position: absolute;
+    top: -0.2rem;
+    right: 0.2rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--magenta-200);
+    box-shadow: inset -2px -2px 0 rgb(255 255 255 / 0.55);
+    opacity: 0;
+    transform: translate(0, 0.4rem) scale(0);
+    transition:
+      transform 0.55s var(--rebote) 0.06s,
+      opacity 0.2s var(--ease-out) 0.06s;
+  }
+  .nav__donar:hover,
+  .nav__donar:focus-visible {
+    background: var(--magenta-600);
+    transform: scale(1.07);
+  }
+  .nav__donar:hover::after,
+  .nav__donar:focus-visible::after {
+    opacity: 1;
+    transform: translate(0.35rem, -0.4rem) scale(1);
+  }
+
+  /* ---------- Celular ---------- */
+  .nav__marca,
+  .nav__acciones {
+    display: none;
+  }
+  .nav__marca {
+    align-items: center;
+    flex: none;
   }
   .nav__logotipo {
     width: auto;
@@ -130,62 +360,14 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
     width: auto;
     height: 2.3rem;
   }
-
-  /* El menú al centro es lo que define la silueta del template. */
-  .nav__menu {
-    margin-inline: auto;
-  }
-  .nav__menu ul {
-    display: flex;
-    gap: 0.25rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .nav__link {
-    position: relative;
-    display: block;
-    padding: 0.5rem 0.9rem;
-    font-size: var(--fs-base);
-    font-weight: 500;
-    color: var(--ink-700);
-    text-decoration: none;
-    border-radius: var(--radius-pill);
-    transition:
-      color 0.2s var(--ease-out),
-      background-color 0.2s var(--ease-out);
-  }
-  .nav__link:hover {
-    color: var(--azul-700);
-    background: var(--neutro-100);
-  }
-  .nav__link.is-active {
-    color: var(--azul-700);
-    font-weight: 600;
-  }
-  .nav__link.is-active::after {
-    content: "";
-    position: absolute;
-    left: 0.9rem;
-    right: 0.9rem;
-    bottom: 0.15rem;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--magenta-600);
-  }
-
   .nav__acciones {
-    display: flex;
     align-items: center;
     gap: 0.6rem;
-    flex: none;
-  }
-  .nav__link--suelto {
-    padding-inline: 0.6rem;
+    margin-left: auto;
   }
 
   .nav__burger {
-    display: none;
+    display: grid;
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
@@ -195,13 +377,15 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
     color: var(--azul-900);
     cursor: pointer;
   }
-  .nav__burger-cerrar {
+  /* Los íconos los dibuja Icon.astro (otro componente), así que el estilo
+     con scope de este archivo no los alcanza sin :global(). */
+  .nav__burger :global(.nav__burger-cerrar) {
     display: none;
   }
-  .nav.is-open .nav__burger-abrir {
+  .nav.is-open .nav__burger :global(.nav__burger-abrir) {
     display: none;
   }
-  .nav.is-open .nav__burger-cerrar {
+  .nav.is-open .nav__burger :global(.nav__burger-cerrar) {
     display: block;
   }
 
@@ -238,15 +422,12 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
   }
 
   @media (max-width: 1000px) {
-    .nav__menu,
-    .nav__link--suelto {
+    .nav__menu {
       display: none;
     }
-    .nav__burger {
-      display: grid;
-    }
-    .nav__inner {
-      justify-content: space-between;
+    .nav__marca,
+    .nav__acciones {
+      display: flex;
     }
   }
   @media (max-width: 420px) {
@@ -255,6 +436,30 @@ const menu = nav.filter((n) => n.href !== "/contacto/");
     }
     .nav__isotipo {
       display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav__link::before,
+    .nav__link::after,
+    .nav__donar,
+    .nav__donar::after,
+    .nav__insignia {
+      transition: opacity 0.2s linear;
+    }
+    .nav__link::before,
+    .nav__link:hover::before,
+    .nav__link:focus-visible::before {
+      transform: none;
+    }
+    .nav__link::after,
+    .nav__donar::after {
+      display: none;
+    }
+    .nav__donar:hover,
+    .nav__donar:focus-visible,
+    .nav__centro:hover .nav__insignia {
+      transform: none;
     }
   }
 </style>
