@@ -3,11 +3,15 @@ import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import Icon from "../components/Icon.astro";
-import Pendiente from "../components/Pendiente.astro";
+import { contacto, enMedios, enRedes } from "../data/site";
 
 const entradas = (await getCollection("noticias", ({ data }) => !data.borrador)).sort(
   (a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf(),
 );
+
+/** Reproductor de Facebook para un video (sin cargar el SDK). */
+const videoFacebook = (url: string) =>
+  `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(decodeURI(url))}&show_text=false&width=560&t=0`;
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("es-CL", { day: "numeric", month: "long", year: "numeric" });
@@ -27,7 +31,7 @@ const fmt = (d: Date) =>
   <section class="section">
     <div class="wrap">
       {
-        entradas.length > 0 ? (
+        entradas.length > 0 && (
           <ul class="noticias">
             {entradas.map((n, i) => (
               <li data-reveal style={`--reveal-delay:${i * 70}ms`}>
@@ -59,27 +63,231 @@ const fmt = (d: Date) =>
               </li>
             ))}
           </ul>
-        ) : (
-          <div class="card center stack" data-reveal>
-            <h2 style="font-size:var(--fs-h2)">Aún no hay noticias publicadas</h2>
-            <p class="muted">
-              Pronto compartiremos acá los comunicados y actividades de la
-              Fundación.
-            </p>
-          </div>
         )
       }
 
-      <Pendiente que="Noticias reales del sitio antiguo (el listado no se alcanzó a migrar porque cargaba de forma dinámica) y fotos para la galería de actividades." />
+      <!-- ===== En los medios ===== -->
+      <header class="sechead sechead--left" data-reveal>
+        <span class="eyebrow">Prensa</span>
+        <h2>La Fundación en los medios</h2>
+      </header>
+      <div class="medios">
+        {
+          enMedios.map((m, i) =>
+            m.video ? (
+              <article class="medio medio--video" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+                <div class="medio__video">
+                  <iframe
+                    src={videoFacebook(m.url)}
+                    title={`Video: ${m.titulo}`}
+                    loading="lazy"
+                    allow="encrypted-media; picture-in-picture; web-share"
+                    allowfullscreen
+                  />
+                </div>
+                <div class="medio__texto">
+                  <span class="medio__fuente">{m.tipo} · {m.medio}</span>
+                  <h3>{m.titulo}</h3>
+                  <a href={m.url} target="_blank" rel="noopener noreferrer" class="link-arrow">
+                    {m.cta}
+                    <Icon name="arrow-right" size={18} />
+                  </a>
+                </div>
+              </article>
+            ) : (
+              <a
+                href={m.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="medio"
+                data-reveal
+                style={`--reveal-delay:${i * 70}ms`}
+              >
+                <span class="medio__fuente">
+                  {m.tipo} · {m.medio}
+                  {m.fecha && ` · ${m.fecha}`}
+                </span>
+                <h3>{m.titulo}</h3>
+                <span class="link-arrow">
+                  {m.cta}
+                  <Icon name="arrow-right" size={18} />
+                </span>
+              </a>
+            ),
+          )
+        }
+      </div>
     </div>
   </section>
+
+  <!-- ===== En nuestras redes (Instagram incrustado) ===== -->
+  <section class="section section--rosa" id="redes">
+    <div class="wrap">
+      <header class="sechead sechead--left" data-reveal>
+        <span class="eyebrow">Instagram</span>
+        <h2>En nuestras redes</h2>
+        <p class="lead">
+          Reels y fotos de las actividades del ELEAM y de la Fundación. Síguenos en
+          <a href={contacto.redes.instagram} target="_blank" rel="noopener noreferrer">@fundaciongentegrande</a>.
+        </p>
+      </header>
+      <div class="ig-grid">
+        {
+          enRedes.map(({ url, incrustar }) =>
+            incrustar ? (
+              <blockquote
+                class="instagram-media"
+                data-instgrm-permalink={url}
+                data-instgrm-version="14"
+                data-instgrm-captioned
+              >
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  Ver esta publicación en Instagram
+                </a>
+              </blockquote>
+            ) : (
+              <a href={url} target="_blank" rel="noopener noreferrer" class="ig-enlace">
+                <Icon name="instagram" size={34} />
+                <strong>Reel de la Fundación</strong>
+                <span class="link-arrow">
+                  Verlo en Instagram
+                  <Icon name="arrow-right" size={18} />
+                </span>
+              </a>
+            ),
+          )
+        }
+      </div>
+    </div>
+  </section>
+  <!-- Código oficial de Instagram: convierte cada blockquote en la publicación. -->
+  <script is:inline async src="https://www.instagram.com/embed.js"></script>
 </Base>
 
 <style>
+  /* --- Prensa --- */
+  .medios {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .medio {
+    display: grid;
+    align-content: start;
+    gap: 0.7rem;
+    padding: 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+  a.medio:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .medio--video {
+    grid-row: span 2;
+    padding: 0;
+    overflow: hidden;
+  }
+  .medio__video {
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  .medio__video iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .medio__texto {
+    display: grid;
+    gap: 0.7rem;
+    padding: 1.4rem 1.6rem 1.6rem;
+  }
+  .medio__fuente {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .medio h3 {
+    font-size: var(--fs-h3);
+    line-height: 1.3;
+  }
+
+  /* --- Instagram --- */
+  .ig-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    align-items: start;
+  }
+  /* Instagram fija un ancho mínimo de 326 px: en celulares chicos se libera. */
+  .ig-grid :global(.instagram-media),
+  .ig-grid :global(iframe.instagram-media) {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 540px !important;
+    margin: 0 auto !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  /* Reels que Instagram no deja incrustar: tarjeta con enlace */
+  .ig-enlace {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    min-height: 14rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-strong);
+    text-align: center;
+    text-decoration: none;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+  .ig-enlace:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .ig-enlace :global(svg:first-child) {
+    color: var(--accent-text);
+  }
+  /* Antes de que cargue el código de Instagram se ve una tarjeta con enlace. */
+  .ig-grid blockquote {
+    display: grid;
+    place-items: center;
+    min-height: 12rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  @media (max-width: 860px) {
+    .medios {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .medio--video {
+      grid-row: auto;
+    }
+  }
+
   .noticias {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 var(--space-2xl);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
     gap: clamp(1.25rem, 2.5vw, 2rem);

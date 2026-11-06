@@ -7,6 +7,7 @@
  * completarse con material que todavía no tenemos.
  */
 
+import type { ImageMetadata } from "astro";
 import fotoSilvia from "../assets/testimonios/silvia-farina.jpg";
 import fotoAlexandra from "../assets/testimonios/alexandra-bustos.jpg";
 import fotoDavid from "../assets/testimonios/david-henriquez.jpg";
@@ -22,6 +23,14 @@ import fotoTallerBandera from "../assets/fotos-eleam/taller-manualidades-bandera
 import fotoPlaya from "../assets/fotos-eleam/paseo-playa-volantines.jpg";
 import fotoVisitaMascota from "../assets/fotos-eleam/visita-mascota.jpg";
 import fotoFiestasPatrias from "../assets/fotos-eleam/fiestas-patrias.jpg";
+
+// Directorio (documento "INSUMOS WEB FGG", noviembre 2026). La foto de Romina
+// es la de su sitio, rominaleblancampuero.cl.
+import fotoPaula from "../assets/directorio/paula-leiva.jpg";
+import fotoCarola from "../assets/directorio/carola-sandoval.jpg";
+import fotoJimena from "../assets/directorio/jimena-aragones.jpg";
+import fotoLuis from "../assets/directorio/luis-garrido.jpg";
+import fotoRomina from "../assets/directorio/romina-le-blanc.jpg";
 
 export const site = {
   name: "Fundación Gente Grande",
@@ -44,11 +53,14 @@ export const contacto = {
   email: "rominaleblanc@fundaciongentegrande.org",
   telefono: "", // PENDIENTE: no hay teléfono público en el sitio actual.
   whatsapp: "", // PENDIENTE
-  direccionPostal: "Volcán Cotacotani #131, Arica",
-  direccionEleam: "Sargento Carvajal 3944, depto. 22, Arica",
+  // Direcciones según el documento "INSUMOS WEB FGG" (noviembre 2026).
+  direccionPostal: "Sargento Carvajal 3944, depto. 22, Arica", // Fundación (FGG)
+  direccionEleam: "Volcán Cotacotani 131, Arica",
+  /** Canal de denuncias: correo exclusivo, distinto del de contacto. */
+  denuncias: "denuncias@fundaciongentegrande.org",
   horario: "Lunes a viernes, horario de oficina", // PENDIENTE: horas exactas
   redes: {
-    facebook: "https://web.facebook.com/fggaricachile",
+    facebook: "https://www.facebook.com/fundaciongentegrande",
     instagram: "https://www.instagram.com/fundaciongentegrande",
     youtube: "", // PENDIENTE: el enlace actual apunta a youtube.com sin canal
   },
@@ -112,62 +124,100 @@ export const historia = {
 };
 
 /**
- * Directorio.
- * PENDIENTE: fotografías de cada integrante (`foto`). Los teléfonos y correos
- * que aparecen en el sitio antiguo son placeholders de plantilla
- * (+1 859 254-6589 / info@example.com) y se omitieron a propósito.
+ * Directorio y representante legal, según el documento "INSUMOS WEB FGG"
+ * (noviembre 2026). La profesión sale de la nómina de socios fundadores;
+ * para quienes no están en ella se deja vacía. Pía Hachim no envió foto:
+ * se muestra un retrato con sus iniciales.
  */
-export const directorio = [
-  {
-    nombre: "Romina Le Blanc Ampuero",
-    cargo: "Presidenta y representante legal",
-    profesion: "Abogada",
-    bio: "Más de 10 años promoviendo los derechos de las personas mayores.",
-    foto: "", // PENDIENTE
-  },
-  {
-    nombre: "Francisco Osorio Sobarzo",
-    cargo: "Vicepresidente y director",
-    profesion: "Médico psiquiatra",
-    bio: "Impulsa la salud mental y el bienestar integral en el ELEAM.",
-    foto: "", // PENDIENTE
-  },
+export const directorio: Array<{
+  nombre: string;
+  cargo: string;
+  profesion?: string;
+  foto?: ImageMetadata;
+}> = [
+  { nombre: "Paula Leiva Le-Blanc", cargo: "Presidenta", profesion: "Asistente social", foto: fotoPaula },
   {
     nombre: "Carola Sandoval Yañez",
-    cargo: "Tesorera y directora",
-    profesion: "Contadora auditora",
-    bio: "Responsable de la transparencia financiera y la rendición de cuentas.",
-    foto: "", // PENDIENTE
+    cargo: "Tesorera",
+    profesion: "Contadora auditora y contadora pública",
+    foto: fotoCarola,
   },
-  {
-    nombre: "Ilse Flores Rivera",
-    cargo: "Secretaria y directora",
-    profesion: "Terapeuta ocupacional",
-    bio: "Coordina los programas y talleres de envejecimiento activo del ELEAM.",
-    foto: "", // PENDIENTE
-  },
-  {
-    nombre: "Pía Hachim Meza",
-    cargo: "Directora",
-    profesion: "Psicóloga",
-    bio: "A cargo del apoyo emocional y psicosocial a residentes y familias.",
-    foto: "", // PENDIENTE
-  },
+  { nombre: "Pía Hachim Meza", cargo: "Directora de Salud", profesion: "Psicóloga" },
+  { nombre: "Jimena Aragonés Sir", cargo: "Directora Social", foto: fotoJimena },
+  { nombre: "Luis Garrido Ampuero", cargo: "Secretario", foto: fotoLuis },
+  { nombre: "Romina Le Blanc Ampuero", cargo: "Representante legal", profesion: "Abogada", foto: fotoRomina },
 ];
 
-/**
- * Socios fundadores.
- * PENDIENTE: el sitio antiguo declara 11 socios fundadores pero muestra
- * tarjetas con texto de relleno ("Lorem ipsum", "John Doe, CEO").
- * Hacen falta los 11 nombres reales, sus profesiones y fotos.
- */
+/** Socios fundadores: solo nombre y título, como pide el documento de insumos. */
 export const sociosFundadores: Array<{
   nombre: string;
   profesion?: string;
   foto?: string;
-}> = [];
+}> = [
+  { nombre: "Carola Sandoval Yañez", profesion: "Contadora auditora y contadora pública" },
+  { nombre: "Paula Leiva Le-Blanc", profesion: "Asistente social" },
+  { nombre: "Romina Le Blanc Ampuero", profesion: "Abogada" },
+  { nombre: "Pía Hachim Meza", profesion: "Psicóloga" },
+  { nombre: "Ilse Flores Rivera", profesion: "Terapeuta ocupacional" },
+  { nombre: "David Escauriaza Sánchez", profesion: "Kinesiólogo" },
+  { nombre: "María Angélica Álvarez Miranda", profesion: "Abogada" },
+  { nombre: "Eduardo Ramírez Gómez", profesion: "Médico cirujano" },
+  { nombre: "Hna. Paulina Minaya Villafana", profesion: "Religiosa" },
+  { nombre: "María Cecilia Díaz Cuevas", profesion: "Ingeniera civil industrial" },
+  { nombre: "Francisco Osorio Sobarzo", profesion: "Médico psiquiatra" },
+];
 
-export const sociosFundadoresTotal = 11;
+export const sociosFundadoresTotal = sociosFundadores.length;
+
+/**
+ * La Fundación en redes y medios (documento "INSUMOS WEB FGG"). Las de
+ * Instagram se incrustan con el código oficial de Instagram; el video del
+ * Poder Judicial, con el reproductor de Facebook; la nota y el PDF van como
+ * tarjetas con enlace. Los enlaces se guardan sin los parámetros de rastreo
+ * (igsh) que agrega el botón "compartir".
+ */
+export const enRedes = [
+  { url: "https://www.instagram.com/reel/DYA8VBVoOhm/", incrustar: true },
+  { url: "https://www.instagram.com/reel/DXxTtRXoIa-/", incrustar: true },
+  { url: "https://www.instagram.com/reel/DXclaJACHE3/", incrustar: true },
+  { url: "https://www.instagram.com/p/DXjo9NPgDwF/", incrustar: true },
+  // Estos dos reels no admiten incrustarse (Instagram responde "Unavailable"
+  // en su página de embed): se muestran como tarjeta con enlace.
+  { url: "https://www.instagram.com/reel/DZViYOLpoxBBJk063_AEaEKgawJmIh28dOOShg0/", incrustar: false },
+  { url: "https://www.instagram.com/reel/DZTklwuO_W8LNWyPJ1VEA8rCQGMozG5t-Qhe4g0/", incrustar: false },
+];
+
+export const enMedios = [
+  {
+    medio: "Arica al Día",
+    tipo: "Nota",
+    fecha: "9 de diciembre de 2024",
+    titulo:
+      "Corte de Apelaciones de Arica dictó charla a la jurisdicción sobre Protocolo de Acceso a la Justicia de Personas Mayores",
+    url: "https://www.aricaldia.cl/corte-de-apelaciones-de-arica-dicto-charla-a-la-jurisdiccion-sobre-protocolo-de-acceso-a-la-justicia-de-personas-mayores/",
+    cta: "Leer la nota",
+  },
+  {
+    medio: "Poder Judicial de Chile",
+    tipo: "Video",
+    fecha: "",
+    titulo: "Jurisdicción de Arica asistió a charla sobre el protocolo de acceso a la justicia",
+    url: encodeURI(
+      "https://www.facebook.com/PoderJudicialdeChile/videos/jurisdicción-de-arica-asistió-a-charla-sobre-el-protocolo-de-acceso-a-la-justici/1049789480444541/",
+    ),
+    cta: "Ver en Facebook",
+    /** Se incrusta con el reproductor de Facebook. */
+    video: true,
+  },
+  {
+    medio: "Extracto Legal",
+    tipo: "PDF",
+    fecha: "",
+    titulo: "Juzgado de Arica y representante de Fundación Gente Grande coordinan trabajo",
+    url: "https://extractolegal.cl/wp-content/uploads/2025/04/juzgado_de_arica_y_representante_de_fundacion_gente_grande_coordinan_trabajo.pdf",
+    cta: "Abrir el PDF",
+  },
+];
 
 export const servicios = [
   {

@@ -170,7 +170,7 @@ const datos = [
       <div class="mapa" data-reveal>
         <iframe
           title="Mapa de la ubicación del ELEAM en Arica"
-          src="https://www.google.com/maps?q=Sargento+Carvajal+3944,+Arica,+Chile&output=embed"
+          src={`https://www.google.com/maps?q=${encodeURIComponent(`${contacto.direccionEleam}, Chile`)}&output=embed`}
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>

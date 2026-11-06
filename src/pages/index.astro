@@ -24,6 +24,7 @@ import {
   denuncias,
   diferencias,
   donacion,
+  enMedios,
   formasDeAportar,
   historia,
   misionVision,
@@ -297,10 +298,33 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
             ))}
           </div>
         ) : (
-          <p class="center muted">Pronto publicaremos novedades acá.</p>
+          <div class="grid grid--3">
+            {enMedios.map((m, i) => (
+              <a
+                href={m.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="prensa"
+                data-reveal
+                style={`--reveal-delay:${i * 70}ms`}
+              >
+                <span class="prensa__fuente">{m.tipo} · {m.medio}</span>
+                <h3>{m.titulo}</h3>
+                <span class="link-arrow">
+                  {m.cta}
+                  <Icon name="arrow-right" size={17} />
+                </span>
+              </a>
+            ))}
+          </div>
         )
       }
-      <Pendiente que="Noticias reales del sitio anterior: el listado cargaba de forma dinámica y no se alcanzó a migrar." />
+      <p class="center" style="margin-top:2rem">
+        <a href="/noticias/#redes" class="btn btn--ghost">
+          Ver noticias y publicaciones en redes
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </p>
     </div>
   </section>
 
@@ -460,7 +484,8 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
           <ul class="garantias">
             {denuncias.garantias.map((g) => <li>{g}</li>)}
           </ul>
-          <a href={`mailto:${contacto.email}?subject=Denuncia`} class="link-arrow">
+          <p class="denuncia-correo">{contacto.denuncias}</p>
+          <a href={`mailto:${contacto.denuncias}?subject=Denuncia`} class="link-arrow">
             Realizar denuncia
             <Icon name="arrow-right" size={17} />
           </a>
@@ -1160,6 +1185,42 @@ const tintesIcono = ["", "--cielo", "--menta", "--rosa"];
   }
 
   /* ===================== DENUNCIAS ===================== */
+  .prensa {
+    display: grid;
+    align-content: start;
+    gap: 0.7rem;
+    height: 100%;
+    padding: 1.6rem;
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+  .prensa:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .prensa__fuente {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .prensa h3 {
+    font-size: var(--fs-lg);
+    line-height: 1.35;
+  }
+  .denuncia-correo {
+    margin: 0.4rem 0 0.9rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    overflow-wrap: anywhere;
+  }
   .garantias {
     list-style: none;
     padding: 0;

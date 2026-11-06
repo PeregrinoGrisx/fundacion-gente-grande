@@ -23,7 +23,7 @@ const vias = [
   },
   {
     icono: "ubicacion" as const,
-    titulo: "Dirección postal",
+    titulo: "Fundación",
     valor: contacto.direccionPostal,
     href: "",
   },
@@ -32,6 +32,12 @@ const vias = [
     titulo: "ELEAM",
     valor: contacto.direccionEleam,
     href: "/eleam/#ubicacion",
+  },
+  {
+    icono: "escudo" as const,
+    titulo: "Canal de denuncias",
+    valor: contacto.denuncias,
+    href: `mailto:${contacto.denuncias}?subject=Denuncia`,
   },
   {
     icono: "reloj" as const,
@@ -74,7 +80,7 @@ const vias = [
             ))
           }
         </ul>
-        <Pendiente que="Teléfono y WhatsApp de contacto, horario exacto de atención, y confirmar si el correo correcto es @fundaciongentegrande.org o @fundaciongentegrandearica.org." />
+        <Pendiente que="Teléfono y WhatsApp de contacto y horario exacto de atención." />
       </div>
 
       <form
@@ -216,12 +222,15 @@ const vias = [
         </ul>
 
         <div class="btn-row">
-          <a href={`mailto:${contacto.email}?subject=Denuncia`} class="btn btn--light">
+          <a href={`mailto:${contacto.denuncias}?subject=Denuncia`} class="btn btn--light">
             <Icon name="mail" size={18} />
             Enviar denuncia por correo
           </a>
         </div>
-        <Pendiente que="Definir si el canal de denuncias usa un formulario anónimo propio (recomendado) o solo el correo institucional, y quién lo recibe." />
+        <p class="denuncia__correo">
+          Correo exclusivo del canal:
+          <a href={`mailto:${contacto.denuncias}?subject=Denuncia`}>{contacto.denuncias}</a>
+        </p>
       </div>
     </div>
   </section>
@@ -384,7 +393,7 @@ const vias = [
     padding: clamp(1.75rem, 4vw, 3.25rem);
     background: linear-gradient(135deg, var(--azul-800), var(--azul-600));
     border-radius: var(--radius-lg);
-    color: var(--neutro-100);
+    color: var(--sobre-oscuro);
     box-shadow: var(--shadow-md);
   }
   .denuncia .eyebrow {
@@ -397,7 +406,17 @@ const vias = [
   }
   .denuncia__cabeza p {
     max-width: 68ch;
-    color: var(--azul-100);
+    color: var(--sobre-oscuro);
+  }
+  .denuncia__correo {
+    margin-top: 1rem;
+    font-size: var(--fs-sm);
+    color: var(--sobre-oscuro);
+    overflow-wrap: anywhere;
+  }
+  .denuncia__correo a {
+    color: #fff;
+    font-weight: 700;
   }
   .garantias {
     list-style: none;

@@ -2,7 +2,6 @@
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import Icon from "../components/Icon.astro";
-import Pendiente from "../components/Pendiente.astro";
 import { Image } from "astro:assets";
 import fotoMision from "../assets/fotos-eleam/residente-taller.jpg";
 import fotoVision from "../assets/fotos-eleam/residente-retrato.jpg";
@@ -16,10 +15,11 @@ import {
   vinculacionAcademica,
 } from "../data/site";
 
-/** Iniciales para el retrato provisional mientras no haya fotos. */
+/** Iniciales para el retrato de quien no tiene foto ("Hna." no cuenta). */
 const iniciales = (nombre: string) =>
   nombre
     .split(" ")
+    .filter((p) => !p.endsWith("."))
     .slice(0, 2)
     .map((p) => p[0])
     .join("");
@@ -110,28 +110,34 @@ const iniciales = (nombre: string) =>
           <h2>Quienes dirigen<br />la Fundación</h2>
         </div>
         <p class="lead">
-          Un equipo multidisciplinario de profesionales de Arica: derecho,
-          psiquiatría, contabilidad, terapia ocupacional y psicología.
+          Profesionales de Arica del trabajo social, el derecho, la
+          contabilidad y la salud, junto a la representante legal de la
+          Fundación.
         </p>
       </header>
 
-      <Pendiente que="Fotografías de los 5 integrantes del directorio. Mientras tanto se muestra un retrato con iniciales." />
-
-      <ul class="personas">
+      <ul class="personas personas--directorio">
         {
           directorio.map((d, i) => (
-            <li class="persona" data-reveal style={`--reveal-delay:${i * 70}ms`}>
-              <div class="persona__retrato">
+            <li class="persona persona--foto" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <div class="persona__foto">
                 {d.foto ? (
-                  <img src={d.foto} alt={`Retrato de ${d.nombre}`} loading="lazy" />
+                  <Image
+                    src={d.foto}
+                    alt={`Retrato de ${d.nombre}`}
+                    widths={[320, 480, 640]}
+                    sizes="(max-width: 700px) 92vw, (max-width: 1100px) 45vw, 22vw"
+                    loading="lazy"
+                  />
                 ) : (
                   <span aria-hidden="true">{iniciales(d.nombre)}</span>
                 )}
               </div>
-              <h3>{d.nombre}</h3>
-              <p class="persona__cargo">{d.cargo}</p>
-              <p class="persona__profesion">{d.profesion}</p>
-              <p class="persona__bio">{d.bio}</p>
+              <div class="persona__texto">
+                <h3>{d.nombre}</h3>
+                <p class="persona__cargo">{d.cargo}</p>
+                {d.profesion && <p class="persona__profesion">{d.profesion}</p>}
+              </div>
             </li>
           ))
         }
@@ -150,8 +156,6 @@ const iniciales = (nombre: string) =>
            profesionales de Arica que decidieron mirar la vejez de otra manera.
         </p>
       </header>
-
-      <Pendiente que={`Nombres, profesiones y fotos de los ${sociosFundadoresTotal} socios fundadores. El sitio antiguo tenía texto de relleno ("Lorem ipsum", "John Doe"), así que acá no se publica nada hasta tener los datos reales.`} />
 
       {
         sociosFundadores.length > 0 ? (
@@ -325,10 +329,32 @@ const iniciales = (nombre: string) =>
     color: var(--ink-400);
     margin-top: 0.15rem;
   }
-  .persona__bio {
-    margin-top: 0.8rem;
-    font-size: 0.92rem;
-    color: var(--text-muted);
+  /* Directorio: tarjeta con retrato vertical grande arriba */
+  .personas--directorio {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+  .persona--foto {
+    padding: 0;
+    overflow: hidden;
+  }
+  .persona__foto {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(140deg, var(--azul-100), var(--magenta-100));
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--link-strong);
+  }
+  .persona__foto :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+  .persona__texto {
+    padding: 1.15rem 1.35rem 1.4rem;
   }
 
   .aviso {

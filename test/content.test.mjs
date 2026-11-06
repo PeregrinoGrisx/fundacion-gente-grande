@@ -104,3 +104,53 @@ describe('JSON-LD de la organización', () => {
     assert.equal(web.publisher['@id'], org['@id']);
   });
 });
+
+describe('insumos de noviembre 2026 (directorio, direcciones, denuncias, noticias)', () => {
+  test('el directorio muestra a sus 6 integrantes, 5 de ellos con foto', async () => {
+    const html = await read('nosotros/index.html');
+    const seccion = html.slice(html.indexOf('id="directorio"'), html.indexOf('id="fundadores"'));
+    for (const nombre of ['Paula Leiva Le-Blanc', 'Carola Sandoval Yañez', 'Pía Hachim Meza', 'Jimena Aragonés Sir', 'Luis Garrido Ampuero', 'Romina Le Blanc Ampuero']) {
+      assert.ok(seccion.includes(nombre), nombre);
+    }
+    assert.equal((seccion.match(/<img [^>]*alt="Retrato de /g) ?? []).length, 5);
+  });
+
+  test('los 11 socios fundadores aparecen con su título', async () => {
+    const md = await read('nosotros/index.md');
+    assert.match(md, /11 socios fundadores/);
+    assert.match(md, /Hna\. Paulina Minaya Villafana, Religiosa/);
+    assert.match(md, /Francisco Osorio Sobarzo, Médico psiquiatra/);
+  });
+
+  test('el ELEAM está en Volcán Cotacotani 131 y la Fundación en Sargento Carvajal', async () => {
+    const eleam = await read('eleam/index.html');
+    assert.ok(eleam.includes('Volcán Cotacotani 131, Arica'));
+    assert.match(eleam, /maps\?q=Volc%C3%A1n%20Cotacotani%20131/);
+    const md = await read('contacto/index.md');
+    assert.match(md, /Dirección del ELEAM: Volcán Cotacotani 131, Arica/);
+    assert.match(md, /Dirección de la Fundación: Sargento Carvajal 3944/);
+  });
+
+  test('las denuncias van al correo exclusivo del canal', async () => {
+    for (const path of ['index.html', 'contacto/index.html']) {
+      const html = await read(path);
+      assert.ok(html.includes('mailto:denuncias@fundaciongentegrande.org?subject=Denuncia'), path);
+      assert.ok(!html.includes('mailto:rominaleblanc@fundaciongentegrande.org?subject=Denuncia'), path);
+    }
+    assert.match(await read('llms.txt'), /denuncias@fundaciongentegrande\.org/);
+  });
+
+  test('Noticias incrusta Instagram y el video de Facebook, y enlaza la prensa', async () => {
+    const html = await read('noticias/index.html');
+    assert.equal((html.match(/class="instagram-media"/g) ?? []).length, 4);
+    assert.equal((html.match(/class="ig-enlace"/g) ?? []).length, 2);
+    assert.ok(html.includes('src="https://www.instagram.com/embed.js"'));
+    assert.match(html, /facebook\.com\/plugins\/video\.php\?href=/);
+    assert.ok(html.includes('https://www.aricaldia.cl/corte-de-apelaciones-de-arica-dicto-charla'));
+    assert.ok(html.includes('juzgado_de_arica_y_representante_de_fundacion_gente_grande_coordinan_trabajo.pdf'));
+    assert.ok(!html.includes('igsh='), 'quedaron parámetros de rastreo de Instagram');
+    const md = await read('noticias/index.md');
+    assert.match(md, /## En los medios/);
+    assert.match(md, /## En nuestras redes/);
+  });
+});
