@@ -270,6 +270,18 @@ export const servicios = [
   },
 ];
 
+/**
+ * Software con que se gestiona la residencia. MACA es de MERA INN; los logos
+ * (public/img/aliados/) vienen de la carpeta de marca del sitio macainn.cl.
+ */
+export const gestionResidencia = {
+  nombre: "MACA",
+  url: "https://macainn.cl/",
+  dominio: "macainn.cl",
+  texto:
+    "La gestión clínica y administrativa de nuestra residencia se lleva en MACA, un software chileno creado para ELEAM. La información de cada residente queda ordenada, segura y al día para todo el equipo, en una plataforma pensada para los registros que exige la normativa de los ELEAM en Chile.",
+};
+
 export const eleam = {
   intro:
     "El ELEAM de la Fundación Gente Grande es un Establecimiento de Larga Estadía para el Adulto Mayor en Arica, en funcionamiento desde 2014 y fiscalizado por SENAMA.",

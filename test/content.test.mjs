@@ -154,3 +154,21 @@ describe('insumos de noviembre 2026 (directorio, direcciones, denuncias, noticia
     assert.match(md, /## En nuestras redes/);
   });
 });
+
+describe('gestión de la residencia con MACA', () => {
+  test('la página ELEAM presenta MACA con enlace a macainn.cl y logo para claro y oscuro', async () => {
+    const html = await read('eleam/index.html');
+    assert.ok(html.includes('Usamos MACA para la gestión clínica y administrativa'));
+    assert.ok(html.includes('href="https://macainn.cl/"'));
+    assert.ok(html.includes('src="/img/aliados/maca.png"'));
+    assert.ok(html.includes('src="/img/aliados/maca-blanco.png"'));
+    assert.ok(await exists('img/aliados/maca.png'));
+    assert.ok(await exists('img/aliados/maca-blanco.png'));
+  });
+
+  test('la versión Markdown del ELEAM también lo menciona', async () => {
+    const md = await read('eleam/index.md');
+    assert.match(md, /## Gestión de la residencia/);
+    assert.match(md, /\[MACA\]\(https:\/\/macainn\.cl\/\)/);
+  });
+});
